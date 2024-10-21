@@ -1,32 +1,33 @@
 package entidades;
 
+import java.sql.Time;
+import java.util.Date;
+
 public class Reserva {
     private int id;
-    private String nombrePersona;
-    private String dni;
-    private String fecha;
-    private String hora;
-    private boolean estado;
+    private String nombreCliente;
+    private String dniCliente;
+    private Date fechaReserva;
+    private Time horaReserva;
+    private String estado;
+    private Mesa mesa;  // Relación con mesa
 
-    public Reserva(int id, String nombrePersona, String dni, String fecha, String hora, boolean estado) {
-        this.id = id;
-        this.nombrePersona = nombrePersona;
-        this.dni = dni;
-        this.fecha = fecha;
-        this.hora = hora;
-        this.estado = estado;
-    }
-
-    public Reserva(String nombrePersona, String dni, String fecha, String hora, boolean estado) {
-        this.nombrePersona = nombrePersona;
-        this.dni = dni;
-        this.fecha = fecha;
-        this.hora = hora;
-        this.estado = estado;
-    }
-
+    // Constructor vacío (por defecto)
     public Reserva() {
     }
+
+    // Constructor con todos los parámetros, si lo necesitas
+    public Reserva(int id, Mesa mesa, String nombreCliente, String dniCliente, Date fechaReserva, Time horaReserva, String estado) {
+        this.id = id;
+        this.mesa = mesa;
+        this.nombreCliente = nombreCliente;
+        this.dniCliente = dniCliente;
+        this.fechaReserva = fechaReserva;
+        this.horaReserva = horaReserva;
+        this.estado = estado;
+    }
+
+    // Getters y setters
 
     public int getId() {
         return id;
@@ -36,57 +37,53 @@ public class Reserva {
         this.id = id;
     }
 
-    public String getNombrePersona() {
-        return nombrePersona;
+    public Mesa getMesa() {
+        return mesa;
     }
 
-    public void setNombrePersona(String nombrePersona) {
-        this.nombrePersona = nombrePersona;
+    public void setMesa(Mesa mesa) {
+        this.mesa = mesa;
     }
 
-    public String getDni() {
-        return dni;
+    public String getNombreCliente() {
+        return nombreCliente;
     }
 
-    public void setDni(String dni) {
-        this.dni = dni;
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
     }
 
-    public String getFecha() {
-        return fecha;
+    public String getDniCliente() {
+        return dniCliente;
     }
 
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
+    public void setDniCliente(String dniCliente) {
+        this.dniCliente = dniCliente;
     }
 
-    public String getHora() {
-        return hora;
+    public Date getFechaReserva() {
+        return fechaReserva;
     }
 
-    public void setHora(String hora) {
-        this.hora = hora;
+    public void setFechaReserva(Date fechaReserva) {
+        this.fechaReserva = fechaReserva;
     }
 
-    public boolean isEstado() {
+    public Time getHoraReserva() {
+        return horaReserva;
+    }
+
+    public void setHoraReserva(Time horaReserva) {
+        this.horaReserva = horaReserva;
+    }
+
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
-    
-    @Override
-    public String toString() {
-        return "Reserva {" +
-                "id=" + id +
-                ", nombrePersona='" + nombrePersona + '\'' +
-                ", dni='" + dni + '\'' +
-                ", fecha='" + fecha + '\'' +
-                ", hora='" + hora + '\'' +
-                ", estado=" + (estado ? "Vigente" : "No vigente") +
-                '}';
-    }
-
 }
+
 

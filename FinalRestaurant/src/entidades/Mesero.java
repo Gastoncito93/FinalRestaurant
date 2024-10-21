@@ -28,6 +28,10 @@ public class Mesero {
     public Mesero() {
     }
 
+    public Mesero(int aInt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public int getId() {
         return id;
     }
@@ -85,6 +89,14 @@ public class Mesero {
                 ", dni='" + dni + '\'' +
                 ", usuario='" + usuario + '\'' +
                 '}';
+    }
+
+    public String getTelefono() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void setTelefono(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
