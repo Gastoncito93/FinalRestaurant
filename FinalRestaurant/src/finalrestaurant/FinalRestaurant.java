@@ -1,21 +1,33 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package finalrestaurant;
 
-/**
- *
- * @author user
- */
+import conexion.Conexion;
+import entidades.Mesa;
+import java.sql.Connection;
+import java.util.List;
+import persistencia.MesaData;
+
 public class FinalRestaurant {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Connection conexion = Conexion.getConexion();
+        MesaData mesaData = new MesaData(conexion);
+
+        // Agregar una mesa
+        Mesa nuevaMesa = new Mesa(0, 5, 4, "libre", null);
+        mesaData.agregarMesa(nuevaMesa);
+        System.out.println("Mesa agregada: " + nuevaMesa);
+
+        // Obtener todas las mesas
+        List<Mesa> mesas = mesaData.obtenerMesas();
+        for (Mesa mesa : mesas) {
+            System.out.println(mesa);
+        }
+        
+        // Actualizar una mesa
+        nuevaMesa.setEstado("ocupada");
+        mesaData.actualizarMesa(nuevaMesa);
+        
+        // Eliminar una mesa
+        mesaData.eliminarMesa(nuevaMesa.getId());
     }
-    
 }
