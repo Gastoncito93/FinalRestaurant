@@ -1,6 +1,5 @@
 package entidades;
 
-import java.sql.Date;
 import java.util.List;
 
 public class Pedido {
@@ -93,22 +92,6 @@ public class Pedido {
                 ", total=" + total +
                 ", fechaHora='" + fechaHora + '\'' +
                 '}';
-    }
-
-    public String getEstado() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Date getFecha() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void setEstado(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void setFecha(Date date) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

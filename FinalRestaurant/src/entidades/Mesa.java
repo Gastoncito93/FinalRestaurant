@@ -25,10 +25,6 @@ public class Mesa {
     public Mesa() {
     }
 
-    public Mesa(int aInt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public int getId() {
         return id;
     }
