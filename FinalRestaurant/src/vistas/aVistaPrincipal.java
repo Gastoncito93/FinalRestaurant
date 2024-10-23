@@ -26,73 +26,49 @@ public class aVistaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        escritorio = new javax.swing.JDesktopPane();
+        jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMadministracion = new javax.swing.JMenu();
-        jMinicioAdmin = new javax.swing.JMenuItem();
-        jMAgregar = new javax.swing.JMenu();
-        jMagregarReservas = new javax.swing.JMenuItem();
-        jMreserva = new javax.swing.JMenu();
-        jMreservas = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1400, 900));
 
-        javax.swing.GroupLayout escritorioLayout = new javax.swing.GroupLayout(escritorio);
-        escritorio.setLayout(escritorioLayout);
-        escritorioLayout.setHorizontalGroup(
-            escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
+        jDesktopPane1.setLayout(jDesktopPane1Layout);
+        jDesktopPane1Layout.setHorizontalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 932, Short.MAX_VALUE)
         );
-        escritorioLayout.setVerticalGroup(
-            escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jDesktopPane1Layout.setVerticalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 476, Short.MAX_VALUE)
         );
 
-        jMadministracion.setText("Administracion");
-        jMadministracion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMadministracionActionPerformed(evt);
-            }
-        });
+        jMenu1.setText("Administracion");
 
-        jMinicioAdmin.setText("Inicio admin.");
-        jMinicioAdmin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMinicioAdminActionPerformed(evt);
-            }
-        });
-        jMadministracion.add(jMinicioAdmin);
+        jMenuItem1.setText("jMenuItem1");
+        jMenu1.add(jMenuItem1);
 
-        jMenuBar1.add(jMadministracion);
+        jMenuBar1.add(jMenu1);
 
-        jMAgregar.setText("Agregar");
+        jMenu2.setText("Agregar");
 
-        jMagregarReservas.setText("Agregar Reserva");
-        jMagregarReservas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMagregarReservasActionPerformed(evt);
-            }
-        });
-        jMAgregar.add(jMagregarReservas);
+        jMenuItem2.setText("jMenuItem2");
+        jMenu2.add(jMenuItem2);
 
-        jMenuBar1.add(jMAgregar);
+        jMenuBar1.add(jMenu2);
 
-        jMreserva.setText("Reserva");
-        jMreserva.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMreservaActionPerformed(evt);
-            }
-        });
+        jMenu3.setText("Reserva");
 
-        jMreservas.setText("Reservas Totales");
-        jMreservas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMreservasActionPerformed(evt);
-            }
-        });
-        jMreserva.add(jMreservas);
+        jMenuItem3.setText("jMenuItem3");
+        jMenu3.add(jMenuItem3);
 
-        jMenuBar1.add(jMreserva);
+        jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
 
@@ -100,43 +76,16 @@ public class aVistaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(escritorio)
+            .addComponent(jDesktopPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(escritorio)
+            .addComponent(jDesktopPane1)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jMadministracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMadministracionActionPerformed
-
-    }//GEN-LAST:event_jMadministracionActionPerformed
-
-    private void jMagregarReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMagregarReservasActionPerformed
-            Vista_Inicio vistaalumno = new Vista_Inicio();
-            escritorio.add(vistaalumno);
-            vistaalumno.setVisible(true);
-    }//GEN-LAST:event_jMagregarReservasActionPerformed
-
-    private void jMreservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMreservaActionPerformed
-  
-    }//GEN-LAST:event_jMreservaActionPerformed
-
-    private void jMinicioAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMinicioAdminActionPerformed
-            Vista_Inicio vistaalumno = new Vista_Inicio();
-            escritorio.add(vistaalumno);
-            vistaalumno.setVisible(true);
-            
-    }//GEN-LAST:event_jMinicioAdminActionPerformed
-
-    private void jMreservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMreservasActionPerformed
-            Vista_Inicio vistaalumno = new Vista_Inicio();
-            escritorio.add(vistaalumno);
-            vistaalumno.setVisible(true);
-    }//GEN-LAST:event_jMreservasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -174,13 +123,13 @@ public class aVistaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDesktopPane escritorio;
-    private javax.swing.JMenu jMAgregar;
-    private javax.swing.JMenu jMadministracion;
-    private javax.swing.JMenuItem jMagregarReservas;
+    private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMinicioAdmin;
-    private javax.swing.JMenu jMreserva;
-    private javax.swing.JMenuItem jMreservas;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     // End of variables declaration//GEN-END:variables
 }
