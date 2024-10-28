@@ -14,7 +14,7 @@ public class FinalRestaurant {
 
     public static void main(String[] args) {
         
-       /* Connection conexion = Conexion.getConexion();
+       Connection conexion = Conexion.getConexion();
         MesaData mesaData = new MesaData(conexion);
 
         // Agregar una mesa
@@ -33,9 +33,9 @@ public class FinalRestaurant {
         mesaData.actualizarMesa(nuevaMesa);
         
         // Eliminar una mesa
-        mesaData.eliminarMesa(nuevaMesa.getId());*/
+        mesaData.eliminarMesa(nuevaMesa.getId());
        
-       /*Connection conexion = Conexion.getConexion();
+      
         ProductoData productoData = new ProductoData(conexion);
 
         // Agregar una mesa
@@ -49,8 +49,6 @@ public class FinalRestaurant {
             System.out.println(producto);
        }
         
-       Connection conexion = Conexion.getConexion();   
-
         // Instanciar MeseroData para interactuar con la base de datos
         MeseroData meseroData = new MeseroData(conexion);
 
@@ -78,6 +76,6 @@ public class FinalRestaurant {
 
         // Eliminar el mesero
         meseroData.eliminarMesero(nuevoMesero.getId());
-        System.out.println("Mesero eliminado.");*/
+        System.out.println("Mesero eliminado.");
     }
     }
