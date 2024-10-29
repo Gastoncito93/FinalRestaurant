@@ -6,135 +6,110 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoData {
-
     private Connection connection;
 
+    // Constructor que establece la conexión a la base de datos
     public ProductoData(Connection connection) {
         this.connection = connection;
     }
 
-    // Método para agregar un producto
-    public void agregarProducto(Producto producto) {
-        String sql = "INSERT INTO producto (nombre, cantidadDisponible, precio, categoria) VALUES (?, ?, ?, ?)";
+    // Método para insertar un nuevo producto
+    public void insertarProducto(Producto producto) {
+        String sql = "INSERT INTO Producto (nombre, cantidad, precio, tipo, estado) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, producto.getNombre());
+            pstmt.setInt(2, producto.getCantidad());
+            pstmt.setDouble(3, producto.getPrecio());
+            pstmt.setString(4, producto.getTipo());
+            pstmt.setBoolean(5, producto.isEstado());
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, producto.getNombre());
-            statement.setInt(2, producto.getCantidadDisponible());
-            statement.setDouble(3, producto.getPrecio());
-            statement.setString(4, producto.getCategoria());
+            pstmt.executeUpdate();
 
-            statement.executeUpdate();
-
-            // Obtener el ID generado automáticamente
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                producto.setCodigo(generatedKeys.getInt(1));
+            // Obtener el ID generado y asignarlo al objeto producto
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                producto.setIdProducto(rs.getInt(1));
             }
 
-            statement.close();
-            System.out.println("Producto agregado exitosamente: " + producto);
+            System.out.println("Producto insertado con éxito");
         } catch (SQLException e) {
-            System.out.println("Error al agregar el producto: " + e.getMessage());
+            System.out.println("Error al insertar el producto: " + e.getMessage());
         }
     }
 
-    // Método para obtener todos los productos
-    public List<Producto> obtenerProductos() {
-        List<Producto> productos = new ArrayList<>();
-        String sql = "SELECT * FROM producto";
+    // Método para obtener un producto por su ID
+    public Producto obtenerProductoPorId(int idProducto) {
+        Producto producto = null;
+        String sql = "SELECT * FROM Producto WHERE id_producto = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, idProducto);
+            ResultSet rs = pstmt.executeQuery();
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                Producto producto = new Producto();
-                producto.setCodigo(resultSet.getInt("codigo"));
-                producto.setNombre(resultSet.getString("nombre"));
-                producto.setCantidadDisponible(resultSet.getInt("cantidadDisponible"));
-                producto.setPrecio(resultSet.getDouble("precio"));
-                producto.setCategoria(resultSet.getString("categoria"));
-
-                productos.add(producto);
+            if (rs.next()) {
+                producto = new Producto();
+                producto.setIdProducto(rs.getInt("id_producto"));
+                producto.setNombre(rs.getString("nombre"));
+                producto.setCantidad(rs.getInt("cantidad"));
+                producto.setPrecio(rs.getDouble("precio"));
+                producto.setTipo(rs.getString("tipo"));
+                producto.setEstado(rs.getBoolean("estado"));
             }
-
-            statement.close();
         } catch (SQLException e) {
-            System.out.println("Error al obtener los productos: " + e.getMessage());
+            System.out.println("Error al obtener el producto: " + e.getMessage());
         }
-
-        return productos;
+        return producto;
     }
 
     // Método para actualizar un producto
     public void actualizarProducto(Producto producto) {
-        String sql = "UPDATE producto SET nombre = ?, cantidadDisponible = ?, precio = ?, categoria = ? WHERE codigo = ?";
+        String sql = "UPDATE Producto SET nombre = ?, cantidad = ?, precio = ?, tipo = ?, estado = ? WHERE id_producto = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, producto.getNombre());
+            pstmt.setInt(2, producto.getCantidad());
+            pstmt.setDouble(3, producto.getPrecio());
+            pstmt.setString(4, producto.getTipo());
+            pstmt.setBoolean(5, producto.isEstado());
+            pstmt.setInt(6, producto.getIdProducto());
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, producto.getNombre());
-            statement.setInt(2, producto.getCantidadDisponible());
-            statement.setDouble(3, producto.getPrecio());
-            statement.setString(4, producto.getCategoria());
-            statement.setInt(5, producto.getCodigo());
-
-            int rowsUpdated = statement.executeUpdate();
-
-            if (rowsUpdated > 0) {
-                System.out.println("Producto actualizado exitosamente: " + producto);
-            }
-
-            statement.close();
+            pstmt.executeUpdate();
+            System.out.println("Producto actualizado con éxito");
         } catch (SQLException e) {
             System.out.println("Error al actualizar el producto: " + e.getMessage());
         }
     }
 
-    // Método para eliminar un producto
-    public void eliminarProducto(int codigo) {
-        String sql = "DELETE FROM producto WHERE codigo = ?";
-
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, codigo);
-
-            int rowsDeleted = statement.executeUpdate();
-
-            if (rowsDeleted > 0) {
-                System.out.println("Producto eliminado exitosamente con código: " + codigo);
-            }
-
-            statement.close();
+    // Método para eliminar un producto por su ID
+    public void eliminarProducto(int idProducto) {
+        String sql = "DELETE FROM Producto WHERE id_producto = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, idProducto);
+            pstmt.executeUpdate();
+            System.out.println("Producto eliminado con éxito");
         } catch (SQLException e) {
             System.out.println("Error al eliminar el producto: " + e.getMessage());
         }
     }
 
-    // Método para obtener un producto por código
-    public Producto obtenerProductoPorCodigo(int codigo) {
-        Producto producto = null;
-        String sql = "SELECT * FROM producto WHERE codigo = ?";
+    // Método para obtener todos los productos
+    public List<Producto> obtenerTodosLosProductos() {
+        List<Producto> productos = new ArrayList<>();
+        String sql = "SELECT * FROM Producto";
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, codigo);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                producto = new Producto();
-                producto.setCodigo(resultSet.getInt("codigo"));
-                producto.setNombre(resultSet.getString("nombre"));
-                producto.setCantidadDisponible(resultSet.getInt("cantidadDisponible"));
-                producto.setPrecio(resultSet.getDouble("precio"));
-                producto.setCategoria(resultSet.getString("categoria"));
+            while (rs.next()) {
+                Producto producto = new Producto();
+                producto.setIdProducto(rs.getInt("id_producto"));
+                producto.setNombre(rs.getString("nombre"));
+                producto.setCantidad(rs.getInt("cantidad"));
+                producto.setPrecio(rs.getDouble("precio"));
+                producto.setTipo(rs.getString("tipo"));
+                producto.setEstado(rs.getBoolean("estado"));
+                productos.add(producto);
             }
-
-            statement.close();
         } catch (SQLException e) {
-            System.out.println("Error al obtener el producto: " + e.getMessage());
+            System.out.println("Error al obtener todos los productos: " + e.getMessage());
         }
-
-        return producto;
+        return productos;
     }
 }

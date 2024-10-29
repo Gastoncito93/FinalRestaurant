@@ -1,39 +1,42 @@
 package entidades;
 
 public class Mesero {
-    private int id;
+    private int idMesero;
     private String nombre;
     private String apellido;
     private String dni;
+    private boolean estado;
     private String usuario;
     private String contraseña;
-
-    public Mesero(int id, String nombre, String apellido, String dni, String usuario, String contraseña) {
-        this.id = id;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.dni = dni;
-        this.usuario = usuario;
-        this.contraseña = contraseña;
-    } 
-
-    public Mesero(String nombre, String apellido, String dni, String usuario, String contraseña) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.dni = dni;
-        this.usuario = usuario;
-        this.contraseña = contraseña;
-    }
 
     public Mesero() {
     }
 
-    public int getId() {
-        return id;
+    public Mesero(String nombre, String apellido, String dni, boolean estado, String usuario, String contraseña) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.dni = dni;
+        this.estado = estado;
+        this.usuario = usuario;
+        this.contraseña = contraseña;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Mesero(int idMesero, String nombre, String apellido, String dni, boolean estado, String usuario, String contraseña) {
+        this.idMesero = idMesero;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.dni = dni;
+        this.estado = estado;
+        this.usuario = usuario;
+        this.contraseña = contraseña;
+    }
+
+    public int getIdMesero() {
+        return idMesero;
+    }
+
+    public void setIdMesero(int idMesero) {
+        this.idMesero = idMesero;
     }
 
     public String getNombre() {
@@ -60,6 +63,14 @@ public class Mesero {
         this.dni = dni;
     }
 
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
     public String getUsuario() {
         return usuario;
     }
@@ -75,14 +86,19 @@ public class Mesero {
     public void setContraseña(String contraseña) {
         this.contraseña = contraseña;
     }
+
+    
+    
+    
     
     @Override
     public String toString() {
         return "Mesero {" +
-                "id=" + id +
+                "id=" + idMesero +
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
                 ", dni='" + dni + '\'' +
+                ", estado='" + estado + '\'' +
                 ", usuario='" + usuario + '\'' +
                 '}';
     }

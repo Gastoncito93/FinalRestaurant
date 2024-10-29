@@ -1,97 +1,74 @@
 package entidades;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 public class Pedido {
-    private int id;
-    private Mesa mesa;
-    private Mesero mesero;
-    private List<Producto> productos;
-    private double total;
-    private String fechaHora;
+    private int idPedido;
+    private int idMesa;
+    private int idMesero;
+    private LocalDateTime fecha; // Cambiamos a LocalDateTime para manejar fechas
+    private boolean estado; // Estado como booleano
 
-    public Pedido(int id, Mesa mesa, Mesero mesero, List<Producto> productos, String fechaHora) {
-        this.id = id;
-        this.mesa = mesa;
-        this.mesero = mesero;
-        this.productos = productos;
-        this.fechaHora = fechaHora;
-        calcularTotal();
-    }
-
-    public void calcularTotal() {
-        total = productos.stream().mapToDouble(Producto::getPrecio).sum();
-    }
-
-    public Pedido(Mesa mesa, Mesero mesero, List<Producto> productos, double total, String fechaHora) {
-        this.mesa = mesa;
-        this.mesero = mesero;
-        this.productos = productos;
-        this.total = total;
-        this.fechaHora = fechaHora;
-    }
-
+    // Constructor por defecto
     public Pedido() {
     }
 
-    public int getId() {
-        return id;
+    // Constructor con todos los atributos
+    public Pedido(int idMesa, int idMesero, LocalDateTime fecha, boolean estado) {
+        this.idMesa = idMesa;
+        this.idMesero = idMesero;
+        this.fecha = fecha;
+        this.estado = estado;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getIdPedido() {
+        return idPedido;
     }
 
-    public Mesa getMesa() {
-        return mesa;
+    public void setIdPedido(int idPedido) {
+        this.idPedido = idPedido;
     }
 
-    public void setMesa(Mesa mesa) {
-        this.mesa = mesa;
+    public int getIdMesa() {
+        return idMesa;
     }
 
-    public Mesero getMesero() {
-        return mesero;
+    public void setIdMesa(int idMesa) {
+        this.idMesa = idMesa;
     }
 
-    public void setMesero(Mesero mesero) {
-        this.mesero = mesero;
+    public int getIdMesero() {
+        return idMesero;
     }
 
-    public List<Producto> getProductos() {
-        return productos;
+    public void setIdMesero(int idMesero) {
+        this.idMesero = idMesero;
     }
 
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
+    public LocalDateTime getFecha() {
+        return fecha;
     }
 
-    public double getTotal() {
-        return total;
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
 
-    public void setTotal(double total) {
-        this.total = total;
+    public boolean isEstado() {
+        return estado;
     }
 
-    public String getFechaHora() {
-        return fechaHora;
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
 
-    public void setFechaHora(String fechaHora) {
-        this.fechaHora = fechaHora;
-    }
-    
     @Override
     public String toString() {
         return "Pedido {" +
-                "id=" + id +
-                ", mesa=" + mesa.getNumero() +
-                ", mesero=" + mesero.getNombre() + " " + mesero.getApellido() +
-                ", productos=" + productos +
-                ", total=" + total +
-                ", fechaHora='" + fechaHora + '\'' +
+                "idPedido=" + idPedido +
+                ", idMesa=" + idMesa +
+                ", idMesero=" + idMesero +
+                ", fecha=" + fecha +
+                ", estado=" + estado +
                 '}';
     }
-
 }

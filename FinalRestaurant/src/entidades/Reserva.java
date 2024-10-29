@@ -1,7 +1,7 @@
 package entidades;
 
 public class Reserva {
-    private int id;
+    private int idReserva;
     private String nombrePersona;
     private String dni;
     private String fecha;
@@ -9,7 +9,7 @@ public class Reserva {
     private boolean estado;
 
     public Reserva(int id, String nombrePersona, String dni, String fecha, String hora, boolean estado) {
-        this.id = id;
+        this.idReserva = id;
         this.nombrePersona = nombrePersona;
         this.dni = dni;
         this.fecha = fecha;
@@ -28,12 +28,12 @@ public class Reserva {
     public Reserva() {
     }
 
-    public int getId() {
-        return id;
+    public int getIdReserva() {
+        return idReserva;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdReserva(int idReserva) {
+        this.idReserva = idReserva;
     }
 
     public String getNombrePersona() {
@@ -75,11 +75,13 @@ public class Reserva {
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
+
+   
     
     @Override
     public String toString() {
         return "Reserva {" +
-                "id=" + id +
+                "id=" + idReserva +
                 ", nombrePersona='" + nombrePersona + '\'' +
                 ", dni='" + dni + '\'' +
                 ", fecha='" + fecha + '\'' +

@@ -1,36 +1,39 @@
 package entidades;
 
 public class Mesa {
-    private int id;
+    private int idMesa;
     private int numero;
     private int capacidad;
-    private String estado; // ocupada, libre, reservada
-    private Reserva reserva; // Relación con Reserva
+    private boolean estado;
+    private Reserva reserva;
 
-    public Mesa(int id, int numero, int capacidad, String estado, Reserva reserva) {
-        this.id = id;
+    // Constructor vacío
+    public Mesa() {}
+
+    // Constructor con parámetros
+    public Mesa(int idMesa, int numero, int capacidad, boolean estado, Reserva reserva) {
+        this.idMesa = idMesa;
         this.numero = numero;
         this.capacidad = capacidad;
         this.estado = estado;
         this.reserva = reserva;
     }
 
-    public Mesa(int numero, int capacidad, String estado, Reserva reserva) {
+    public Mesa(int numero, int capacidad, boolean estado, Reserva reserva) {
         this.numero = numero;
         this.capacidad = capacidad;
         this.estado = estado;
         this.reserva = reserva;
     }
 
-    public Mesa() {
+    
+    
+    public int getIdMesa() {
+        return idMesa;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public void setIdMesa(int idMesa) {
+        this.idMesa = idMesa;
     }
 
     public int getNumero() {
@@ -49,11 +52,11 @@ public class Mesa {
         this.capacidad = capacidad;
     }
 
-    public String getEstado() {
+    public boolean isEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(boolean estado) {
         this.estado = estado;
     }
 
@@ -64,16 +67,18 @@ public class Mesa {
     public void setReserva(Reserva reserva) {
         this.reserva = reserva;
     }
+ 
     
+    
+
     @Override
     public String toString() {
-        return "Mesa {" +
-                "id=" + id +
+        return "Mesa{" +
+                "idMesa=" + idMesa +
                 ", numero=" + numero +
                 ", capacidad=" + capacidad +
-                ", estado='" + estado + '\'' +
-                ", reserva=" + (reserva != null ? reserva.toString() : "Sin reserva") +
+                ", estado=" + estado +
+                ", idReserva=" + reserva +
                 '}';
     }
 }
-

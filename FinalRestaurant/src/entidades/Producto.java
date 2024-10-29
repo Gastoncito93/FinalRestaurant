@@ -1,36 +1,50 @@
 package entidades;
 
 public class Producto {
-    private int codigo;
+    private int idProducto;
     private String nombre;
-    private int cantidadDisponible;
+    private int cantidad;
     private double precio;
-    private String categoria; // comida, bebida sin alcohol, bebida con alcohol
+    private String tipo;
+    private boolean estado;
 
-    public Producto(int codigo, String nombre, int cantidadDisponible, double precio, String categoria) {
-        this.codigo = codigo;
+    // Constructor vacío
+    public Producto() {}
+
+    // Constructor con parámetros
+    public Producto(int idProducto, String nombre, int cantidad, double precio, String tipo, boolean estado) {
+        this.idProducto = idProducto;
         this.nombre = nombre;
-        this.cantidadDisponible = cantidadDisponible;
+        this.cantidad = cantidad;
         this.precio = precio;
-        this.categoria = categoria;
+        this.tipo = tipo;
+        this.estado = estado;
     }
 
-    public Producto(String nombre, int cantidadDisponible, double precio, String categoria) {
+    public Producto(int idProducto, String nombre, int cantidad) {
+        this.idProducto = idProducto;
         this.nombre = nombre;
-        this.cantidadDisponible = cantidadDisponible;
+        this.cantidad = cantidad;
+    }
+    
+    
+
+    public Producto(String nombre, int cantidad, double precio, String tipo, boolean estado) {
+        this.nombre = nombre;
+        this.cantidad = cantidad;
         this.precio = precio;
-        this.categoria = categoria;
+        this.tipo = tipo;
+        this.estado = estado;
     }
 
-    public Producto() {
+    
+    // Getters y Setters
+    public int getIdProducto() {
+        return idProducto;
     }
 
-    public int getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
     }
 
     public String getNombre() {
@@ -41,12 +55,12 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public int getCantidadDisponible() {
-        return cantidadDisponible;
+    public int getCantidad() {
+        return cantidad;
     }
 
-    public void setCantidadDisponible(int cantidadDisponible) {
-        this.cantidadDisponible = cantidadDisponible;
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 
     public double getPrecio() {
@@ -57,23 +71,33 @@ public class Producto {
         this.precio = precio;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public String getTipo() {
+        return tipo;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
-    
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    // Método toString para representar el objeto como cadena
     @Override
     public String toString() {
-        return "Producto {" +
-                "codigo=" + codigo +
+        return "Producto{" +
+                "idProducto=" + idProducto +
                 ", nombre='" + nombre + '\'' +
-                ", cantidadDisponible=" + cantidadDisponible +
+                ", cantidad=" + cantidad +
                 ", precio=" + precio +
-                ", categoria='" + categoria + '\'' +
+                ", tipo='" + tipo + '\'' +
+                ", estado=" + estado +
                 '}';
     }
-
 }
+
