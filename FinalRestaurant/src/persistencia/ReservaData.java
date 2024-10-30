@@ -8,7 +8,7 @@ import java.util.List;
 public class ReservaData {
 
     private Connection connection;
-    private boolean flag = false;
+    private boolean flag = true;
 
     // Constructor que establece la conexión a la base de datos
     public ReservaData(Connection connection) {
