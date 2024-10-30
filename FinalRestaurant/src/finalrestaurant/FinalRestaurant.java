@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import persistencia.PedidoData;
 import persistencia.PedidoProductoData;
+import persistencia.ReservaData;
+import entidades.Reserva;
 
 public class FinalRestaurant {
 
@@ -26,7 +28,7 @@ public class FinalRestaurant {
         Mesa mesa1 = new Mesa(101, 4, 2, true, null);
         mesaData.agregarMesa(mesa1);
         System.out.println("Mesa agregada: " + mesa1);
-        
+
         Mesa mesa2 = new Mesa(102, 5, 4, true, null);
         mesaData.agregarMesa(mesa2);
         System.out.println("Mesa agregada: " + mesa2);
@@ -68,7 +70,6 @@ public class FinalRestaurant {
         }
 
         // ----------------------------------------------------------------------------------
-        
         // Instanciar MeseroData para interactuar con la base de datos
         MeseroData meseroData = new MeseroData(conexion);
 
@@ -88,10 +89,9 @@ public class FinalRestaurant {
         }
 
         // ----------------------------------------------------------------------------------
-        
         // Agregar pedidos asegurándote de que las mesas y meseros existen
         PedidoData pedidoData = new PedidoData(conexion);
-        
+
         Pedido pedido1 = new Pedido(mesa1.getIdMesa(), mesero1.getIdMesero(), LocalDateTime.now(), true);
         pedidoData.agregarPedido(pedido1);
         System.out.println("Pedido agregado: " + pedido1);
@@ -105,7 +105,7 @@ public class FinalRestaurant {
         for (Pedido pedido : pedidos) {
             System.out.println(pedido);
         }
-        
+
         // Instanciar PedidoProductoData para interactuar con la base de datos
         PedidoProductoData pedidoProductoData = new PedidoProductoData(conexion);
 
@@ -123,5 +123,22 @@ public class FinalRestaurant {
         // Obtener y mostrar productos del segundo pedido
         System.out.println("Productos del pedido " + pedido2.getIdPedido() + ":");
         pedidoProductoData.obtenerProductosPorPedido(pedido2.getIdPedido());
+
+        //creando una reserva
+        ReservaData reservaData = new ReservaData(conexion);
+
+        Reserva reserva1 = new Reserva(20, "Nico Nico", "33333333", "2024-02-21", "21:05:01", true);
+        reservaData.crearReserva(reserva1);
+
+        Reserva reserva2 = new Reserva(20, "Maca Rena", "11111111", "2024-02-19", "19:00:00", true);
+        reservaData.crearReserva(reserva2);
+
+        //Mostrar todas las reservas
+        List<Reserva> reservas = reservaData.listaDeReservas();
+
+        for (Reserva reserva : reservas) {
+            System.out.println(reserva);
+        }
+
     }
 }

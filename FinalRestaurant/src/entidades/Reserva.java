@@ -2,14 +2,16 @@ package entidades;
 
 public class Reserva {
     private int idReserva;
+    private int id_mesa;
     private String nombrePersona;
     private String dni;
     private String fecha;
     private String hora;
     private boolean estado;
 
-    public Reserva(int id, String nombrePersona, String dni, String fecha, String hora, boolean estado) {
+    public Reserva(int id, int id_mesa, String nombrePersona, String dni, String fecha, String hora, boolean estado) {
         this.idReserva = id;
+        this.id_mesa= id_mesa;
         this.nombrePersona = nombrePersona;
         this.dni = dni;
         this.fecha = fecha;
@@ -17,7 +19,8 @@ public class Reserva {
         this.estado = estado;
     }
 
-    public Reserva(String nombrePersona, String dni, String fecha, String hora, boolean estado) {
+    public Reserva( int id_mesa, String nombrePersona, String dni, String fecha, String hora, boolean estado) {
+        this.id_mesa= id_mesa;
         this.nombrePersona = nombrePersona;
         this.dni = dni;
         this.fecha = fecha;
@@ -34,6 +37,14 @@ public class Reserva {
 
     public void setIdReserva(int idReserva) {
         this.idReserva = idReserva;
+    }
+
+    public int getId_mesa() {
+        return id_mesa;
+    }
+
+    public void setId_mesa(int id_mesa) {
+        this.id_mesa = id_mesa;
     }
 
     public String getNombrePersona() {
@@ -82,6 +93,7 @@ public class Reserva {
     public String toString() {
         return "Reserva {" +
                 "id=" + idReserva +
+                ", id_mesa" + id_mesa + '\'' +
                 ", nombrePersona='" + nombrePersona + '\'' +
                 ", dni='" + dni + '\'' +
                 ", fecha='" + fecha + '\'' +
