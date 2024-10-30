@@ -123,6 +123,7 @@ public class FinalRestaurant {
         // Obtener y mostrar productos del segundo pedido
         System.out.println("Productos del pedido " + pedido2.getIdPedido() + ":");
         pedidoProductoData.obtenerProductosPorPedido(pedido2.getIdPedido());
+        
         //creando una reserva
         ReservaData reservaData = new ReservaData(conexion);
 

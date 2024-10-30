@@ -8,6 +8,7 @@ import java.util.List;
 public class ReservaData {
 
     private Connection connection;
+    private boolean flag = false;
 
     // Constructor que establece la conexión a la base de datos
     public ReservaData(Connection connection) {
@@ -16,26 +17,38 @@ public class ReservaData {
 
     // Método para insertar un nuevo reserva
     public void crearReserva(Reserva reserva) {
-        String sql = "INSERT INTO Reserva ( id_mesa, nombre_cliente, dni_cliente, fecha, hora, estado ) VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            pstmt.setInt(1, reserva.getId_mesa());
-            pstmt.setString(2, reserva.getNombrePersona());
-            pstmt.setString(3, reserva.getDni());
-            pstmt.setString(4, reserva.getFecha());
-            pstmt.setString(5, reserva.getHora());
-            pstmt.setBoolean(6, reserva.isEstado());
 
-            pstmt.executeUpdate();
-
-            // Obtener el ID generado y asignarlo al objeto reserva
-            ResultSet rs = pstmt.getGeneratedKeys();
-            if (rs.next()) {
-                reserva.setIdReserva(rs.getInt(1));
+        List<Reserva> reservas = listaDeReservas();
+        for (Reserva reservasexistentes : reservas) {
+            if (reservasexistentes.getId_mesa() == reserva.getId_mesa() && reservasexistentes.getFecha().equalsIgnoreCase(reserva.getFecha()) && reservasexistentes.getHora().equalsIgnoreCase(reserva.getHora())) {
+                flag = false;
             }
 
-            System.out.println("Reserva creada con éxito");
-        } catch (SQLException e) {
-            System.out.println("Error al crear la reserva " + e.getMessage());
+        }
+        if (flag) {
+            String sql = "INSERT INTO Reserva ( id_mesa, nombre_cliente, dni_cliente, fecha, hora, estado ) VALUES (?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                pstmt.setInt(1, reserva.getId_mesa());
+                pstmt.setString(2, reserva.getNombrePersona());
+                pstmt.setString(3, reserva.getDni());
+                pstmt.setString(4, reserva.getFecha());
+                pstmt.setString(5, reserva.getHora());
+                pstmt.setBoolean(6, reserva.isEstado());
+
+                pstmt.executeUpdate();
+
+                // Obtener el ID generado y asignarlo al objeto reserva
+                ResultSet rs = pstmt.getGeneratedKeys();
+                if (rs.next()) {
+                    reserva.setIdReserva(rs.getInt(1));
+                }
+
+                System.out.println("Reserva creada con éxito");
+            } catch (SQLException e) {
+                System.out.println("Error al crear la reserva " + e.getMessage());
+            }
+        } else{
+            System.out.println("Error al crear reserva, la mesa se encuentra ocupada ese dia a esa hora");
         }
     }
 
@@ -79,8 +92,7 @@ public class ReservaData {
     public List<Reserva> listaDeReservas() {
         List<Reserva> reservas = new ArrayList<>();
         String sql = "SELECT * FROM Reserva";
-        try (Statement stmt = connection.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Reserva reserva = new Reserva(
                         rs.getInt("id_reserva"),
