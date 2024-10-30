@@ -26,49 +26,73 @@ public class aVistaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jDesktopPane1 = new javax.swing.JDesktopPane();
+        escritorio = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        jMadministracion = new javax.swing.JMenu();
+        jMbaseAdmin = new javax.swing.JMenuItem();
+        jMAgregar = new javax.swing.JMenu();
+        jMagregarReservas = new javax.swing.JMenuItem();
+        jMreservas = new javax.swing.JMenu();
+        jMreservasTotal = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1400, 900));
 
-        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
-        jDesktopPane1.setLayout(jDesktopPane1Layout);
-        jDesktopPane1Layout.setHorizontalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        escritorio.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                escritorioAncestorAdded(evt);
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+
+        javax.swing.GroupLayout escritorioLayout = new javax.swing.GroupLayout(escritorio);
+        escritorio.setLayout(escritorioLayout);
+        escritorioLayout.setHorizontalGroup(
+            escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 932, Short.MAX_VALUE)
         );
-        jDesktopPane1Layout.setVerticalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        escritorioLayout.setVerticalGroup(
+            escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 476, Short.MAX_VALUE)
         );
 
-        jMenu1.setText("Administracion");
+        jMadministracion.setText("Administracion");
 
-        jMenuItem1.setText("jMenuItem1");
-        jMenu1.add(jMenuItem1);
+        jMbaseAdmin.setText("Base de Administracion");
+        jMbaseAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMbaseAdminActionPerformed(evt);
+            }
+        });
+        jMadministracion.add(jMbaseAdmin);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(jMadministracion);
 
-        jMenu2.setText("Agregar");
+        jMAgregar.setText("Agregar");
 
-        jMenuItem2.setText("jMenuItem2");
-        jMenu2.add(jMenuItem2);
+        jMagregarReservas.setText("Agregar Reservas");
+        jMagregarReservas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMagregarReservasActionPerformed(evt);
+            }
+        });
+        jMAgregar.add(jMagregarReservas);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(jMAgregar);
 
-        jMenu3.setText("Reserva");
+        jMreservas.setText("Reservas");
 
-        jMenuItem3.setText("jMenuItem3");
-        jMenu3.add(jMenuItem3);
+        jMreservasTotal.setText("Reservas Totales");
+        jMreservasTotal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMreservasTotalActionPerformed(evt);
+            }
+        });
+        jMreservas.add(jMreservasTotal);
 
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.add(jMreservas);
 
         setJMenuBar(jMenuBar1);
 
@@ -76,16 +100,42 @@ public class aVistaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1)
+            .addComponent(escritorio)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1)
+            .addComponent(escritorio)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMagregarReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMagregarReservasActionPerformed
+         Vista_AgregarReservas Reservas = new Vista_AgregarReservas();
+            escritorio.add(Reservas);
+            Reservas.setVisible(true);
+        
+    }//GEN-LAST:event_jMagregarReservasActionPerformed
+
+    private void jMbaseAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMbaseAdminActionPerformed
+       Vista_Administracion Administracion = new Vista_Administracion();
+            escritorio.add(Administracion);
+            Administracion.setVisible(true);
+        
+        
+    }//GEN-LAST:event_jMbaseAdminActionPerformed
+
+    private void jMreservasTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMreservasTotalActionPerformed
+        Vista_ReservasTotal ReservasTotales = new Vista_ReservasTotal();
+            escritorio.add(ReservasTotales);
+            ReservasTotales.setVisible(true);
+    }//GEN-LAST:event_jMreservasTotalActionPerformed
+
+    private void escritorioAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_escritorioAncestorAdded
+      
+        
+    }//GEN-LAST:event_escritorioAncestorAdded
 
     /**
      * @param args the command line arguments
@@ -123,13 +173,13 @@ public class aVistaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDesktopPane jDesktopPane1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
+    private javax.swing.JDesktopPane escritorio;
+    private javax.swing.JMenu jMAgregar;
+    private javax.swing.JMenu jMadministracion;
+    private javax.swing.JMenuItem jMagregarReservas;
+    private javax.swing.JMenuItem jMbaseAdmin;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenu jMreservas;
+    private javax.swing.JMenuItem jMreservasTotal;
     // End of variables declaration//GEN-END:variables
 }
