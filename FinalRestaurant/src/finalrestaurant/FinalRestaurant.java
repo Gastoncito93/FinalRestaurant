@@ -123,7 +123,6 @@ public class FinalRestaurant {
         // Obtener y mostrar productos del segundo pedido
         System.out.println("Productos del pedido " + pedido2.getIdPedido() + ":");
         pedidoProductoData.obtenerProductosPorPedido(pedido2.getIdPedido());
-
         //creando una reserva
         ReservaData reservaData = new ReservaData(conexion);
 
@@ -139,6 +138,13 @@ public class FinalRestaurant {
         for (Reserva reserva : reservas) {
             System.out.println(reserva);
         }
+         
+        reservaData.eliminarReserva(11);
 
+        List<Reserva> reservas1 = reservaData.listaDeReservas();
+        for (Reserva reserva : reservas1) {
+            System.out.println(reserva);
+
+        }
     }
 }
