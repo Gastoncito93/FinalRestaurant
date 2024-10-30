@@ -26,14 +26,21 @@ public class aVistaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuItem1 = new javax.swing.JMenuItem();
         escritorio = new javax.swing.JDesktopPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMadministracion = new javax.swing.JMenu();
         jMbaseAdmin = new javax.swing.JMenuItem();
         jMAgregar = new javax.swing.JMenu();
+        jMagregarMesa = new javax.swing.JMenuItem();
         jMagregarReservas = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMreservas = new javax.swing.JMenu();
         jMreservasTotal = new javax.swing.JMenuItem();
+
+        jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,15 +54,36 @@ public class aVistaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Mesa", "Mozo", "Reserva"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        escritorio.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         javax.swing.GroupLayout escritorioLayout = new javax.swing.GroupLayout(escritorio);
         escritorio.setLayout(escritorioLayout);
         escritorioLayout.setHorizontalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 932, Short.MAX_VALUE)
+            .addGroup(escritorioLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(381, Short.MAX_VALUE))
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 476, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, escritorioLayout.createSequentialGroup()
+                .addContainerGap(348, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39))
         );
 
         jMadministracion.setText("Administracion");
@@ -72,13 +100,19 @@ public class aVistaPrincipal extends javax.swing.JFrame {
 
         jMAgregar.setText("Agregar");
 
-        jMagregarReservas.setText("Agregar Reservas");
+        jMagregarMesa.setText("Agregar mesa");
+        jMAgregar.add(jMagregarMesa);
+
+        jMagregarReservas.setText("Agregar Pedidos");
         jMagregarReservas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMagregarReservasActionPerformed(evt);
             }
         });
         jMAgregar.add(jMagregarReservas);
+
+        jMenuItem2.setText("Agregar producto");
+        jMAgregar.add(jMenuItem2);
 
         jMenuBar1.add(jMAgregar);
 
@@ -112,7 +146,7 @@ public class aVistaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMagregarReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMagregarReservasActionPerformed
-         Vista_AgregarReservas Reservas = new Vista_AgregarReservas();
+         Vista_AgregarPedidos Reservas = new Vista_AgregarPedidos();
             escritorio.add(Reservas);
             Reservas.setVisible(true);
         
@@ -176,10 +210,15 @@ public class aVistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JDesktopPane escritorio;
     private javax.swing.JMenu jMAgregar;
     private javax.swing.JMenu jMadministracion;
+    private javax.swing.JMenuItem jMagregarMesa;
     private javax.swing.JMenuItem jMagregarReservas;
     private javax.swing.JMenuItem jMbaseAdmin;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenu jMreservas;
     private javax.swing.JMenuItem jMreservasTotal;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
