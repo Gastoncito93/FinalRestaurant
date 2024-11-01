@@ -4,7 +4,6 @@
  */
 package vistas;
 
-import entidades.Mesa;
 import entidades.Producto;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -360,13 +359,13 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
 
     // Método auxiliar para actualizar la tabla de productos
     private void actualizarTabla() {
-    modelo.setRowCount(0); // Limpiar el modelo de la tabla
-    List<Producto> productos = productoData.obtenerTodosLosProductos(); // Obtener todos los productos
+        modelo.setRowCount(0); // Limpiar el modelo de la tabla
+        List<Producto> productos = productoData.obtenerTodosLosProductos(); // Obtener todos los productos
 
-    for (Producto producto : productos) {
-        Object[] fila = {producto.getIdProducto(), producto.getNombre(), producto.getCantidad(), producto.getPrecio(), producto.getTipo(), producto.isEstado()};
-        modelo.addRow(fila); // Agregar cada producto como una nueva fila en la tabla
-    }
+        for (Producto producto : productos) {
+            Object[] fila = {producto.getIdProducto(), producto.getNombre(), producto.getCantidad(), producto.getPrecio(), producto.getTipo(), producto.isEstado()};
+            modelo.addRow(fila); // Agregar cada producto como una nueva fila en la tabla
+        }
 
 
     }//GEN-LAST:event_jBAgregarActionPerformed

@@ -152,12 +152,12 @@ public class aVistaPrincipal extends javax.swing.JFrame {
 
     private void jMbaseAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMbaseAdminActionPerformed
        for (javax.swing.JInternalFrame frame : escritorio.getAllFrames()) {
-            if (frame instanceof Vista_Administracion) {
+            if (frame instanceof Vista_AgregarMesero) {
                 frame.dispose();
                 break;
             }
         }
-        Vista_Administracion Administracion = new Vista_Administracion();
+        Vista_AgregarMesero Administracion = new Vista_AgregarMesero();
             escritorio.add(Administracion);
             Administracion.setVisible(true);
     }//GEN-LAST:event_jMbaseAdminActionPerformed
@@ -174,7 +174,14 @@ public class aVistaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_escritorioAncestorAdded
 
     private void jMagregarMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMagregarMesaActionPerformed
-       Vista_AgregarMesa vista_AgregarMesa = new Vista_AgregarMesa();
+       for (javax.swing.JInternalFrame frame : escritorio.getAllFrames()) {
+        if (frame instanceof Vista_AgregarMesa) {
+            frame.dispose();
+            break;
+        }
+    }
+        
+        Vista_AgregarMesa vista_AgregarMesa = new Vista_AgregarMesa();
             escritorio.add(vista_AgregarMesa);
             vista_AgregarMesa.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jMagregarMesaActionPerformed
