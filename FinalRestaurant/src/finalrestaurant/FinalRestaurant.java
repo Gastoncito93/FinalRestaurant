@@ -15,10 +15,11 @@ import persistencia.PedidoData;
 import persistencia.PedidoProductoData;
 import persistencia.ReservaData;
 import entidades.Reserva;
+import java.sql.SQLException;
 
 public class FinalRestaurant {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         Connection conexion = Conexion.getConexion();
 
         // ----------------------------------------------------------------------------------      
@@ -38,7 +39,7 @@ public class FinalRestaurant {
         for (Mesa mesa : mesas) {
             System.out.println(mesa);
         }
-
+ 
         // ----------------------------------------------------------------------------------             
         ProductoData productoData = new ProductoData(conexion);
 

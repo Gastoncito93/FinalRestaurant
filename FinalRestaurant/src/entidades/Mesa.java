@@ -5,25 +5,25 @@ public class Mesa {
     private int numero;
     private int capacidad;
     private boolean estado;
-    private Reserva reserva;
+    private Integer idReserva;
 
     // Constructor vacío
     public Mesa() {}
 
     // Constructor con parámetros
-    public Mesa(int idMesa, int numero, int capacidad, boolean estado, Reserva reserva) {
+    public Mesa(int idMesa, int numero, int capacidad, boolean estado, Integer idReserva) {
         this.idMesa = idMesa;
         this.numero = numero;
         this.capacidad = capacidad;
         this.estado = estado;
-        this.reserva = reserva;
+        this.idReserva = idReserva;
     }
 
-    public Mesa(int numero, int capacidad, boolean estado, Reserva reserva) {
+    public Mesa(int numero, int capacidad, boolean estado, Integer idReserva) {
         this.numero = numero;
         this.capacidad = capacidad;
         this.estado = estado;
-        this.reserva = reserva;
+        this.idReserva = idReserva;
     }
 
     
@@ -60,13 +60,14 @@ public class Mesa {
         this.estado = estado;
     }
 
-    public Reserva getReserva() {
-        return reserva;
+    public Integer getIdReserva() {
+        return idReserva;
     }
 
-    public void setReserva(Reserva reserva) {
-        this.reserva = reserva;
+    public void setIdReserva(Integer idReserva) {
+        this.idReserva = idReserva;
     }
+
  
     
     
@@ -78,7 +79,7 @@ public class Mesa {
                 ", numero=" + numero +
                 ", capacidad=" + capacidad +
                 ", estado=" + estado +
-                ", idReserva=" + reserva +
+                ", idReserva=" + idReserva +
                 '}';
     }
 }
