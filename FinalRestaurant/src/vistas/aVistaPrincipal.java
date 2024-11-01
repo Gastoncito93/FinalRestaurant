@@ -19,10 +19,10 @@ public class aVistaPrincipal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMadministracion = new javax.swing.JMenu();
         jMbaseAdmin = new javax.swing.JMenuItem();
-        jMAgregar = new javax.swing.JMenu();
+        jMProducto = new javax.swing.JMenuItem();
         jMagregarMesa = new javax.swing.JMenuItem();
+        jMAgregar = new javax.swing.JMenu();
         jMagregarReservas = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
         jMreservas = new javax.swing.JMenu();
         jMreservasTotal = new javax.swing.JMenuItem();
 
@@ -31,10 +31,10 @@ public class aVistaPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         escritorio.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 escritorioAncestorAdded(evt);
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -60,21 +60,21 @@ public class aVistaPrincipal extends javax.swing.JFrame {
         escritorioLayout.setHorizontalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(escritorioLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(381, Short.MAX_VALUE))
+                .addContainerGap(657, Short.MAX_VALUE))
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, escritorioLayout.createSequentialGroup()
-                .addContainerGap(348, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39))
+                .addContainerGap(488, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jMadministracion.setText("Administracion");
 
-        jMbaseAdmin.setText("Base de Administracion");
+        jMbaseAdmin.setText("Agregar Mesero");
         jMbaseAdmin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMbaseAdminActionPerformed(evt);
@@ -82,17 +82,25 @@ public class aVistaPrincipal extends javax.swing.JFrame {
         });
         jMadministracion.add(jMbaseAdmin);
 
-        jMenuBar1.add(jMadministracion);
+        jMProducto.setText("Agregar Producto");
+        jMProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMProductoActionPerformed(evt);
+            }
+        });
+        jMadministracion.add(jMProducto);
 
-        jMAgregar.setText("Agregar");
-
-        jMagregarMesa.setText("Agregar mesa");
+        jMagregarMesa.setText("Agregar Mesa");
         jMagregarMesa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMagregarMesaActionPerformed(evt);
             }
         });
-        jMAgregar.add(jMagregarMesa);
+        jMadministracion.add(jMagregarMesa);
+
+        jMenuBar1.add(jMadministracion);
+
+        jMAgregar.setText("Agregar");
 
         jMagregarReservas.setText("Agregar Pedidos");
         jMagregarReservas.addActionListener(new java.awt.event.ActionListener() {
@@ -101,9 +109,6 @@ public class aVistaPrincipal extends javax.swing.JFrame {
             }
         });
         jMAgregar.add(jMagregarReservas);
-
-        jMenuItem2.setText("Agregar producto");
-        jMAgregar.add(jMenuItem2);
 
         jMenuBar1.add(jMAgregar);
 
@@ -125,7 +130,9 @@ public class aVistaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(escritorio)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(escritorio)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,11 +151,15 @@ public class aVistaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMagregarReservasActionPerformed
 
     private void jMbaseAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMbaseAdminActionPerformed
-       Vista_Administracion Administracion = new Vista_Administracion();
+       for (javax.swing.JInternalFrame frame : escritorio.getAllFrames()) {
+            if (frame instanceof Vista_Administracion) {
+                frame.dispose();
+                break;
+            }
+        }
+        Vista_Administracion Administracion = new Vista_Administracion();
             escritorio.add(Administracion);
             Administracion.setVisible(true);
-        
-        
     }//GEN-LAST:event_jMbaseAdminActionPerformed
 
     private void jMreservasTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMreservasTotalActionPerformed
@@ -167,6 +178,18 @@ public class aVistaPrincipal extends javax.swing.JFrame {
             escritorio.add(vista_AgregarMesa);
             vista_AgregarMesa.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jMagregarMesaActionPerformed
+
+    private void jMProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMProductoActionPerformed
+    for (javax.swing.JInternalFrame frame : escritorio.getAllFrames()) {
+        if (frame instanceof Vista_AgregarProducto) {
+            frame.dispose();
+            break;
+        }
+    }
+    Vista_AgregarProducto vista_AgregarProducto = new Vista_AgregarProducto();
+    escritorio.add(vista_AgregarProducto);
+    vista_AgregarProducto.setVisible(true);     
+    }//GEN-LAST:event_jMProductoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -206,13 +229,13 @@ public class aVistaPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane escritorio;
     private javax.swing.JMenu jMAgregar;
+    private javax.swing.JMenuItem jMProducto;
     private javax.swing.JMenu jMadministracion;
     private javax.swing.JMenuItem jMagregarMesa;
     private javax.swing.JMenuItem jMagregarReservas;
     private javax.swing.JMenuItem jMbaseAdmin;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenu jMreservas;
     private javax.swing.JMenuItem jMreservasTotal;
     private javax.swing.JScrollPane jScrollPane1;

@@ -80,14 +80,16 @@ public class MesaData {
     }
 
     // Método para eliminar una mesa
-    public void eliminarMesa(int idMesa) {
+    public boolean eliminarMesa(int idMesa) {
         String sql = "DELETE FROM Mesa WHERE id_mesa = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, idMesa);
-            statement.executeUpdate();
+            int filasAfectadas = statement.executeUpdate();
+            return filasAfectadas > 0; // Retorna true si se eliminó al menos una fila
         } catch (SQLException e) {
             e.printStackTrace();
+            return false; // Retorna false si ocurre una excepción
         }
     }
 
