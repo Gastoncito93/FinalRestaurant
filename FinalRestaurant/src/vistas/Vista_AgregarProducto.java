@@ -4,6 +4,7 @@
  */
 package vistas;
 
+import entidades.Mesa;
 import entidades.Producto;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -136,7 +137,6 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTFNombre = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jTFCantidad = new javax.swing.JTextField();
         jTFPrecio = new javax.swing.JTextField();
@@ -144,7 +144,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jBAgregar = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jBActualizar = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jTFTipo = new javax.swing.JTextField();
         jRBAlta = new javax.swing.JRadioButton();
@@ -168,6 +168,11 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTProducto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTProductoMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTProducto);
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
@@ -178,8 +183,6 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Agregar Producto");
         jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        jButton1.setText("Eliminar");
 
         jLabel4.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel4.setText("Precio");
@@ -206,7 +209,12 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton3.setText("Actualizar");
+        jBActualizar.setText("Actualizar");
+        jBActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBActualizarActionPerformed(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel8.setText("Tipo");
@@ -235,18 +243,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jBAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(3, 3, 3)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jTFTipo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
-                                .addComponent(jTFPrecio, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTFCantidad, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTFNombre, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(24, 24, 24)
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -262,19 +259,29 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(67, 67, 67)
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(13, 13, 13)
-                                .addComponent(jRBAlta)
-                                .addGap(18, 18, 18)
-                                .addComponent(jRBBaja)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jTFCantidad, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTFPrecio, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTFTipo, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jBAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(13, 13, 13)
+                                            .addComponent(jRBAlta)))
+                                    .addGap(30, 30, 30)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jRBBaja)
+                                        .addComponent(jBActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jTFNombre))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(34, 34, 34)
+                                .addGap(94, 94, 94)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 27, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane1)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -311,8 +318,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jBAgregar)
-                            .addComponent(jButton3)
-                            .addComponent(jButton1)))
+                            .addComponent(jBActualizar)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -335,6 +341,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
     private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
        // Método para agregar un nuevo product
     try {
+        
         String nombre = jTFNombre.getText();
         int cantidad = Integer.parseInt(jTFCantidad.getText());
         double precio = Double.parseDouble(jTFPrecio.getText());
@@ -364,11 +371,39 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_jBAgregarActionPerformed
 
+    private void jTProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTProductoMouseClicked
+        int rowIndex = jTProducto.getSelectedRow();
+        if (rowIndex != -1) { // Asegúrate de que haya una fila seleccionada
+            cargarDatosProductoSeleccionada(rowIndex);
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jTProductoMouseClicked
+
+    private void jBActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBActualizarActionPerformed
+        int filaSeleccionada = jTProducto.getSelectedRow();
+    if (filaSeleccionada != -1) {
+        int idProducto = (int) modelo.getValueAt(filaSeleccionada, 0);
+        String nombre = jTFNombre.getText();
+        int cantidad = Integer.parseInt(jTFCantidad.getText());
+        double precio = Double.parseDouble(jTFPrecio.getText());
+        String tipo = jTFTipo.getText();
+        boolean estado = jRBAlta.isSelected();
+
+        Producto nuevoProducto = new Producto(idProducto, nombre, cantidad, precio, tipo, estado);
+
+        productoData.actualizarProducto(nuevoProducto);
+        
+        consultar(); 
+
+        JOptionPane.showMessageDialog(this, "Producto actualizado exitosamente.");
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, selecciona un Producto para actualizar.");
+    }
+    }//GEN-LAST:event_jBActualizarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBActualizar;
     private javax.swing.JButton jBAgregar;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
