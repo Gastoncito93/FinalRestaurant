@@ -118,7 +118,7 @@ public class Vista_AgregarMesa extends javax.swing.JInternalFrame {
         jLabel2.setText("Numero de mesa:");
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Capasidad de mesa:");
+        jLabel3.setText("Capacidad de mesa:");
 
         jTMesa.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

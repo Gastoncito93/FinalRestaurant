@@ -75,6 +75,35 @@ public class ReservaData {
         }
         return reserva;
     }
+// Método para obtener reservas por mesa
+public List<Reserva> obtenerReservasPorMesa(int idMesa) {
+    List<Reserva> reservas = new ArrayList<>();
+    String sql = "SELECT * FROM Reserva WHERE id_mesa = ?";
+    
+    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        pstmt.setInt(1, idMesa);
+        ResultSet rs = pstmt.executeQuery();
+        
+        while (rs.next()) {
+            Reserva reserva = new Reserva(
+                rs.getInt("id_reserva"),
+                rs.getInt("id_mesa"),
+                rs.getString("nombre_cliente"),
+                rs.getString("dni_cliente"),
+                rs.getString("fecha"),
+                rs.getString("hora"),
+                rs.getBoolean("estado")
+            );
+            reservas.add(reserva);
+        }
+    } catch (SQLException e) {
+        System.out.println("Error al obtener las reservas para la mesa: " + e.getMessage());
+    }
+    
+    return reservas;
+}
+
+
 
     // Método para eliminar una reserva por su ID
     public void eliminarReserva(int idReserva) {
@@ -111,4 +140,24 @@ public class ReservaData {
         return reservas;
     }
 
+    
+    public void actualizarReserva(Reserva reserva) {
+    String sql = "UPDATE Reserva SET id_mesa = ?, nombre_cliente = ?, dni_cliente = ?, fecha = ?, hora = ?, estado = ? WHERE id_reserva = ?";
+    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        pstmt.setInt(1, reserva.getId_mesa());
+        pstmt.setString(2, reserva.getNombrePersona());
+        pstmt.setString(3, reserva.getDni());
+        pstmt.setDate(4, Date.valueOf(reserva.getFecha())); // Formato YYYY-MM-DD
+        pstmt.setTime(5, Time.valueOf(reserva.getHora())); // Formato HH:MM:SS
+        pstmt.setBoolean(6, reserva.isEstado());
+        pstmt.setInt(7, reserva.getIdReserva());
+
+        pstmt.executeUpdate();
+        System.out.println("Reserva actualizada con éxito");
+    } catch (SQLException e) {
+        System.out.println("Error al actualizar la reserva: " + e.getMessage());
+    }
+}
+
+    
 }

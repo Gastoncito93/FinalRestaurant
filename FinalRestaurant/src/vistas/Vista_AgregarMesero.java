@@ -4,6 +4,7 @@ package vistas;
 import entidades.Mesero;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -119,17 +120,29 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
 
     
     // Método auxiliar para actualizar la tabla de productos
-    private void actualizarTabla() {
-        modelo.setRowCount(0); // Limpiar el modelo de la tabla
-        List<Mesero> meseros = meseroData.obtenerMeseros(); // Obtener todos los productos
+private void actualizarTabla() {
+    modelo.setRowCount(0); // Limpiar el modelo de la tabla
 
-        for (Mesero mesero : meseros) {
-            Object[] fila = {mesero.getNombre(), mesero.getApellido(), mesero.getDni(), mesero.getUsuario(), mesero.getContraseña(), mesero.isEstado()};
-            modelo.addRow(fila); // Agregar cada producto como una nueva fila en la tabla
-        }
+    List<Mesero> meseros = meseroData.obtenerMeseros(); // Obtener todos los meseros
 
-
-    } 
+    for (Mesero mesero : meseros) {
+        Object[] fila = {
+            mesero.getIdMesero(),
+            mesero.getNombre(),
+            mesero.getApellido(),
+            mesero.getDni(),
+            mesero.getUsuario(),
+            mesero.getContraseña(),
+            mesero.isEstado()
+        };
+        modelo.addRow(fila); // Agregar cada mesero como una nueva fila en la tabla
+    }
+    
+    jTableMesero.setModel(modelo);
+    jTableMesero.revalidate(); // Validar la tabla después de actualizar el modelo
+    jTableMesero.repaint(); // Repintar la tabla
+}
+ 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -316,17 +329,24 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTableMeseroMouseClicked
 
     private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
-        try {
+ try {
         String nombre = jTNombre.getText();
         String apellido = jTApellido.getText();
         String dni = jTDNI.getText();
         String usuario = jTUsuario.getText();
         String contraseña = jTContraseña.getText();
-        boolean estado = jRActivo.isSelected(); // suponiendo que jRActivo es el botón de selección para el estado
+        boolean estado = jRActivo.isSelected(); // Suponiendo que jRActivo es el botón de selección para el estado
+
+        // Verificar si el nombre de usuario ya existe
+        if (usuarioExiste(usuario)) {
+            JOptionPane.showMessageDialog(this, "El nombre de usuario ya está en uso. Elige otro.");
+            return;
+        }
 
         Mesero nuevoMesero = new Mesero(nombre, apellido, dni, estado, usuario, contraseña);
-        meseroData.agregarMesero(nuevoMesero); // Agrega el producto a la base de datos
+        meseroData.agregarMesero(nuevoMesero); // Agrega el mesero a la base de datos
         actualizarTabla(); // Actualiza la tabla después de agregar
+
         JOptionPane.showMessageDialog(this, "Mesero agregado exitosamente.");
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, "Por favor, ingresa un número válido para cantidad y precio.");
@@ -356,7 +376,21 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
         JOptionPane.showMessageDialog(this, "Por favor, selecciona un Mesero para actualizar.");
     }
     }//GEN-LAST:event_jBActualizarActionPerformed
-
+    private boolean usuarioExiste(String usuario) {
+    String sql = "SELECT COUNT(*) FROM mesero WHERE usuario = ?";
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, usuario);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+        ps.close();
+    } catch (SQLException e) {
+        System.out.println("Error al verificar el nombre de usuario: " + e.getMessage());
+    }
+    return false;
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBActualizar;
