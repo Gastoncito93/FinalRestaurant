@@ -163,7 +163,7 @@ public class aVistaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMbaseAdminActionPerformed
 
     private void jMreservasTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMreservasTotalActionPerformed
-        Vista_ReservasTotal ReservasTotales = new Vista_ReservasTotal();
+        Vista_Reservas ReservasTotales = new Vista_Reservas();
             escritorio.add(ReservasTotales);
             ReservasTotales.setVisible(true);
     }//GEN-LAST:event_jMreservasTotalActionPerformed
