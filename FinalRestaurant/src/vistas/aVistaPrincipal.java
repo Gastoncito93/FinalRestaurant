@@ -1,5 +1,11 @@
 package vistas;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class aVistaPrincipal extends javax.swing.JFrame {
@@ -7,14 +13,93 @@ public class aVistaPrincipal extends javax.swing.JFrame {
     private DefaultTableModel modeloMesas;
     private DefaultTableModel modeloMeseros;
     private DefaultTableModel modeloReservas;
+    private Connection connection;
     
     public aVistaPrincipal() {
         initComponents();
+        conectarBaseDeDatos();
         inicializarModeloReservas();
         inicializarModeloMeseros();
         inicializarModeloMesas();
+        consultarMesas();
+        consultarMeseros();
+        consultarReservas();
+    }
+    private void conectarBaseDeDatos() {
+        String url = "jdbc:mariadb://127.0.0.1:3306/restaurant";
+        String user = "root";
+        String password = "";
+
+        try {
+            connection = DriverManager.getConnection(url, user, password);
+            System.out.println("Conexión a la base de datos exitosa!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al conectar con la base de datos: " + e.getMessage());
+            return; // Detener la ejecución si no se puede conectar
+        }
+    }
+    void consultarMesas() {
+        String sql = "SELECT  numero, estado FROM mesa";
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            Object[] mesa = new Object[2];
+            modeloMesas.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
+
+            while (rs.next()) {
+                mesa[0] = rs.getInt("numero");
+                mesa[1] = rs.getInt("estado");
+                modeloMesas.addRow(mesa);
+            }
+
+            jTMesas.setModel(modeloMesas);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    void consultarMeseros() {
+        String sql = "SELECT  id_mesero, apellido FROM mesero";
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            Object[] mesa = new Object[2];
+            modeloMeseros.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
+
+            while (rs.next()) {
+                mesa[0] = rs.getInt("id_mesero");
+                mesa[1] = rs.getString("apellido");
+                modeloMeseros.addRow(mesa);
+            }
+
+            jTMeseros.setModel(modeloMeseros);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
+    void consultarReservas() {
+        String sql = "SELECT reserva.hora, mesa.numero FROM reserva JOIN mesa ON reserva.id_mesa = mesa.id_mesa WHERE reserva.fecha = (SELECT CURDATE())";
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            Object[] mesa = new Object[2];
+            modeloReservas.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
+
+            while (rs.next()) {
+                mesa[0] = rs.getTime("reserva.hora");
+                mesa[1] = rs.getString("mesa.numero");
+                modeloReservas.addRow(mesa);
+            }
+
+            jTReservas.setModel(modeloReservas);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
