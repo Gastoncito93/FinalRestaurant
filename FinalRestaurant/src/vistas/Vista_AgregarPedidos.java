@@ -1,9 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
+
 package vistas;
 
+import conexion.Conexion;
+import entidades.Mesa;
 import entidades.Reserva;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +12,6 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import persistencia.MesaData;
@@ -42,8 +40,9 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
         reservaData = new ReservaData(connection);
         meseroData = new MeseroData(connection);
         initComponents();
-        llenarComboBoxMesas();
-        inicializarModelo();   
+        inicializarModelo(); 
+        cargarMesasEnCombo();
+          
     }
 
     /**
@@ -83,6 +82,11 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
         jCBMesas.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jCBMesasItemStateChanged(evt);
+            }
+        });
+        jCBMesas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBMesasActionPerformed(evt);
             }
         });
 
@@ -197,6 +201,10 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jCBMesasItemStateChanged
 
+    private void jCBMesasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBMesasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCBMesasActionPerformed
+
     private void conectarBaseDeDatos() {
         String url = "jdbc:mariadb://127.0.0.1:3306/restaurant";
         String user = "root";
@@ -211,7 +219,7 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
             return; // Detener la ejecución si no se puede conectar
         }
     }
-    private void llenarComboBoxMesas() {
+   /* private void llenarComboBoxMesas() {
     mesaMap = new HashMap<>(); // Inicializa el HashMap
     String sql = "SELECT id_mesa, numero FROM mesa";
     try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
@@ -261,8 +269,19 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
         jTPedido.revalidate(); // Validar la tabla después de actualizar el modelo
         jTPedido.repaint(); // Repintar la tabla
     }
+    }*/
+        private void cargarMesasEnCombo() {
+        jCBMesas.removeAllItems();
+        Conexion con = new Conexion();
+        MesaData mesaData = new MesaData(connection);
+
+        List<Mesa> mesas = mesaData.obtenerMesas();
+        for (Mesa m : mesas) {
+            if (m.isEstado()){
+            jCBMesas.addItem(m.getNumero());
+            }
+        }
     }
-    
     
     private void inicializarModelo() {
         modelo = new DefaultTableModel();
@@ -274,7 +293,7 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBGenerarPedido;
-    private javax.swing.JComboBox<String> jCBMesas;
+    private javax.swing.JComboBox<Object> jCBMesas;
     private javax.swing.JComboBox<String> jCBMeseros;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
