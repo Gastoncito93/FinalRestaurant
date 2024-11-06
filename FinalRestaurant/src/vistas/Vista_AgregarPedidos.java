@@ -3,6 +3,7 @@ package vistas;
 
 import conexion.Conexion;
 import entidades.Mesa;
+import entidades.Mesero;
 import entidades.Reserva;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -42,6 +43,7 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
         initComponents();
         inicializarModelo(); 
         cargarMesasEnCombo();
+        cargarMeserosEnCombo();
           
     }
 
@@ -282,6 +284,17 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
             }
         }
     }
+                private void cargarMeserosEnCombo() {
+        jCBMeseros.removeAllItems();
+        Conexion con = new Conexion();
+        MeseroData meseroData = new MeseroData(connection);
+        List<Mesero> meseros = meseroData.obtenerMeseros();
+        for (Mesero mesero : meseros) {
+            if (mesero.isEstado()){
+            jCBMeseros.addItem(mesero.getApellido());
+            }
+        }
+    }
     
     private void inicializarModelo() {
         modelo = new DefaultTableModel();
@@ -294,7 +307,7 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBGenerarPedido;
     private javax.swing.JComboBox<Object> jCBMesas;
-    private javax.swing.JComboBox<String> jCBMeseros;
+    private javax.swing.JComboBox<Object> jCBMeseros;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

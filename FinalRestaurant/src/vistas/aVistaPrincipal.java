@@ -179,6 +179,11 @@ public class aVistaPrincipal extends javax.swing.JFrame {
                 "Mesas"
             }
         ));
+        jTMesas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTMesasMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(jTMesas);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -403,6 +408,18 @@ public class aVistaPrincipal extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jMAgregarActionPerformed
+
+    private void jTMesasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTMesasMouseClicked
+      for (javax.swing.JInternalFrame frame : escritorio.getAllFrames()) {
+        if (frame instanceof Vista_CargarOrden) {
+            frame.dispose();
+            break;
+        }
+    }
+    Vista_CargarOrden vista_CargarOrden = new Vista_CargarOrden();
+    escritorio.add(vista_CargarOrden);
+    vista_CargarOrden.setVisible(true);
+    }//GEN-LAST:event_jTMesasMouseClicked
 
     /**
      * @param args the command line arguments
