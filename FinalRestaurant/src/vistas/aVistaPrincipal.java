@@ -8,6 +8,10 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+
 public class aVistaPrincipal extends javax.swing.JFrame {
 
     private DefaultTableModel modeloMesas;
@@ -24,7 +28,19 @@ public class aVistaPrincipal extends javax.swing.JFrame {
         consultarMesas();
         consultarMeseros();
         consultarReservas();
+        
+        
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            
+            public void run() {
+                consultarMesas();
+                consultarMeseros();
+                consultarReservas();
+            }
+        }, 0, 5000); // 0 de retraso inicial, 5000 milisegundos de intervalo
     }
+    
     private void conectarBaseDeDatos() {
         String url = "jdbc:mariadb://127.0.0.1:3306/restaurant";
         String user = "root";
