@@ -1,5 +1,6 @@
 package persistencia;
 
+import entidades.PedidoProducto;
 import entidades.Producto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,6 +51,7 @@ public List<Producto> obtenerProductosPorPedido(int id_pedido) {
     }
     return productos;
 }
+    
 
 
     // Otros métodos según sea necesario, como eliminar o actualizar productos de un pedido.

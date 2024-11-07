@@ -81,7 +81,7 @@
                   <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="jBCargarProducto" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jBFinalizar" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jBEntregado" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -107,7 +107,7 @@
                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   <Component id="jBCargarProducto" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                  <Component id="jBFinalizar" min="-2" max="-2" attributes="0"/>
+                  <Component id="jBEntregado" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -153,6 +153,7 @@
             </Property>
           </Properties>
           <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jCBPedidosDisponiblesItemStateChanged"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCBPedidosDisponiblesActionPerformed"/>
           </Events>
           <AuxValues>
@@ -196,12 +197,12 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBCargarProductoActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jBFinalizar">
+        <Component class="javax.swing.JButton" name="jBEntregado">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Finalizar"/>
+            <Property name="text" type="java.lang.String" value="Entregado"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBFinalizarActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBEntregadoActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
@@ -213,7 +214,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="jTable1">
+        <Component class="javax.swing.JTable" name="jTPedidoProducto">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="4" rowCount="4">

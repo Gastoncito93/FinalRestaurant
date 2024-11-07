@@ -76,7 +76,7 @@ public class aVistaPrincipal extends javax.swing.JFrame {
         }
     }
     void consultarMeseros() {
-        String sql = "SELECT  id_mesero, apellido FROM mesero";
+        String sql = "SELECT  id_mesero, apellido FROM mesero WHERE estado >= 1";
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
 

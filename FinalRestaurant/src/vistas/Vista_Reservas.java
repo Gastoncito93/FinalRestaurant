@@ -65,7 +65,7 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
     
 private void llenarComboBoxMesas() {
     mesaMap = new HashMap<>(); // Inicializa el HashMap
-    String sql = "SELECT id_mesa, numero FROM mesa";
+    String sql = "SELECT id_mesa, numero FROM mesa WHERE estado >= 1";
     try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
         jCMesas.removeAllItems();
         while (rs.next()) {
