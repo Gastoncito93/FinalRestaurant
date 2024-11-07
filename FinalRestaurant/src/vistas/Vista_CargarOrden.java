@@ -109,26 +109,6 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
     }
 }
 
-    private void consultarProductosPorPedido1() {
-        int pedidoSeleccionado = Integer.parseInt((String) jCBPedidosDisponibles.getSelectedItem());
-        List<Producto> productosPedido = pedidoProductoData.obtenerProductosPorPedido(pedidoSeleccionado);
-        modelo.setRowCount(0);
-        
-        int numeroPedido = 1;
-        for (Producto producto : productosPedido) {
-            Object[] fila = {
-                numeroPedido,
-                producto.getNombre(),
-                producto.getCantidad(),
-                "No entregado"
-            };
-            modelo.addRow(fila);
-            numeroPedido++;
-        }
-        jTPedidoProducto.setModel(modelo);
-        jTPedidoProducto.revalidate();
-        jTPedidoProducto.repaint();
-    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -315,7 +295,15 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBCargarProductoActionPerformed
 
     private void jBEntregadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEntregadoActionPerformed
-        // TODO add your handling code here:
+      int filaSeleccionada = jTPedidoProducto.getSelectedRow();
+    if (filaSeleccionada != -1) {
+       jTPedidoProducto.setValueAt("Entregado", filaSeleccionada, 3);
+        JOptionPane.showMessageDialog(this, "El pedido fue entregado");
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione un producto para entregar");
+    }  
+        
+        
     }//GEN-LAST:event_jBEntregadoActionPerformed
 
     private void jCBProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBProductosActionPerformed
