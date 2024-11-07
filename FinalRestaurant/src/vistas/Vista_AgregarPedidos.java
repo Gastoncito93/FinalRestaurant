@@ -4,12 +4,17 @@ package vistas;
 import conexion.Conexion;
 import entidades.Mesa;
 import entidades.Mesero;
+import entidades.Pedido;
 import entidades.Reserva;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import persistencia.MesaData;
 import persistencia.MeseroData;
+import persistencia.PedidoData;
 import persistencia.ReservaData;
 
 /**
@@ -25,11 +31,12 @@ import persistencia.ReservaData;
  */
 public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
 
-    
+        private List<Mesa> mesas; // Lista para almacenar las mesas
         private Connection connection;
         private MesaData mesaData;
         private ReservaData reservaData;
         private MeseroData meseroData;
+        private PedidoData pedidoData;
         private DefaultTableModel modelo;
         private Map<String, Integer> mesaMap; // Para almacenar la relación número -> id_mesa
     /**
@@ -40,11 +47,12 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
         mesaData = new MesaData(connection);
         reservaData = new ReservaData(connection);
         meseroData = new MeseroData(connection);
+        pedidoData = new PedidoData(connection);
         initComponents();
         inicializarModelo(); 
         cargarMesasEnCombo();
         cargarMeserosEnCombo();
-          
+        consultarPedidosPorMesa();  
     }
 
     /**
@@ -194,9 +202,46 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBGenerarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGenerarPedidoActionPerformed
+    Integer mesaSeleccionada = (Integer) jCBMesas.getSelectedItem();
+    String meseroSeleccionado = (String) jCBMeseros.getSelectedItem();
+    LocalDate fechaActual = LocalDate.now();
+    LocalTime horaActual = LocalTime.now();
+    String fechaCompleta = fechaActual.toString() + " " + horaActual.toString();
+    
+    // Obtener IDs de la mesa y del mesero
+    int idMesa = -1;
+    for (Mesa m : mesas) {
+        if (m.getNumero() == mesaSeleccionada) {
+            idMesa = m.getIdMesa();
+            break;
+        }
+    }
+    
+    int idMesero = -1;
+    List<Mesero> meseros = meseroData.obtenerMeseros();
+    for (Mesero mesero : meseros) {
+        if (mesero.getApellido().equals(meseroSeleccionado)) {
+            idMesero = mesero.getIdMesero();
+            break;
+        }
+    }
+    
+    // Crear el pedido y guardarlo en la base de datos
+    String sql = "INSERT INTO Pedido (id_mesa, id_mesero, fecha, estado) VALUES (?, ?, ?, 1)";
+    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        pstmt.setInt(1, idMesa);
+        pstmt.setInt(2, idMesero);
+        pstmt.setString(3, fechaCompleta);
         
+        pstmt.executeUpdate();
+        JOptionPane.showMessageDialog(this, "Pedido generado exitosamente.");
         
-        
+        // Actualizar la tabla con el nuevo pedido
+        consultarPedidosPorMesa();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al generar el pedido: " + e.getMessage());
+    }
+
     }//GEN-LAST:event_jBGenerarPedidoActionPerformed
 
     private void jCBMesasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBMesasItemStateChanged
@@ -204,7 +249,7 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jCBMesasItemStateChanged
 
     private void jCBMesasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBMesasActionPerformed
-        // TODO add your handling code here:
+        consultarPedidosPorMesa();
     }//GEN-LAST:event_jCBMesasActionPerformed
 
     private void conectarBaseDeDatos() {
@@ -273,21 +318,18 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
     }
     }*/
         private void cargarMesasEnCombo() {
+        mesas = new ArrayList<>();
         jCBMesas.removeAllItems();
-        Conexion con = new Conexion();
-        MesaData mesaData = new MesaData(connection);
-
-        List<Mesa> mesas = mesaData.obtenerMesas();
-        for (Mesa m : mesas) {
+        List<Mesa> mesasDisponibles = mesaData.obtenerMesas();
+        for (Mesa m : mesasDisponibles) {
             if (m.isEstado()){
             jCBMesas.addItem(m.getNumero());
+            mesas.add(m); //añadimos la mesa a la lista
             }
         }
     }
-                private void cargarMeserosEnCombo() {
+        private void cargarMeserosEnCombo() {
         jCBMeseros.removeAllItems();
-        Conexion con = new Conexion();
-        MeseroData meseroData = new MeseroData(connection);
         List<Mesero> meseros = meseroData.obtenerMeseros();
         for (Mesero mesero : meseros) {
             if (mesero.isEstado()){
@@ -295,6 +337,7 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
             }
         }
     }
+    
     
     private void inicializarModelo() {
         modelo = new DefaultTableModel();
@@ -304,6 +347,62 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
         modelo.addColumn("Estado");
         jTPedido.setModel(modelo);
     }
+    
+    private void consultarPedidosPorMesa() {
+    Integer mesaSeleccionada = (Integer) jCBMesas.getSelectedItem(); // Asegúrate de que jCBMesas maneja Integer
+    if (mesaSeleccionada != null) {
+        int idMesa = -1;
+        for (Mesa m : mesas) {
+            if (m.getNumero() == mesaSeleccionada) {
+                idMesa = m.getIdMesa();
+                break;
+            }
+        }
+
+        List<Pedido> pedidos = pedidoData.obtenerPedidos(); // Ajustar si es necesario para obtener pedidos por mesa
+        modelo.setRowCount(0); // Limpiar el modelo de la tabla
+
+        for (Pedido pedido : pedidos) {
+            if (pedido.getIdMesa() == idMesa) {
+                // Obtener el número de la mesa
+                String numeroMesa = "";
+                for (Mesa m : mesas) {
+                    if (m.getIdMesa() == pedido.getIdMesa()) {
+                        numeroMesa = String.valueOf(m.getNumero());
+                        break;
+                    }
+                }
+
+                // Obtener el apellido del mesero
+                String apellidoMesero = "";
+                List<Mesero> meseros = meseroData.obtenerMeseros();
+                for (Mesero mesero : meseros) {
+                    if (mesero.getIdMesero() == pedido.getIdMesero()) {
+                        apellidoMesero = mesero.getApellido();
+                        break;
+                    }
+                }
+
+                Object[] fila = {
+                    numeroMesa,
+                    apellidoMesero,
+                    pedido.getFecha(),
+                    pedido.isEstado() ? "1" : "0"
+                };
+                modelo.addRow(fila);
+            }
+        }
+
+        jTPedido.setModel(modelo);
+        jTPedido.revalidate(); // Validar la tabla después de actualizar el modelo
+        jTPedido.repaint(); // Repintar la tabla
+    }
+}
+
+
+
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBGenerarPedido;
     private javax.swing.JComboBox<Object> jCBMesas;
