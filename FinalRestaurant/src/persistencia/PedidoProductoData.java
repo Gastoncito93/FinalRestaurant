@@ -32,25 +32,38 @@ public class PedidoProductoData {
 
    
     // Método para obtener productos de un pedido
-public List<Producto> obtenerProductosPorPedido(int id_pedido) {
+public List<Producto> obtenerProductosPorPedido(int pedidoId) {
     List<Producto> productos = new ArrayList<>();
-    String sql = "SELECT pp.id_producto, p.nombre, pp.cantidad " +
-                 "FROM pedido_producto pp JOIN Producto p ON pp.id_producto = p.id_producto " + // Asegúrate que 'id_producto' es el nombre correcto
-                 "WHERE pp.id_pedido = ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setInt(1, id_pedido);
+    try {
+        String consultaSQL = "SELECT p.id_producto, p.nombre, p.cantidad, p.precio, p.tipo, p.estado " +
+                             "FROM producto p " +
+                             "JOIN pedido_producto pp ON p.id_producto = pp.id_producto " +
+                             "WHERE pp.id_pedido = ?";
+        PreparedStatement ps = connection.prepareStatement(consultaSQL);
+        ps.setInt(1, pedidoId);
         ResultSet rs = ps.executeQuery();
+        
         while (rs.next()) {
             int idProducto = rs.getInt("id_producto");
             String nombre = rs.getString("nombre");
             int cantidad = rs.getInt("cantidad");
-            productos.add(new Producto(idProducto, nombre, cantidad)); // Asume que tienes un constructor adecuado
+            double precio = rs.getDouble("precio");
+            String tipo = rs.getString("tipo");
+            boolean estado = rs.getBoolean("estado");
+
+            // Debugging: Imprimir valores obtenidos directamente desde el ResultSet
+            System.out.println("DB values - Nombre: " + nombre + ", Precio: " + precio + ", Cantidad: " + cantidad);
+
+            Producto producto = new Producto(idProducto, nombre, cantidad, precio, tipo, estado);
+            productos.add(producto);
         }
     } catch (SQLException e) {
-        System.out.println("Error al obtener productos del pedido: " + e.getMessage());
+        e.printStackTrace();
     }
     return productos;
 }
+
+
     
 
 

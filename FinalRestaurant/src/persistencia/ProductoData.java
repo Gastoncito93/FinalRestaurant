@@ -112,4 +112,33 @@ public class ProductoData {
         }
         return productos;
     }
+    public List<Producto> obtenerProductosPorPedido(int pedidoId) {
+    List<Producto> productos = new ArrayList<>();
+    try {
+        String consultaSQL = "SELECT id_producto, nombre, cantidad, precio, tipo, estado FROM producto WHERE id_pedido = ?";
+        PreparedStatement ps = connection.prepareStatement(consultaSQL);
+        ps.setInt(1, pedidoId);
+        ResultSet rs = ps.executeQuery();
+        
+        while (rs.next()) {
+            int idProducto = rs.getInt("id_producto");
+            String nombre = rs.getString("nombre");
+            int cantidad = rs.getInt("cantidad");
+            double precio = rs.getDouble("precio");
+            String tipo = rs.getString("tipo");
+            boolean estado = rs.getBoolean("estado");
+
+            // Debugging: Imprimir valores obtenidos directamente desde el ResultSet
+            System.out.println("DB values - Nombre: " + nombre + ", Precio: " + precio + ", Cantidad: " + cantidad);
+
+            Producto producto = new Producto(idProducto, nombre, cantidad, precio, tipo, estado);
+            productos.add(producto);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return productos;
+}
+
+
 }
