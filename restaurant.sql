@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-10-2024 a las 15:16:55
+-- Tiempo de generación: 08-11-2024 a las 01:31:09
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `restaurant`
 --
+CREATE DATABASE IF NOT EXISTS `restaurant` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `restaurant`;
 
 -- --------------------------------------------------------
 
@@ -98,17 +100,16 @@ INSERT INTO `pedido` (`id_pedido`, `id_mesa`, `id_mesero`, `fecha`, `estado`) VA
 CREATE TABLE `pedido_producto` (
   `id_pedido` int(11) NOT NULL,
   `id_producto` int(11) NOT NULL,
-  `cantidad` int(11) DEFAULT NULL
+  `cantidad` int(11) DEFAULT NULL,
+  `precio` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `pedido_producto`
 --
 
-INSERT INTO `pedido_producto` (`id_pedido`, `id_producto`, `cantidad`) VALUES
-(17, 45, 2),
-(17, 46, 1),
-(18, 47, 3);
+INSERT INTO `pedido_producto` (`id_pedido`, `id_producto`, `cantidad`, `precio`) VALUES
+(18, 46, 2, 250.75);
 
 -- --------------------------------------------------------
 
@@ -153,6 +154,13 @@ CREATE TABLE `reserva` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
+-- Volcado de datos para la tabla `reserva`
+--
+
+INSERT INTO `reserva` (`id_reserva`, `id_mesa`, `nombre_cliente`, `dni_cliente`, `fecha`, `hora`, `estado`) VALUES
+(1, 20, 'juan', '42357149', '2024-11-07', '19:00:00', 1);
+
+--
 -- Índices para tablas volcadas
 --
 
@@ -184,13 +192,15 @@ ALTER TABLE `pedido`
 --
 ALTER TABLE `pedido_producto`
   ADD PRIMARY KEY (`id_pedido`,`id_producto`),
-  ADD KEY `id_producto` (`id_producto`);
+  ADD KEY `id_producto` (`id_producto`),
+  ADD KEY `precio` (`precio`);
 
 --
 -- Indices de la tabla `producto`
 --
 ALTER TABLE `producto`
-  ADD PRIMARY KEY (`id_producto`);
+  ADD PRIMARY KEY (`id_producto`),
+  ADD KEY `precio` (`precio`);
 
 --
 -- Indices de la tabla `reserva`
@@ -231,7 +241,7 @@ ALTER TABLE `producto`
 -- AUTO_INCREMENT de la tabla `reserva`
 --
 ALTER TABLE `reserva`
-  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
@@ -255,7 +265,8 @@ ALTER TABLE `pedido`
 --
 ALTER TABLE `pedido_producto`
   ADD CONSTRAINT `pedido_producto_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id_pedido`),
-  ADD CONSTRAINT `pedido_producto_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`);
+  ADD CONSTRAINT `pedido_producto_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`),
+  ADD CONSTRAINT `pedido_producto_ibfk_3` FOREIGN KEY (`precio`) REFERENCES `producto` (`precio`);
 
 --
 -- Filtros para la tabla `reserva`
