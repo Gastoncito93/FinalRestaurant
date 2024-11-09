@@ -93,9 +93,10 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
         modelo.setRowCount(0);
 
         int numeroPedido = 1;
+        double totalPrecio = 0.0;  // Variable para calcular el precio total
         for (Producto producto : productosPedido) {
-            System.out.println("Producto: " + producto.getNombre() + ", Precio: " + producto.getPrecio() + ", Cantidad: " + producto.getCantidad());
             double subtotal = producto.getPrecio() * producto.getCantidad();
+            totalPrecio += subtotal; // Sumar el subtotal al precio total
             Object[] fila = {
                 numeroPedido,
                 producto.getNombre(),
@@ -109,11 +110,17 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
         jTPedidoProducto.setModel(modelo);
         jTPedidoProducto.revalidate();
         jTPedidoProducto.repaint();
+
+        // Actualizar el campo de texto con el precio total
+        jTFPrecioTotal.setText(String.valueOf(totalPrecio));
     } else {
         // Manejar el caso en el que no hay un pedido seleccionado o la cadena está vacía
         System.out.println("No se ha seleccionado un pedido válido.");
+        jTFPrecioTotal.setText("0.0"); // Restablecer el campo de texto a 0.0
     }
 }
+
+
 
 
 
@@ -133,7 +140,7 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
         jSProducto = new javax.swing.JSpinner();
         jBCargarProducto = new javax.swing.JButton();
         jBEntregado = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jBCobrar = new javax.swing.JButton();
         jTFPrecioTotal = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTPedidoProducto = new javax.swing.JTable();
@@ -177,6 +184,8 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("Cantidad");
 
+        jSProducto.setModel(new javax.swing.SpinnerNumberModel(0, 0, 50, 1));
+
         jBCargarProducto.setText("Cargar Producto");
         jBCargarProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -191,9 +200,16 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton1.setText("Cobrar/Finalizar");
+        jBCobrar.setText("Cobrar/Finalizar");
+        jBCobrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBCobrarActionPerformed(evt);
+            }
+        });
 
+        jTFPrecioTotal.setEditable(false);
         jTFPrecioTotal.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jTFPrecioTotal.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -212,20 +228,23 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jCBPedidosDisponibles, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jCBProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 75, Short.MAX_VALUE)))
+                                .addGap(0, 75, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jBCobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addComponent(jTFPrecioTotal)))
                         .addContainerGap())))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jSProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(87, 87, 87))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jBCargarProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBEntregado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTFPrecioTotal))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jBEntregado, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBCargarProducto))
+                        .addGap(91, 91, 91))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jSProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(118, 118, 118))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,17 +261,17 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
                 .addComponent(jCBProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
                 .addComponent(jBCargarProducto)
-                .addGap(34, 34, 34)
+                .addGap(38, 38, 38)
                 .addComponent(jBEntregado)
-                .addGap(34, 34, 34)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(jBCobrar)
                     .addComponent(jTFPrecioTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addGap(75, 75, 75))
         );
 
         jTPedidoProducto.setModel(new javax.swing.table.DefaultTableModel(
@@ -285,7 +304,7 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -334,12 +353,16 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
     private void jCBPedidosDisponiblesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBPedidosDisponiblesItemStateChanged
        
     }//GEN-LAST:event_jCBPedidosDisponiblesItemStateChanged
+
+    private void jBCobrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCobrarActionPerformed
+        JOptionPane.showMessageDialog(this, "El cliente ha realizado el pago");
+    }//GEN-LAST:event_jBCobrarActionPerformed
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBCargarProducto;
+    private javax.swing.JButton jBCobrar;
     private javax.swing.JButton jBEntregado;
-    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jCBPedidosDisponibles;
     private javax.swing.JComboBox<String> jCBProductos;
     private javax.swing.JLabel jLabel6;
