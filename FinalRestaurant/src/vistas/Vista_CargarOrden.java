@@ -355,7 +355,28 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jCBPedidosDisponiblesItemStateChanged
 
     private void jBCobrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCobrarActionPerformed
-        JOptionPane.showMessageDialog(this, "El cliente ha realizado el pago");
+    String pedidoSeleccionadoStr = (String) jCBPedidosDisponibles.getSelectedItem();
+    if (pedidoSeleccionadoStr != null && !pedidoSeleccionadoStr.isEmpty()) {
+        int pedidoSeleccionado = Integer.parseInt(pedidoSeleccionadoStr);
+
+        // Eliminar los productos asociados al pedido en la tabla `pedido_producto`
+        pedidoProductoData.eliminarProductosPorPedido(pedidoSeleccionado);
+
+        // Eliminar el pedido en la tabla `pedido`
+        pedidoData.eliminarPedido(pedidoSeleccionado);
+        
+        
+        String total = jTFPrecioTotal.getText();
+        // Mostrar mensaje de éxito
+        JOptionPane.showMessageDialog(this, "El cliente ha realizado el pago de "+ total +"$. Pedido eliminado.");
+
+        // Actualizar el JComboBox y la tabla
+        cargarPedidosEnCombo();
+        consultarProductosPorPedido(); // Esto limpiará la tabla ya que no habrá un pedido seleccionado
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, selecciona un pedido para cobrar.");
+    }
+    
     }//GEN-LAST:event_jBCobrarActionPerformed
     
 

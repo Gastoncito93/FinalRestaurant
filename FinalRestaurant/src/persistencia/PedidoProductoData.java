@@ -71,9 +71,7 @@ public List<Producto> obtenerProductosPorPedido(int pedidoId) {
             String tipo = rs.getString("tipo");
             boolean estado = rs.getBoolean("estado");
 
-            // Debugging: Imprimir valores obtenidos directamente desde el ResultSet
-            System.out.println("DB values - Nombre: " + nombre + ", Precio: " + precio + ", Cantidad: " + cantidad);
-
+            
             Producto producto = new Producto(idProducto, nombre, cantidad, precio, tipo, estado);
             productos.add(producto);
         }
@@ -83,10 +81,19 @@ public List<Producto> obtenerProductosPorPedido(int pedidoId) {
     return productos;
 }
 
+public void eliminarProductosPorPedido(int idPedido) {
+    String sql = "DELETE FROM pedido_producto WHERE id_pedido = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, idPedido);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        System.err.println("Error al eliminar los productos del pedido: " + e.getMessage());
+    }
+}
 
 
     
 
 
-    // Otros métodos según sea necesario, como eliminar o actualizar productos de un pedido.
+    
 }
