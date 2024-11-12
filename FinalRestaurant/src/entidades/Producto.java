@@ -7,7 +7,8 @@ public class Producto {
     private double precio;
     private String tipo;
     private boolean estado;
-
+    private int idPedido;
+    
     // Constructor vacío
     public Producto() {}
 
@@ -85,6 +86,14 @@ public class Producto {
 
     public void setEstado(boolean estado) {
         this.estado = estado;
+    }
+
+    public int getIdPedido() {
+        return idPedido;
+    }
+
+    public void setIdPedido(int idPedido) {
+        this.idPedido = idPedido;
     }
 
     // Método toString para representar el objeto como cadena

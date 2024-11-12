@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-11-2024 a las 01:31:09
+-- Tiempo de generación: 12-11-2024 a las 03:04:59
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -29,6 +29,7 @@ USE `restaurant`;
 -- Estructura de tabla para la tabla `mesa`
 --
 
+DROP TABLE IF EXISTS `mesa`;
 CREATE TABLE `mesa` (
   `id_mesa` int(11) NOT NULL,
   `numero` int(11) NOT NULL,
@@ -43,7 +44,10 @@ CREATE TABLE `mesa` (
 
 INSERT INTO `mesa` (`id_mesa`, `numero`, `capacidad`, `estado`, `id_reserva`) VALUES
 (20, 4, 2, 1, NULL),
-(21, 5, 4, 1, NULL);
+(21, 5, 4, 1, NULL),
+(23, 6, 8, 1, NULL),
+(26, 3, 2, 1, NULL),
+(27, 2, 8, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -51,6 +55,7 @@ INSERT INTO `mesa` (`id_mesa`, `numero`, `capacidad`, `estado`, `id_reserva`) VA
 -- Estructura de tabla para la tabla `mesero`
 --
 
+DROP TABLE IF EXISTS `mesero`;
 CREATE TABLE `mesero` (
   `id_mesero` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
@@ -66,8 +71,12 @@ CREATE TABLE `mesero` (
 --
 
 INSERT INTO `mesero` (`id_mesero`, `nombre`, `apellido`, `dni`, `estado`, `usuario`, `contraseña`) VALUES
-(21, 'Carlos', 'Pérez', '12345678', 1, 'carlos123', 'password'),
-(22, 'Ana', 'García', '87654321', 1, 'ana123', 'password');
+(21, 'Carlos', 'Pérez', '12345678', 0, 'carlos123', 'password'),
+(22, 'Ana', 'García', '87654321', 1, 'ana123', 'password'),
+(24, 'Yaciel', 'Muñoz', '46408906', 1, 'Zombers007', '39394014'),
+(27, 'Angel', 'Rubin', '36333655', 1, 'cartonero322', '4556532'),
+(29, 'Adolfo', 'Tripler', '40482367', 1, 'Kerosene', '1945555'),
+(31, 'Pedro', 'Perez', '22333333', 1, 'Pedro333', '23332243');
 
 -- --------------------------------------------------------
 
@@ -75,6 +84,7 @@ INSERT INTO `mesero` (`id_mesero`, `nombre`, `apellido`, `dni`, `estado`, `usuar
 -- Estructura de tabla para la tabla `pedido`
 --
 
+DROP TABLE IF EXISTS `pedido`;
 CREATE TABLE `pedido` (
   `id_pedido` int(11) NOT NULL,
   `id_mesa` int(11) DEFAULT NULL,
@@ -88,8 +98,9 @@ CREATE TABLE `pedido` (
 --
 
 INSERT INTO `pedido` (`id_pedido`, `id_mesa`, `id_mesero`, `fecha`, `estado`) VALUES
-(17, 20, 21, '2024-10-29 14:13:15', 1),
-(18, 21, 22, '2024-10-29 14:13:15', 1);
+(37, 20, 22, '2024-11-11 18:55:20', 1),
+(38, 23, 31, '2024-11-11 19:42:16', 1),
+(39, 26, 22, '2024-11-12 01:26:48', 1);
 
 -- --------------------------------------------------------
 
@@ -97,19 +108,25 @@ INSERT INTO `pedido` (`id_pedido`, `id_mesa`, `id_mesero`, `fecha`, `estado`) VA
 -- Estructura de tabla para la tabla `pedido_producto`
 --
 
+DROP TABLE IF EXISTS `pedido_producto`;
 CREATE TABLE `pedido_producto` (
   `id_pedido` int(11) NOT NULL,
   `id_producto` int(11) NOT NULL,
   `cantidad` int(11) DEFAULT NULL,
-  `precio` decimal(10,2) DEFAULT NULL
+  `precio` decimal(10,2) DEFAULT NULL,
+  `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Volcado de datos para la tabla `pedido_producto`
 --
 
-INSERT INTO `pedido_producto` (`id_pedido`, `id_producto`, `cantidad`, `precio`) VALUES
-(18, 46, 2, 250.75);
+INSERT INTO `pedido_producto` (`id_pedido`, `id_producto`, `cantidad`, `precio`, `estado`) VALUES
+(37, 45, 1, 160.00, 0),
+(37, 55, 2, 1000.00, 1),
+(37, 61, 2, 200.00, 1),
+(38, 47, 0, 0.00, 0),
+(39, 49, 2, 160.00, 1);
 
 -- --------------------------------------------------------
 
@@ -117,6 +134,7 @@ INSERT INTO `pedido_producto` (`id_pedido`, `id_producto`, `cantidad`, `precio`)
 -- Estructura de tabla para la tabla `producto`
 --
 
+DROP TABLE IF EXISTS `producto`;
 CREATE TABLE `producto` (
   `id_producto` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
@@ -131,11 +149,13 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`id_producto`, `nombre`, `cantidad`, `precio`, `tipo`, `estado`) VALUES
-(45, 'Paco', 4, 150.50, 'Perfumería', 1),
+(45, 'Paco', 4, 160.00, 'Perfumería', 1),
 (46, 'Shampoo', 5, 250.75, 'Higiene', 1),
 (47, 'Jabón', 3, 100.00, 'Higiene', 1),
 (48, 'Perfume', 6, 500.00, 'Perfumería', 1),
-(49, 'Desodorante', 2, 80.00, 'Higiene', 1);
+(49, 'Desodorante', 2, 80.00, 'Higiene', 1),
+(55, 'Pizza', 20, 500.00, 'Comida', 1),
+(61, 'Gaseosa', 50, 100.00, 'Bebida', 1);
 
 -- --------------------------------------------------------
 
@@ -143,6 +163,7 @@ INSERT INTO `producto` (`id_producto`, `nombre`, `cantidad`, `precio`, `tipo`, `
 -- Estructura de tabla para la tabla `reserva`
 --
 
+DROP TABLE IF EXISTS `reserva`;
 CREATE TABLE `reserva` (
   `id_reserva` int(11) NOT NULL,
   `id_mesa` int(11) NOT NULL,
@@ -158,7 +179,7 @@ CREATE TABLE `reserva` (
 --
 
 INSERT INTO `reserva` (`id_reserva`, `id_mesa`, `nombre_cliente`, `dni_cliente`, `fecha`, `hora`, `estado`) VALUES
-(1, 20, 'juan', '42357149', '2024-11-07', '19:00:00', 1);
+(16, 20, 'alguien', '12121212', '2024-11-11', '22:00:00', 1);
 
 --
 -- Índices para tablas volcadas
@@ -192,15 +213,13 @@ ALTER TABLE `pedido`
 --
 ALTER TABLE `pedido_producto`
   ADD PRIMARY KEY (`id_pedido`,`id_producto`),
-  ADD KEY `id_producto` (`id_producto`),
-  ADD KEY `precio` (`precio`);
+  ADD KEY `id_producto` (`id_producto`);
 
 --
 -- Indices de la tabla `producto`
 --
 ALTER TABLE `producto`
-  ADD PRIMARY KEY (`id_producto`),
-  ADD KEY `precio` (`precio`);
+  ADD PRIMARY KEY (`id_producto`);
 
 --
 -- Indices de la tabla `reserva`
@@ -217,31 +236,31 @@ ALTER TABLE `reserva`
 -- AUTO_INCREMENT de la tabla `mesa`
 --
 ALTER TABLE `mesa`
-  MODIFY `id_mesa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_mesa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `mesero`
 --
 ALTER TABLE `mesero`
-  MODIFY `id_mesero` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_mesero` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT de la tabla `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT de la tabla `reserva`
 --
 ALTER TABLE `reserva`
-  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Restricciones para tablas volcadas
@@ -265,8 +284,7 @@ ALTER TABLE `pedido`
 --
 ALTER TABLE `pedido_producto`
   ADD CONSTRAINT `pedido_producto_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id_pedido`),
-  ADD CONSTRAINT `pedido_producto_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`),
-  ADD CONSTRAINT `pedido_producto_ibfk_3` FOREIGN KEY (`precio`) REFERENCES `producto` (`precio`);
+  ADD CONSTRAINT `pedido_producto_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`);
 
 --
 -- Filtros para la tabla `reserva`

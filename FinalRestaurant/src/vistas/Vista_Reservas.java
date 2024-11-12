@@ -298,25 +298,8 @@ private void llenarComboBoxMesas() {
         String fecha = jTFecha.getText(); // Asegúrate de que esté en formato YYYY-MM-DD
         String hora = jTHora.getText();   // Asegúrate de que esté en formato HH:MM:SS
         boolean estado = jRadioButton1.isSelected();
-
-        // Verificar si la reserva ya existe
-        List<Reserva> reservas = reservaData.listaDeReservas();
-        boolean reservaExiste = false;
-        for (Reserva reservasexistentes : reservas) {
-            if (reservasexistentes.getId_mesa() == idMesa && reservasexistentes.getFecha().equalsIgnoreCase(fecha) && reservasexistentes.getHora().equalsIgnoreCase(hora)) {
-                reservaExiste = true;
-                break;
-            }
-        }
-
-        if (reservaExiste) {
-            JOptionPane.showMessageDialog(this, "Error: La reserva ya existe para la mesa seleccionada en la fecha y hora especificadas.");
-        } else {
-            Reserva nuevaReserva = new Reserva(idMesa, nombre, dni, fecha, hora, estado);
-            reservaData.crearReserva(nuevaReserva);
-            actualizarTablaReservas();
-            JOptionPane.showMessageDialog(this, "Reserva agregada exitosamente.");
-        }
+        Reserva nuevaReserva = new Reserva(idMesa, nombre, dni, fecha, hora, estado );
+        reservaData.crearReserva(nuevaReserva);
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, "Por favor, ingresa datos válidos.");
     }

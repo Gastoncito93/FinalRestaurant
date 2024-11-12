@@ -4,11 +4,14 @@ public class PedidoProducto {
     private int idPedido;
     private int idProducto;
     private int cantidad;
+    private double precio;
+    private boolean estado;
 
-    public PedidoProducto(int idPedido, int idProducto, int cantidad) {
+    public PedidoProducto(int idPedido, int idProducto, int cantidad, double estado) {
         this.idPedido = idPedido;
         this.idProducto = idProducto;
         this.cantidad = cantidad;
+        this.estado= false;
     }
 
     public PedidoProducto() {
@@ -41,12 +44,31 @@ public class PedidoProducto {
         this.cantidad = cantidad;
     }
 
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
     @Override
     public String toString() {
-        return "PedidoProducto{" +
-                "idPedido=" + idPedido +
-                ", idProducto=" + idProducto +
-                ", cantidad=" + cantidad +
-                '}';
+        return "PedidoProducto{" 
+                + "idPedido=" + idPedido 
+                + ", idProducto=" + idProducto 
+                + ", cantidad=" + cantidad 
+                + ", estado=" + estado 
+                + '}';
     }
+
+
 }

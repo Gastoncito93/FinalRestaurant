@@ -20,7 +20,8 @@ public class ReservaData {
 
         List<Reserva> reservas = listaDeReservas();
         for (Reserva reservasexistentes : reservas) {
-            if (reservasexistentes.getId_mesa() == reserva.getId_mesa() && reservasexistentes.getFecha().equalsIgnoreCase(reserva.getFecha()) && reservasexistentes.getHora().equalsIgnoreCase(reserva.getHora())) {
+            if (reservasexistentes.getId_mesa() == reserva.getId_mesa() && reservasexistentes.getFecha().equalsIgnoreCase(reserva.getFecha())) {
+                System.out.println("bandera");
                 flag = false;
             }
 
@@ -48,7 +49,7 @@ public class ReservaData {
                 System.out.println("Error al crear la reserva " + e.getMessage());
             }
         } else{
-            System.out.println("Error al crear reserva, la mesa se encuentra ocupada ese dia a esa hora");
+            System.out.println("Error al crear reserva, la mesa se encuentra ocupada ese dia");
         }
     }
 

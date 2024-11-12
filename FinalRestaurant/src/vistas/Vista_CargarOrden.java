@@ -1,13 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
 package vistas;
 
 import entidades.Pedido;
 import entidades.Producto;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -86,27 +84,31 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
         }
     }
     private void consultarProductosPorPedido() {
-    String pedidoSeleccionadoStr = (String) jCBPedidosDisponibles.getSelectedItem();
+        String pedidoSeleccionadoStr = (String) jCBPedidosDisponibles.getSelectedItem();
     if (pedidoSeleccionadoStr != null && !pedidoSeleccionadoStr.isEmpty()) {
         int pedidoSeleccionado = Integer.parseInt(pedidoSeleccionadoStr);
         List<Producto> productosPedido = pedidoProductoData.obtenerProductosPorPedido(pedidoSeleccionado);
-        modelo.setRowCount(0);
+        modelo.setRowCount(0); // Limpiar la tabla antes de volver a cargar los datos
 
         int numeroPedido = 1;
         double totalPrecio = 0.0;  // Variable para calcular el precio total
+
         for (Producto producto : productosPedido) {
             double subtotal = producto.getPrecio() * producto.getCantidad();
-            totalPrecio += subtotal; // Sumar el subtotal al precio total
+            totalPrecio += subtotal;
+
             Object[] fila = {
-                numeroPedido,
+                producto.getIdPedido(),
                 producto.getNombre(),
                 producto.getCantidad(),
-                "No entregado",
+                producto.isEstado(),
                 subtotal
             };
             modelo.addRow(fila);
             numeroPedido++;
         }
+
+        // Actualizar la tabla
         jTPedidoProducto.setModel(modelo);
         jTPedidoProducto.revalidate();
         jTPedidoProducto.repaint();
@@ -119,13 +121,7 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
         jTFPrecioTotal.setText("0.0"); // Restablecer el campo de texto a 0.0
     }
 }
-
-
-
-
-
-
-    
+   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -336,14 +332,18 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
 
     private void jBEntregadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEntregadoActionPerformed
       int filaSeleccionada = jTPedidoProducto.getSelectedRow();
+    
     if (filaSeleccionada != -1) {
-       jTPedidoProducto.setValueAt("Entregado", filaSeleccionada, 3);
-        JOptionPane.showMessageDialog(this, "El pedido fue entregado");
+        int idPedido = (Integer) jTPedidoProducto.getValueAt(filaSeleccionada, 0);
+        String nombreProducto = (String) jTPedidoProducto.getValueAt(filaSeleccionada, 1);
+        int idProducto = buscarProductoPorNombre(nombreProducto).getIdProducto();
+        int cantidad = (Integer) jTPedidoProducto.getValueAt(filaSeleccionada, 2);
+
+        entregarProductoPedido(idPedido, idProducto, cantidad);
+        consultarProductosPorPedido();
     } else {
-        JOptionPane.showMessageDialog(this, "Por favor, seleccione un producto para entregar");
-    }  
-        
-        
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione un producto para entregar.");
+    }
     }//GEN-LAST:event_jBEntregadoActionPerformed
 
     private void jCBProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBProductosActionPerformed
@@ -359,12 +359,9 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
     if (pedidoSeleccionadoStr != null && !pedidoSeleccionadoStr.isEmpty()) {
         int pedidoSeleccionado = Integer.parseInt(pedidoSeleccionadoStr);
 
-        // Eliminar los productos asociados al pedido en la tabla `pedido_producto`
         pedidoProductoData.eliminarProductosPorPedido(pedidoSeleccionado);
 
-        // Eliminar el pedido en la tabla `pedido`
         pedidoData.eliminarPedido(pedidoSeleccionado);
-        
         
         String total = jTFPrecioTotal.getText();
         // Mostrar mensaje de éxito
@@ -379,7 +376,49 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
     
     }//GEN-LAST:event_jBCobrarActionPerformed
     
+    public void entregarProductoPedido(int idPedido, int idProducto, int cantidad) {
+    String sql = "UPDATE pedido_producto SET estado = 1 WHERE id_pedido = ? AND id_producto = ? AND cantidad = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, idPedido);
+        ps.setInt(2, idProducto);
+        ps.setInt(3, cantidad);
 
+        int filasActualizadas = ps.executeUpdate();
+   
+        if (filasActualizadas > 0) {
+            JOptionPane.showMessageDialog(this, "Producto entregado exitosamente.");
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró el producto con los datos especificados.");
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al entregar el producto del pedido: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, "Ocurrió un error al intentar entregar el producto.");
+    }
+}
+        public Producto buscarProductoPorNombre(String nombreProducto) {
+    Producto producto = null;
+    String sql = "SELECT * FROM producto WHERE nombre like ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, nombreProducto);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            // Recuperar los datos del producto
+            int idProducto = rs.getInt("id_producto");
+            String nombre = rs.getString("nombre");
+            int cantidad = rs.getInt("cantidad");
+            double precio = rs.getDouble("precio");
+            String tipo = rs.getString("tipo");
+            boolean estado = rs.getBoolean("estado");
+
+            // Crear el objeto Producto
+            producto = new Producto(idProducto, nombre, cantidad, precio, tipo, estado);
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al buscar el producto: " + e.getMessage());
+    }
+    return producto;
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBCargarProducto;
     private javax.swing.JButton jBCobrar;

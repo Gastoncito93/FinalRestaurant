@@ -1,6 +1,5 @@
 package persistencia;
 
-import entidades.PedidoProducto;
 import entidades.Producto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +20,7 @@ public class PedidoProductoData {
     double precio = obtenerPrecioProducto(idProducto); // Método para obtener el precio del producto
     double precioTotal = precio * cantidad;
 
-    String sql = "INSERT INTO pedido_producto (id_pedido, id_producto, cantidad, precio) VALUES (?, ?, ?, ?)";
+    String sql = "INSERT INTO pedido_producto (id_pedido, id_producto, cantidad, precio, estado) VALUES (?, ?, ?, ?, 0)";
     try (PreparedStatement ps = connection.prepareStatement(sql)) {
         ps.setInt(1, idPedido);
         ps.setInt(2, idProducto);
@@ -55,24 +54,24 @@ public class PedidoProductoData {
 public List<Producto> obtenerProductosPorPedido(int pedidoId) {
     List<Producto> productos = new ArrayList<>();
     try {
-        String consultaSQL = "SELECT pp.id_producto, p.nombre, pp.cantidad, p.precio, (pp.cantidad * p.precio) as subtotal, p.tipo, p.estado " +
+        String consultaSQL = "SELECT pp.id_pedido, pp.id_producto, p.nombre, pp.cantidad, p.precio, (pp.cantidad * p.precio) as subtotal, p.tipo, pp.estado " +
                              "FROM producto p " +
                              "JOIN pedido_producto pp ON p.id_producto = pp.id_producto " +
                              "WHERE pp.id_pedido = ?";
         PreparedStatement ps = connection.prepareStatement(consultaSQL);
         ps.setInt(1, pedidoId);
         ResultSet rs = ps.executeQuery();
-        
-        while (rs.next()) {
-            int idProducto = rs.getInt("id_producto");
-            String nombre = rs.getString("nombre");
-            int cantidad = rs.getInt("cantidad");
-            double precio = rs.getDouble("precio");
-            String tipo = rs.getString("tipo");
-            boolean estado = rs.getBoolean("estado");
 
-            
-            Producto producto = new Producto(idProducto, nombre, cantidad, precio, tipo, estado);
+        while (rs.next()) {
+            Producto producto = new Producto();
+            producto.setIdPedido(rs.getInt("id_pedido"));  // Obtener id_pedido de la consulta
+            producto.setIdProducto(rs.getInt("id_producto"));
+            producto.setNombre(rs.getString("nombre"));
+            producto.setCantidad(rs.getInt("cantidad"));
+            producto.setPrecio(rs.getDouble("precio"));
+            producto.setTipo(rs.getString("tipo"));
+            producto.setEstado(rs.getBoolean("estado"));
+
             productos.add(producto);
         }
     } catch (SQLException e) {
@@ -90,9 +89,6 @@ public void eliminarProductosPorPedido(int idPedido) {
         System.err.println("Error al eliminar los productos del pedido: " + e.getMessage());
     }
 }
-
-
-    
 
 
     
