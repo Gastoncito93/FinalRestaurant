@@ -317,15 +317,27 @@ public class Vista_AgregarMesa extends javax.swing.JInternalFrame {
         boolean estado = jRHabilitada.isSelected(); 
         int idMesa = (int) modelo.getValueAt(filaSeleccionada, 0); 
 
-        Mesa mesaActualizada = new Mesa(idMesa, numero, capacidad, estado, null); 
+        try {
+            // Verificar si el número de mesa ya está en uso por otra mesa
+            if (mesaData.mesaExiste(numero, idMesa)) {
+                JOptionPane.showMessageDialog(this, "El número de mesa ya está en uso. Elige otro número.");
+                return;
+            }
 
-        mesaData.actualizarMesa(mesaActualizada);
-        
-        consultar(); 
-        
-        setearTodoEnVacio();
-        
-        JOptionPane.showMessageDialog(this, "Mesa actualizada exitosamente.");
+            // Procede con la actualización si el número no está duplicado
+            Mesa mesaActualizada = new Mesa(idMesa, numero, capacidad, estado, null); 
+            mesaData.actualizarMesa(mesaActualizada);
+
+            consultar(); // Actualiza la tabla después de actualizar
+            setearTodoEnVacio(); // Limpiar campos de entrada
+
+            JOptionPane.showMessageDialog(this, "Mesa actualizada exitosamente.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al actualizar la mesa: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa un número válido para número y capacidad.");
+        }
     } else {
         JOptionPane.showMessageDialog(this, "Por favor, selecciona una mesa para actualizar.");
     }

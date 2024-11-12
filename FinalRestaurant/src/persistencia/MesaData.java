@@ -43,16 +43,30 @@ public class MesaData {
     }
     
     public boolean mesaExiste(int numero) throws SQLException {
-    String sql = "SELECT COUNT(*) FROM Mesa WHERE numero = ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setInt(1, numero);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            return rs.getInt(1) > 0; // Retorna true si ya existe una mesa con ese número
+        String sql = "SELECT COUNT(*) FROM Mesa WHERE numero = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, numero);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Retorna true si ya existe una mesa con ese número
+            }
         }
+        return false;
     }
-    return false;
-}
+    
+    public boolean mesaExiste(int numero, int idMesa) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Mesa WHERE numero = ? AND id_mesa != ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, numero);
+            ps.setInt(2, idMesa); // Excluye el ID de la mesa actual
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Retorna true si ya existe otra mesa con ese número
+            }
+        }
+        return false;
+    }
+
 
     // Método para obtener una mesa por su id
     public Mesa obtenerMesa(int idMesa) throws SQLException {
