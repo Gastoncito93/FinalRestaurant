@@ -58,23 +58,21 @@
                               <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
                               <Component id="jLabel7" min="-2" pref="65" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="jTFCantidad" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jTFPrecio" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jTFTipo" alignment="0" max="32767" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jBAgregar" alignment="0" min="-2" pref="80" max="-2" attributes="0"/>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
-                                          <Component id="jRBAlta" min="-2" max="-2" attributes="0"/>
-                                      </Group>
+                          <Component id="jTFCantidad" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jTFPrecio" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jTFTipo" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jBAgregar" alignment="0" min="-2" pref="80" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                                      <Component id="jRBAlta" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jRBBaja" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jBActualizar" min="-2" pref="87" max="-2" attributes="0"/>
-                                  </Group>
+                              </Group>
+                              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jRBBaja" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jBActualizar" min="-2" pref="87" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="jTFNombre" alignment="0" max="32767" attributes="0"/>
