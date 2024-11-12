@@ -354,7 +354,14 @@ public class aVistaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMagregarReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMagregarReservasActionPerformed
-         Vista_AgregarPedidos Reservas = new Vista_AgregarPedidos();
+        for (javax.swing.JInternalFrame frame : escritorio.getAllFrames()) {
+            if (frame instanceof Vista_AgregarPedidos) {
+                frame.dispose();
+                break;
+            }
+        } 
+        
+        Vista_AgregarPedidos Reservas = new Vista_AgregarPedidos();
             escritorio.add(Reservas);
             Reservas.setVisible(true);
         
@@ -370,9 +377,17 @@ public class aVistaPrincipal extends javax.swing.JFrame {
         Vista_AgregarMesero Administracion = new Vista_AgregarMesero();
             escritorio.add(Administracion);
             Administracion.setVisible(true);
+            // Limpiar los campos de texto
     }//GEN-LAST:event_jMbaseAdminActionPerformed
 
     private void jMreservasTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMreservasTotalActionPerformed
+        for (javax.swing.JInternalFrame frame : escritorio.getAllFrames()) {
+            if (frame instanceof Vista_Reservas) {
+                frame.dispose();
+                break;
+            }
+        }
+        
         Vista_Reservas ReservasTotales = new Vista_Reservas();
             escritorio.add(ReservasTotales);
             ReservasTotales.setVisible(true);

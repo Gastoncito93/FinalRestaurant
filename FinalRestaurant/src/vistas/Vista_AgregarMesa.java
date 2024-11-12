@@ -65,18 +65,18 @@ public class Vista_AgregarMesa extends javax.swing.JInternalFrame {
 
             jTMesa.setModel(modelo);
 
-            // Selecciona la primera fila si la tabla tiene datos
-            if (modelo.getRowCount() > 0) {
-                jTMesa.setRowSelectionInterval(0, 0);
-                cargarDatosMesaSeleccionada(0);
-            }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
         
-
+    private void setearTodoEnVacio(){
+        // Limpiar los campos de texto
+        jTextFieldNumero.setText("");
+        jTextFieldCapacidad.setText("");
+        jRHabilitada.setSelected(false);
+    }
+    
     private void inicializarModelo() {
         modelo = new DefaultTableModel();
         modelo.addColumn("Id");
@@ -261,20 +261,28 @@ public class Vista_AgregarMesa extends javax.swing.JInternalFrame {
 
     private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
         try {
-            int numero = Integer.parseInt(jTextFieldNumero.getText());
-            int capacidad = Integer.parseInt(jTextFieldCapacidad.getText());
-            boolean estado = jRHabilitada.isSelected();
+        int numero = Integer.parseInt(jTextFieldNumero.getText());
+        int capacidad = Integer.parseInt(jTextFieldCapacidad.getText());
+        boolean estado = jRHabilitada.isSelected();
 
-            Mesa nuevaMesa = new Mesa(numero, capacidad, estado, null);
-            mesaData.agregarMesa(nuevaMesa);
-            consultar(); // Actualiza la tabla después de agregar
-            JOptionPane.showMessageDialog(this, "Mesa agregada exitosamente.");
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingresa un número válido para número y capacidad.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al agregar la mesa: " + e.getMessage());
-        }        // TODO add your handling code here:
+        // Verificar si la mesa ya existe antes de agregarla
+        if (mesaData.mesaExiste(numero)) {
+            JOptionPane.showMessageDialog(this, "El número de mesa ya está en uso. Elige otro número.");
+            return;
+        }
+
+        Mesa nuevaMesa = new Mesa(numero, capacidad, estado, null);
+        mesaData.agregarMesa(nuevaMesa); // Agrega la mesa a la base de datos
+        consultar(); // Actualiza la tabla después de agregar
+        setearTodoEnVacio(); // Limpiar campos de entrada
+
+        JOptionPane.showMessageDialog(this, "Mesa agregada exitosamente.");
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Por favor, ingresa un número válido para número y capacidad.");
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al agregar la mesa: " + e.getMessage());
+    }
     }//GEN-LAST:event_jBAgregarActionPerformed
 
     private void jBBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBorrarActionPerformed
@@ -291,6 +299,7 @@ public class Vista_AgregarMesa extends javax.swing.JInternalFrame {
     } else {
         JOptionPane.showMessageDialog(this, "Por favor, selecciona una mesa para borrar.");
     }
+    setearTodoEnVacio();
     }//GEN-LAST:event_jBBorrarActionPerformed
 
     private void jTMesaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTMesaMouseClicked
@@ -313,7 +322,9 @@ public class Vista_AgregarMesa extends javax.swing.JInternalFrame {
         mesaData.actualizarMesa(mesaActualizada);
         
         consultar(); 
-
+        
+        setearTodoEnVacio();
+        
         JOptionPane.showMessageDialog(this, "Mesa actualizada exitosamente.");
     } else {
         JOptionPane.showMessageDialog(this, "Por favor, selecciona una mesa para actualizar.");

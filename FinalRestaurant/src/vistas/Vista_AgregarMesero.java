@@ -27,6 +27,7 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
       conectarBaseDeDatos(); // Primero, establece la conexión
         meseroData = new MeseroData(connection); // Luego, inicializa MesaData
         inicializarModelo();
+        setearTodoEnVacio();
         grupoEstado = new ButtonGroup();
         grupoEstado.add(jRActivo);
         grupoEstado.add(jRInactivo);
@@ -60,6 +61,16 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
         jTableMesero.setModel(modelo);
     }
     
+    private void setearTodoEnVacio(){
+        // Limpiar los campos de texto
+        jTNombre.setText("");
+        jTApellido.setText("");
+        jTDNI.setText("");
+        jTUsuario.setText("");
+        jTContraseña.setText("");
+        jRActivo.setSelected(false);
+    }
+    
     void consultar() {
         String sql = "SELECT id_mesero, nombre, apellido, dni, usuario, contraseña, estado FROM mesero";
         try (Statement st = connection.createStatement();
@@ -80,20 +91,13 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
             }
 
             jTableMesero.setModel(modelo);
-
-            // Selecciona la primera fila si la tabla tiene datos
-            if (modelo.getRowCount() > 0) {
-                jTableMesero.setRowSelectionInterval(0, 0);
-                cargarDatosMeseroSeleccionado(0);
-            }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
     
     private void cargarDatosMeseroSeleccionado(int rowIndex) {
-    // Obtén los datos de la mesa seleccionada
+    // Obtén los datos del mesero seleccionado
     int id_mesero = (int) modelo.getValueAt(rowIndex, 0); 
     String nombre = (String) modelo.getValueAt(rowIndex, 1); 
     String apellido = (String) modelo.getValueAt(rowIndex, 2); 
@@ -120,28 +124,28 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
 
     
     // Método auxiliar para actualizar la tabla de productos
-private void actualizarTabla() {
-    modelo.setRowCount(0); // Limpiar el modelo de la tabla
+    private void actualizarTabla() {
+        modelo.setRowCount(0); // Limpiar el modelo de la tabla
 
-    List<Mesero> meseros = meseroData.obtenerMeseros(); // Obtener todos los meseros
+        List<Mesero> meseros = meseroData.obtenerMeseros(); // Obtener todos los meseros
 
-    for (Mesero mesero : meseros) {
-        Object[] fila = {
-            mesero.getIdMesero(),
-            mesero.getNombre(),
-            mesero.getApellido(),
-            mesero.getDni(),
-            mesero.getUsuario(),
-            mesero.getContraseña(),
-            mesero.isEstado()
-        };
-        modelo.addRow(fila); // Agregar cada mesero como una nueva fila en la tabla
+        for (Mesero mesero : meseros) {
+            Object[] fila = {
+                mesero.getIdMesero(),
+                mesero.getNombre(),
+                mesero.getApellido(),
+                mesero.getDni(),
+                mesero.getUsuario(),
+                mesero.getContraseña(),
+                mesero.isEstado()
+            };
+            modelo.addRow(fila); // Agregar cada mesero como una nueva fila en la tabla
+        }
+
+        jTableMesero.setModel(modelo);
+        jTableMesero.revalidate(); // Validar la tabla después de actualizar el modelo
+        jTableMesero.repaint(); // Repintar la tabla
     }
-    
-    jTableMesero.setModel(modelo);
-    jTableMesero.revalidate(); // Validar la tabla después de actualizar el modelo
-    jTableMesero.repaint(); // Repintar la tabla
-}
  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -325,11 +329,11 @@ private void actualizarTabla() {
        int rowIndex = jTableMesero.getSelectedRow();
         if (rowIndex != -1) { // Asegúrate de que haya una fila seleccionada
             cargarDatosMeseroSeleccionado(rowIndex);
-        }        // TODO add your handling code here:
+        }       
     }//GEN-LAST:event_jTableMeseroMouseClicked
 
     private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
- try {
+        try {
         String nombre = jTNombre.getText();
         String apellido = jTApellido.getText();
         String dni = jTDNI.getText();
@@ -348,6 +352,15 @@ private void actualizarTabla() {
         actualizarTabla(); // Actualiza la tabla después de agregar
 
         JOptionPane.showMessageDialog(this, "Mesero agregado exitosamente.");
+
+        // Limpiar los campos de texto
+        jTNombre.setText("");
+        jTApellido.setText("");
+        jTDNI.setText("");
+        jTUsuario.setText("");
+        jTContraseña.setText("");
+        jRActivo.setSelected(false); // Deseleccionar el botón de selección para el estado
+
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, "Por favor, ingresa un número válido para cantidad y precio.");
     }
@@ -355,8 +368,7 @@ private void actualizarTabla() {
 
     private void jBActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBActualizarActionPerformed
         int filaSeleccionada = jTableMesero.getSelectedRow();
-        if (filaSeleccionada != -1) 
-        {
+    if (filaSeleccionada != -1) {
         int idMesero = (int) modelo.getValueAt(filaSeleccionada, 0);
         String nombre = jTNombre.getText();
         String apellido = jTApellido.getText();
@@ -367,8 +379,18 @@ private void actualizarTabla() {
 
         Mesero nuevoMesero = new Mesero(idMesero, nombre, apellido, dni, estado, usuario, contraseña);
 
+        // Actualizar el mesero en la base de datos
         meseroData.actualizarMesero(nuevoMesero);
-        
+
+        // Limpiar los campos de texto y el estado del botón
+        jTNombre.setText("");
+        jTApellido.setText("");
+        jTDNI.setText("");
+        jTUsuario.setText("");
+        jTContraseña.setText("");
+        jRActivo.setSelected(false);
+
+        // Actualizar la tabla para reflejar los cambios
         consultar(); 
 
         JOptionPane.showMessageDialog(this, "Mesero actualizado exitosamente.");
@@ -376,6 +398,8 @@ private void actualizarTabla() {
         JOptionPane.showMessageDialog(this, "Por favor, selecciona un Mesero para actualizar.");
     }
     }//GEN-LAST:event_jBActualizarActionPerformed
+    
+    
     private boolean usuarioExiste(String usuario) {
     String sql = "SELECT COUNT(*) FROM mesero WHERE usuario = ?";
     try {
