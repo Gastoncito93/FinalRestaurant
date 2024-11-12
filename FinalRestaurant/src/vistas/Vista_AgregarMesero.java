@@ -334,41 +334,50 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
 
     private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
         try {
-        String nombre = jTNombre.getText();
-        String apellido = jTApellido.getText();
-        String dni = jTDNI.getText();
-        String usuario = jTUsuario.getText();
-        String contraseña = jTContraseña.getText();
-        boolean estado = jRActivo.isSelected(); // Suponiendo que jRActivo es el botón de selección para el estado
+            String nombre = jTNombre.getText().trim();
+            String apellido = jTApellido.getText().trim();
+            String dni = jTDNI.getText().trim();
+            String usuario = jTUsuario.getText().trim();
+            String contraseña = jTContraseña.getText().trim();
+            boolean estado = jRActivo.isSelected();
 
-        // Verificar si el nombre de usuario ya existe
-        if (usuarioExiste(usuario)) {
-            JOptionPane.showMessageDialog(this, "El nombre de usuario ya está en uso. Elige otro.");
-            return;
+                // Verificar si todos los campos obligatorios están llenos
+                if (nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty() || usuario.isEmpty() || contraseña.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios. Por favor, complétalos.");
+                    return;
+                }
+
+                // Verificar si el nombre de usuario ya existe
+                if (usuarioExiste(usuario)) {
+                    JOptionPane.showMessageDialog(this, "El nombre de usuario ya está en uso. Elige otro.");
+                    return;
+                }
+
+            // Crear y agregar el mesero
+            Mesero nuevoMesero = new Mesero(nombre, apellido, dni, estado, usuario, contraseña);
+            meseroData.agregarMesero(nuevoMesero);
+            actualizarTabla(); // Actualiza la tabla después de agregar
+
+            JOptionPane.showMessageDialog(this, "Mesero agregado exitosamente.");
+
+            // Limpiar los campos de texto después de agregar
+            jTNombre.setText("");
+            jTApellido.setText("");
+            jTDNI.setText("");
+            jTUsuario.setText("");
+            jTContraseña.setText("");
+            jRActivo.setSelected(false);
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa un número válido en los campos numéricos.");
         }
-
-        Mesero nuevoMesero = new Mesero(nombre, apellido, dni, estado, usuario, contraseña);
-        meseroData.agregarMesero(nuevoMesero); // Agrega el mesero a la base de datos
-        actualizarTabla(); // Actualiza la tabla después de agregar
-
-        JOptionPane.showMessageDialog(this, "Mesero agregado exitosamente.");
-
-        // Limpiar los campos de texto
-        jTNombre.setText("");
-        jTApellido.setText("");
-        jTDNI.setText("");
-        jTUsuario.setText("");
-        jTContraseña.setText("");
-        jRActivo.setSelected(false); // Deseleccionar el botón de selección para el estado
-
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Por favor, ingresa un número válido para cantidad y precio.");
-    }
     }//GEN-LAST:event_jBAgregarActionPerformed
 
     private void jBActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBActualizarActionPerformed
-        int filaSeleccionada = jTableMesero.getSelectedRow();
+       int filaSeleccionada = jTableMesero.getSelectedRow();
+    
     if (filaSeleccionada != -1) {
+        // Obtener datos del formulario
         int idMesero = (int) modelo.getValueAt(filaSeleccionada, 0);
         String nombre = jTNombre.getText();
         String apellido = jTApellido.getText();
@@ -377,23 +386,27 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
         String contraseña = jTContraseña.getText();
         boolean estado = jRActivo.isSelected();
 
+        // Crear el objeto Mesero con los datos actuales
         Mesero nuevoMesero = new Mesero(idMesero, nombre, apellido, dni, estado, usuario, contraseña);
 
-        // Actualizar el mesero en la base de datos
-        meseroData.actualizarMesero(nuevoMesero);
+        // Validar que el DNI o usuario no estén duplicados antes de actualizar
+        if (!meseroData.esDuplicado(dni, usuario, idMesero)) {
+            meseroData.actualizarMesero(nuevoMesero); // Actualizar el mesero en la base de datos
+            JOptionPane.showMessageDialog(this, "Mesero actualizado exitosamente.");
+            
+            // Limpiar los campos de texto y el estado del botón
+            jTNombre.setText("");
+            jTApellido.setText("");
+            jTDNI.setText("");
+            jTUsuario.setText("");
+            jTContraseña.setText("");
+            jRActivo.setSelected(false);
 
-        // Limpiar los campos de texto y el estado del botón
-        jTNombre.setText("");
-        jTApellido.setText("");
-        jTDNI.setText("");
-        jTUsuario.setText("");
-        jTContraseña.setText("");
-        jRActivo.setSelected(false);
-
-        // Actualizar la tabla para reflejar los cambios
-        consultar(); 
-
-        JOptionPane.showMessageDialog(this, "Mesero actualizado exitosamente.");
+            // Actualizar la tabla para reflejar los cambios
+            consultar(); 
+        } else {
+            JOptionPane.showMessageDialog(this, "Error: El DNI o usuario ya está en uso por otro mesero.");
+        }
     } else {
         JOptionPane.showMessageDialog(this, "Por favor, selecciona un Mesero para actualizar.");
     }
