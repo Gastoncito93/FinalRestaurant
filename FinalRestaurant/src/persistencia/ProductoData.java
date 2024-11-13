@@ -138,17 +138,32 @@ public class ProductoData {
         e.printStackTrace();
     }
     return productos;
-}
-public void actualizarCantidadProducto(int idProducto, int cantidadReducida) {
-    String sql = "UPDATE producto SET cantidad = cantidad - ? WHERE id_producto = ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setInt(1, cantidadReducida);
-        ps.setInt(2, idProducto);
-        ps.executeUpdate();
-    } catch (SQLException e) {
-        System.err.println("Error al actualizar la cantidad del producto: " + e.getMessage());
     }
-}
+    
+    public void actualizarCantidadProducto(int idProducto, int cantidadReducida) {
+        String sql = "UPDATE producto SET cantidad = cantidad - ? WHERE id_producto = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, cantidadReducida);
+            ps.setInt(2, idProducto);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar la cantidad del producto: " + e.getMessage());
+        }
+    }
 
+    public boolean existeProductoConNombreYTipo(String nombre, String tipo) {
+        String sql = "SELECT COUNT(*) FROM producto WHERE nombre = ? AND tipo = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, nombre);
+            ps.setString(2, tipo);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Retorna true si ya existe un producto con ese nombre y tipo
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 }

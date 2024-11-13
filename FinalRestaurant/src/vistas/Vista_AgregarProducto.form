@@ -81,7 +81,7 @@
                           <Group type="102" attributes="0">
                               <EmptySpace min="-2" pref="94" max="-2" attributes="0"/>
                               <Component id="jLabel1" min="-2" pref="395" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="27" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="34" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -127,7 +127,7 @@
                           <Component id="jRBAlta" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jRBBaja" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="37" max="32767" attributes="0"/>
+                      <EmptySpace pref="39" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jBAgregar" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jBActualizar" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -185,6 +185,11 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTFNombre">
+      <Properties>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="jTFCantidad"/>
+        </Property>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
@@ -195,8 +200,18 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTFCantidad">
+      <Properties>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="jTFPrecio"/>
+        </Property>
+      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTFPrecio">
+      <Properties>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="jTFTipo"/>
+        </Property>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTFPrecioActionPerformed"/>
       </Events>
@@ -250,6 +265,11 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTFTipo">
+      <Properties>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="jTFNombre"/>
+        </Property>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTFTipoActionPerformed"/>
       </Events>
@@ -257,6 +277,9 @@
     <Component class="javax.swing.JRadioButton" name="jRBAlta">
       <Properties>
         <Property name="text" type="java.lang.String" value="Alta"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="jRBBaja"/>
+        </Property>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRBAltaActionPerformed"/>
@@ -265,6 +288,9 @@
     <Component class="javax.swing.JRadioButton" name="jRBBaja">
       <Properties>
         <Property name="text" type="java.lang.String" value="Baja"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="jTFNombre"/>
+        </Property>
       </Properties>
     </Component>
   </SubComponents>

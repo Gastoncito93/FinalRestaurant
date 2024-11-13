@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
 package vistas;
 
 import entidades.Producto;
@@ -16,10 +12,6 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import persistencia.ProductoData;
 
-/**
- *
- * @author Lenovo
- */
 public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
     
     private ButtonGroup grupoEstado;
@@ -94,30 +86,31 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
     }
     
     private void cargarDatosProductoSeleccionada(int rowIndex) {
-    // Obtén los datos de la mesa seleccionada
-    int id_producto = (int) modelo.getValueAt(rowIndex, 0); 
-    String nombre = (String) modelo.getValueAt(rowIndex, 1); 
-    int cantidad = (int) modelo.getValueAt(rowIndex, 2); 
-    double precio = (double) modelo.getValueAt(rowIndex, 3);
-    String tipo = (String) modelo.getValueAt(rowIndex, 4);
-    boolean estado = (boolean) modelo.getValueAt(rowIndex, 5); 
+        // Obtén los datos del Producto seleccionado
+        int id_producto = (int) modelo.getValueAt(rowIndex, 0); 
+        String nombre = (String) modelo.getValueAt(rowIndex, 1); 
+        int cantidad = (int) modelo.getValueAt(rowIndex, 2); 
+        double precio = (double) modelo.getValueAt(rowIndex, 3);
+        String tipo = (String) modelo.getValueAt(rowIndex, 4);
+        boolean estado = (boolean) modelo.getValueAt(rowIndex, 5); 
 
-    // Establece los valores en los campos de texto
-    jTFNombre.setText(String.valueOf(nombre));
-    jTFCantidad.setText(String.valueOf(cantidad));
-    jTFPrecio.setText(String.valueOf(precio));
-    jTFTipo.setText(String.valueOf(tipo));
+        // Establece los valores en los campos de texto
+        jTFNombre.setText(String.valueOf(nombre));
+        jTFCantidad.setText(String.valueOf(cantidad));
+        jTFPrecio.setText(String.valueOf(precio));
+        jTFTipo.setText(String.valueOf(tipo));
 
-    // Establece el estado en los radio buttons
-    if (estado) {
-        jRBAlta.setSelected(true);
-        jRBBaja.setSelected(false);
-    } else {
-        jRBAlta.setSelected(false);
-        jRBBaja.setSelected(true);
-    }
+        // Establece el estado en los radio buttons
+        if (estado) {
+            jRBAlta.setSelected(true);
+            jRBBaja.setSelected(false);
+        } else {
+            jRBAlta.setSelected(false);
+            jRBBaja.setSelected(true);
+        }
     }
     
+    // Setea todos los campos en Vacio
     private void setearTodoEnVacio(){
         // Limpiar los campos de texto
         jTFNombre.setText("");
@@ -184,9 +177,14 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
         jLabel2.setText("Agregar Producto");
         jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
+        jTFNombre.setNextFocusableComponent(jTFCantidad);
+
         jLabel4.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel4.setText("Precio");
 
+        jTFCantidad.setNextFocusableComponent(jTFPrecio);
+
+        jTFPrecio.setNextFocusableComponent(jTFTipo);
         jTFPrecio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTFPrecioActionPerformed(evt);
@@ -219,6 +217,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
         jLabel8.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel8.setText("Tipo");
 
+        jTFTipo.setNextFocusableComponent(jTFNombre);
         jTFTipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTFTipoActionPerformed(evt);
@@ -226,6 +225,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
         });
 
         jRBAlta.setText("Alta");
+        jRBAlta.setNextFocusableComponent(jRBBaja);
         jRBAlta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRBAltaActionPerformed(evt);
@@ -233,6 +233,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
         });
 
         jRBBaja.setText("Baja");
+        jRBBaja.setNextFocusableComponent(jTFNombre);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -259,26 +260,25 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(67, 67, 67)
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jTFCantidad, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTFPrecio, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTFTipo, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jBAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addGap(13, 13, 13)
-                                            .addComponent(jRBAlta)))
-                                    .addGap(30, 30, 30)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jRBBaja)
-                                        .addComponent(jBActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jTFCantidad)
+                            .addComponent(jTFPrecio)
+                            .addComponent(jTFTipo)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jBAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(13, 13, 13)
+                                        .addComponent(jRBAlta)))
+                                .addGap(30, 30, 30)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jRBBaja)
+                                    .addComponent(jBActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jTFNombre))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(94, 94, 94)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 27, Short.MAX_VALUE))
+                                .addGap(0, 34, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jScrollPane1)))))
@@ -315,7 +315,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jRBAlta)
                             .addComponent(jRBBaja))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jBAgregar)
                             .addComponent(jBActualizar)))
@@ -339,26 +339,66 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jRBAltaActionPerformed
 
     private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
-       // Método para agregar un nuevo product
-    try {
-        
-        String nombre = jTFNombre.getText();
-        int cantidad = Integer.parseInt(jTFCantidad.getText());
-        double precio = Double.parseDouble(jTFPrecio.getText());
-        String tipo = jTFTipo.getText();
-        boolean estado = jRBAlta.isSelected(); // suponiendo que jRActivo es el botón de selección para el estado
+        try {
+            // Verifica que los campos de texto no estén vacíos antes de parsearlos
+            if (jTFNombre.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, ingresa un nombre.");
+                return;
+            }
+            if (jTFCantidad.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, ingresa una cantidad.");
+                return;
+            }
+            if (jTFPrecio.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, ingresa un precio.");
+                return;
+            }
+            if (jTFTipo.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, ingresa un tipo.");
+                return;
+            }
 
-        Producto nuevoProducto = new Producto(nombre, cantidad, precio, tipo, estado);
-        productoData.insertarProducto(nuevoProducto); // Agrega el producto a la base de datos
-        actualizarTabla(); // Actualiza la tabla después de agregar
-        
-        setearTodoEnVacio();
-                
-        JOptionPane.showMessageDialog(this, "Producto agregado exitosamente.");
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Por favor, ingresa un número válido para cantidad y precio.");
+            // Parseo de campos
+            String nombre = jTFNombre.getText();
+            int cantidad;
+            double precio;
+            String tipo = jTFTipo.getText();
+            boolean estado = jRBAlta.isSelected();
+
+            // Intenta convertir a int para cantidad
+            try {
+                cantidad = Integer.parseInt(jTFCantidad.getText());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "La cantidad debe ser un número entero.");
+                return;
+            }
+
+            // Intenta convertir a double para precio
+            try {
+                precio = Double.parseDouble(jTFPrecio.getText());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "El precio debe ser un número válido.");
+                return;
+            }
+
+            // Verifica si ya existe un producto con el mismo nombre y tipo
+            if (productoData.existeProductoConNombreYTipo(nombre, tipo)) {
+                JOptionPane.showMessageDialog(this, "Ya existe un producto con el mismo nombre y tipo.");
+                return;
+            }
+
+            // Si no hay duplicados, Crea el producto y lo inserta en la base de datos
+            Producto nuevoProducto = new Producto(nombre, cantidad, precio, tipo, estado);
+            productoData.insertarProducto(nuevoProducto);
+            actualizarTabla();
+            setearTodoEnVacio();
+
+            JOptionPane.showMessageDialog(this, "Producto agregado exitosamente.");
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado. Por favor, inténtalo nuevamente.");
+        }
     }
-}
    
 
     // Método auxiliar para actualizar la tabla de productos
