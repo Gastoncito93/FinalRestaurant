@@ -7,11 +7,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +15,8 @@ import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import persistencia.ReservaData;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 public class Vista_Reservas extends javax.swing.JInternalFrame {
 
@@ -69,7 +67,7 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
     }
 
     private void llenarComboBoxMesas() {
-       mesaMap = new HashMap<>(); // Inicializa el HashMap
+        mesaMap = new HashMap<>(); // Inicializa el HashMap
         String sql = "SELECT id_mesa, numero FROM mesa WHERE estado >= 1";
         try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             jCMesas.removeAllItems(); // Limpiar el JComboBox antes de añadir los items
@@ -94,7 +92,7 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
             consultarReservasPorMesa();
         });
     }
-    
+
     private void llenarComboBoxHora() {
         jCBHora.removeAllItems();
         jCBHora.addItem("19:00");
@@ -122,8 +120,8 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
                     reserva.getId_mesa(),
                     reserva.getNombrePersona(),
                     reserva.getDni(),
-                    fechaStr,  // Mostrar la fecha como String
-                    horaStr,   // Mostrar la hora como String
+                    fechaStr, // Mostrar la fecha como String
+                    horaStr, // Mostrar la hora como String
                     reserva.isEstado() ? "Vigente" : "No vigente"
                 };
                 modelo.addRow(fila);
@@ -310,156 +308,169 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
-    
         if (jCMesas.getSelectedItem() != null
-    && !jTNombre.getText().isEmpty()
-    && !jTDni.getText().isEmpty()
-    && jDCFecha.getDate() != null
-    && jCBHora.getSelectedItem() != null) {
+                && !jTNombre.getText().isEmpty()
+                && !jTDni.getText().isEmpty()
+                && jDCFecha.getDate() != null
+                && jCBHora.getSelectedItem() != null) {
 
-    try {
-        // Obtener los datos del formulario
-        String mesaSeleccionada = (String) jCMesas.getSelectedItem();
-        int idMesa = mesaMap.get(mesaSeleccionada); // Mapa que relaciona nombres de mesas con IDs
-        String nombre = jTNombre.getText();
-        String dni = jTDni.getText();
+            // Convertir LocalDate.now() a java.util.Date
+            java.util.Date fechaActual = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-        // Obtener la fecha seleccionada de jDCFecha
-        java.util.Date fechaSeleccionada = jDCFecha.getDate(); // Obtiene java.util.Date
-        
-        if (fechaSeleccionada != null) {
-            // Convertir java.util.Date a java.sql.Date
-            java.sql.Date sqlFecha = new java.sql.Date(fechaSeleccionada.getTime()); // Conversión correcta
+            // Comparar si la fecha seleccionada es posterior a la actual
+            if (!jDCFecha.getDate().before(fechaActual)) {
 
-            // Convertir la hora seleccionada en String a LocalTime
-            String horaSeleccionada = (String) jCBHora.getSelectedItem();
-            LocalTime hora = LocalTime.parse(horaSeleccionada);
+                try {
+                    // Obtener los datos del formulario
+                    String mesaSeleccionada = (String) jCMesas.getSelectedItem();
+                    int idMesa = mesaMap.get(mesaSeleccionada); // Mapa que relaciona nombres de mesas con IDs
+                    String nombre = jTNombre.getText();
+                    String dni = jTDni.getText();
 
-            boolean estado = jRadioButton1.isSelected(); // Estado de la reserva
+                    // Obtener la fecha seleccionada de jDCFecha
+                    java.util.Date fechaSeleccionada = jDCFecha.getDate(); // Obtiene java.util.Date
 
-            // Crear la reserva con LocalDate y LocalTime
-            Reserva nuevaReserva = new Reserva(idMesa, nombre, dni, sqlFecha.toLocalDate(), hora, estado);
-            reservaData.crearReserva(nuevaReserva); // Guardar la reserva en la base de datos
+                    if (fechaSeleccionada != null) {
+                        // Convertir java.util.Date a java.sql.Date
+                        java.sql.Date sqlFecha = new java.sql.Date(fechaSeleccionada.getTime()); // Conversión correcta
 
-            // Mostrar mensaje de confirmación
-            JOptionPane.showMessageDialog(this, "Se creó una reserva para el día " 
-                    + nuevaReserva.getFecha() + " a la hora " + nuevaReserva.getHora());
+                        // Convertir la hora seleccionada en String a LocalTime
+                        String horaSeleccionada = (String) jCBHora.getSelectedItem();
+                        LocalTime hora = LocalTime.parse(horaSeleccionada);
 
-            // Actualizar la vista con las reservas
-            consultarReservasPorMesa();
+                        boolean estado = jRadioButton1.isSelected(); // Estado de la reserva
+
+                        // Crear la reserva con LocalDate y LocalTime
+                        Reserva nuevaReserva = new Reserva(idMesa, nombre, dni, sqlFecha.toLocalDate(), hora, estado);
+                        reservaData.crearReserva(nuevaReserva); // Guardar la reserva en la base de datos
+
+                        // Mostrar mensaje de confirmación
+                        JOptionPane.showMessageDialog(this, "Se creó una reserva para el día "
+                                + nuevaReserva.getFecha() + " a la hora " + nuevaReserva.getHora());
+
+                        // Actualizar la vista con las reservas
+                        consultarReservasPorMesa();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Por favor, selecciona una fecha.");
+                    }
+
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Por favor, ingresa datos válidos.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor, ingresa una fecha posterior al día actual.");
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Por favor, selecciona una fecha.");
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa todos los datos.");
         }
-
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Por favor, ingresa datos válidos.");
-    }
-} else {
-    JOptionPane.showMessageDialog(this, "Por favor, ingresa todos los datos.");
-}
-
-        
     }//GEN-LAST:event_jBAgregarActionPerformed
 
     private void jBActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBActualizarActionPerformed
-            int fila = JTableReservas.getSelectedRow();
-    if (fila == -1) {
-        JOptionPane.showMessageDialog(this, "Seleccione una reserva de la tabla para actualizar.");
-    } else {
-        try {
-        // Obtener el ID de la reserva seleccionada
-        int idReserva = (int) JTableReservas.getValueAt(fila, 0);
+        int fila = JTableReservas.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una reserva de la tabla para actualizar.");
+        } else {
+            try {
+                // Obtener el ID de la reserva seleccionada
+                int idReserva = (int) JTableReservas.getValueAt(fila, 0);
 
-        // Obtener el ID de la mesa seleccionada desde el ComboBox
-        int idMesa = mesaMap.get((String) jCMesas.getSelectedItem());
+                // Obtener el ID de la mesa seleccionada desde el ComboBox
+                int idMesa = mesaMap.get((String) jCMesas.getSelectedItem());
 
-        // Obtener el nombre y el DNI desde los campos de texto
-        String nombre = jTNombre.getText();
-        String dni = jTDni.getText();
+                // Obtener el nombre y el DNI desde los campos de texto
+                String nombre = jTNombre.getText();
+                String dni = jTDni.getText();
 
-        // Obtener la fecha seleccionada desde el JDateChooser
-        java.util.Date fechaSeleccionada = jDCFecha.getDate(); // Obtiene java.util.Date
-        if (fechaSeleccionada == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, selecciona una fecha.");
-            return;
+                // Obtener la fecha seleccionada desde el JDateChooser
+                java.util.Date fechaSeleccionada = jDCFecha.getDate(); // Obtiene java.util.Date
+                if (fechaSeleccionada == null) {
+                    JOptionPane.showMessageDialog(this, "Por favor, selecciona una fecha.");
+                    return;
+                }
+
+                // Convertir la java.util.Date a java.sql.Date
+                java.sql.Date sqlFecha = new java.sql.Date(fechaSeleccionada.getTime()); // Conversión correcta
+
+                // Convertir la hora seleccionada a LocalTime
+                String horaSeleccionada = (String) jCBHora.getSelectedItem();
+                LocalTime hora = LocalTime.parse(horaSeleccionada);
+
+                // Obtener el estado de la reserva (por ejemplo, si está activa o no)
+                boolean estado = jRadioButton1.isSelected();
+
+                // Crear el objeto Reserva actualizado con LocalDate y LocalTime
+                Reserva reservaActualizada = new Reserva(idReserva, idMesa, nombre, dni, sqlFecha.toLocalDate(), hora, estado);
+                // Convertir LocalDate.now() a java.util.Date
+                java.util.Date fechaActual = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+                // Comparar si la fecha seleccionada es posterior a la actual
+                if (!jDCFecha.getDate().before(fechaActual)) {
+                    // Llamar al método para actualizar la reserva en la base de datos
+                    reservaData.actualizarReserva(reservaActualizada);
+
+                    // Actualizar la tabla con las nuevas reservas
+                    actualizarTablaReservas();
+
+                    // Mostrar un mensaje de confirmación
+                    JOptionPane.showMessageDialog(this, "Reserva actualizada exitosamente.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Seleccione una fecha posterior al día actual.");
+                }
+            } catch (Exception e) {
+                // Manejo de errores en caso de que algo no esté correcto
+                JOptionPane.showMessageDialog(this, "Por favor, ingresa datos válidos.");
+                e.printStackTrace();
+            }
         }
-        
-        // Convertir la java.util.Date a java.sql.Date
-        java.sql.Date sqlFecha = new java.sql.Date(fechaSeleccionada.getTime()); // Conversión correcta
-
-        // Convertir la hora seleccionada a LocalTime
-        String horaSeleccionada = (String) jCBHora.getSelectedItem();
-        LocalTime hora = LocalTime.parse(horaSeleccionada);
-
-        // Obtener el estado de la reserva (por ejemplo, si está activa o no)
-        boolean estado = jRadioButton1.isSelected();
-
-        // Crear el objeto Reserva actualizado con LocalDate y LocalTime
-        Reserva reservaActualizada = new Reserva(idReserva, idMesa, nombre, dni, sqlFecha.toLocalDate(), hora, estado);
-
-        // Llamar al método para actualizar la reserva en la base de datos
-        reservaData.actualizarReserva(reservaActualizada);
-
-        // Actualizar la tabla con las nuevas reservas
-        actualizarTablaReservas();
-
-        // Mostrar un mensaje de confirmación
-        JOptionPane.showMessageDialog(this, "Reserva actualizada exitosamente.");
-    } catch (Exception e) {
-        // Manejo de errores en caso de que algo no esté correcto
-        JOptionPane.showMessageDialog(this, "Por favor, ingresa datos válidos.");
-        e.printStackTrace();
-    }
-}
 
     }//GEN-LAST:event_jBActualizarActionPerformed
 
     private void JTableReservasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTableReservasMouseClicked
         if (evt.getClickCount() == 1) { // Asegúrate de que el evento se maneje solo en un clic
-    int fila = JTableReservas.getSelectedRow();
-    if (fila == -1) {
-        JOptionPane.showMessageDialog(this, "No se seleccionó una fila");
-    } else {
-        // Obtén los valores de la fila seleccionada
-        int idReserva = Integer.parseInt(JTableReservas.getValueAt(fila, 0).toString());
-        int idMesa = Integer.parseInt(JTableReservas.getValueAt(fila, 1).toString());
-        String nombreCliente = JTableReservas.getValueAt(fila, 2).toString();
-        String dniCliente = JTableReservas.getValueAt(fila, 3).toString();
-        String fechaStr = JTableReservas.getValueAt(fila, 4).toString();
-        String horaStr = JTableReservas.getValueAt(fila, 5).toString();
-        String estadoStr = JTableReservas.getValueAt(fila, 6).toString();
+            int fila = JTableReservas.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this, "No se seleccionó una fila");
+            } else {
+                // Obtén los valores de la fila seleccionada
+                int idReserva = Integer.parseInt(JTableReservas.getValueAt(fila, 0).toString());
+                int idMesa = Integer.parseInt(JTableReservas.getValueAt(fila, 1).toString());
+                String nombreCliente = JTableReservas.getValueAt(fila, 2).toString();
+                String dniCliente = JTableReservas.getValueAt(fila, 3).toString();
+                String fechaStr = JTableReservas.getValueAt(fila, 4).toString();
+                String horaStr = JTableReservas.getValueAt(fila, 5).toString();
+                String estadoStr = JTableReservas.getValueAt(fila, 6).toString();
 
-        // Setea los valores de los campos de texto
-        jTNombre.setText(nombreCliente);
-        jTDni.setText(dniCliente);
-        
-        // Convierte la fecha String a LocalDate y asigna a JDateChooser
-        try {
-            LocalDate fecha = LocalDate.parse(fechaStr);
-            jDCFecha.setDate(Date.valueOf(fecha)); // Asignamos la fecha al JDateChooser
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Formato de fecha incorrecto");
-        }
+                // Setea los valores de los campos de texto
+                jTNombre.setText(nombreCliente);
+                jTDni.setText(dniCliente);
 
-        // Asigna la hora al JComboBox de horas
-        jCBHora.setSelectedItem(horaStr);
+                // Convierte la fecha String a LocalDate y asigna a JDateChooser
+                try {
+                    LocalDate fecha = LocalDate.parse(fechaStr);
+                    jDCFecha.setDate(Date.valueOf(fecha)); // Asignamos la fecha al JDateChooser
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Formato de fecha incorrecto");
+                }
 
-        // Establecer el estado en el radioButton
-        if (estadoStr.equals("Vigente")) {
-            jRadioButton1.setSelected(true); // Vigente
-        } else {
-            jRadioButton2.setSelected(true); // No vigente
-        }
+                // Asigna la hora al JComboBox de horas
+                jCBHora.setSelectedItem(horaStr);
 
-        // Puedes descomentar el siguiente código si deseas asignar la mesa al JComboBox
-        /*for (int i = 0; i < jCMesas.getItemCount(); i++) {
+                // Establecer el estado en el radioButton
+                if (estadoStr.equals("Vigente")) {
+                    jRadioButton1.setSelected(true); // Vigente
+                } else {
+                    jRadioButton2.setSelected(true); // No vigente
+                }
+
+                // Puedes descomentar el siguiente código si deseas asignar la mesa al JComboBox
+                /*for (int i = 0; i < jCMesas.getItemCount(); i++) {
             if (mesaMap.get(jCMesas.getItemAt(i)) == idMesa) {
                 jCMesas.setSelectedIndex(i);
                 break;
             }
         }*/
-    }
-}
+            }
+        }
 
     }//GEN-LAST:event_JTableReservasMouseClicked
 

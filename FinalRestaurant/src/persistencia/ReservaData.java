@@ -19,14 +19,14 @@ public class ReservaData {
 
     // Método para insertar un nuevo reserva
     public void crearReserva(Reserva reserva) {
+
         List<Reserva> reservas = listaDeReservas();
         for (Reserva reservasexistentes : reservas) {
             if (reservasexistentes.getId_mesa() == reserva.getId_mesa() && reservasexistentes.getFecha().equals(reserva.getFecha())) {
-                System.out.println("bandera");
                 flag = false;
             }
         }
-        
+
         if (flag) {
             String sql = "INSERT INTO Reserva (id_mesa, nombre_cliente, dni_cliente, fecha, hora, estado) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -52,6 +52,7 @@ public class ReservaData {
         } else {
             System.out.println("Error al crear reserva, la mesa se encuentra ocupada ese día");
         }
+
     }
 
     // Método para obtener un reserva por su ID
@@ -82,27 +83,27 @@ public class ReservaData {
     public List<Reserva> obtenerReservasPorMesa(int idMesa) {
         List<Reserva> reservas = new ArrayList<>();
         String sql = "SELECT * FROM Reserva WHERE id_mesa = ?";
-        
+
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, idMesa);
             ResultSet rs = pstmt.executeQuery();
-            
+
             while (rs.next()) {
                 Reserva reserva = new Reserva(
-                    rs.getInt("id_reserva"),
-                    rs.getInt("id_mesa"),
-                    rs.getString("nombre_cliente"),
-                    rs.getString("dni_cliente"),
-                    rs.getDate("fecha").toLocalDate(), // Convertir Date a LocalDate
-                    rs.getTime("hora").toLocalTime(), // Convertir Time a LocalTime
-                    rs.getBoolean("estado")
+                        rs.getInt("id_reserva"),
+                        rs.getInt("id_mesa"),
+                        rs.getString("nombre_cliente"),
+                        rs.getString("dni_cliente"),
+                        rs.getDate("fecha").toLocalDate(), // Convertir Date a LocalDate
+                        rs.getTime("hora").toLocalTime(), // Convertir Time a LocalTime
+                        rs.getBoolean("estado")
                 );
                 reservas.add(reserva);
             }
         } catch (SQLException e) {
             System.out.println("Error al obtener las reservas para la mesa: " + e.getMessage());
         }
-        
+
         return reservas;
     }
 
@@ -143,20 +144,23 @@ public class ReservaData {
 
     // Método para actualizar una reserva
     public void actualizarReserva(Reserva reserva) {
-        String sql = "UPDATE Reserva SET id_mesa = ?, nombre_cliente = ?, dni_cliente = ?, fecha = ?, hora = ?, estado = ? WHERE id_reserva = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, reserva.getId_mesa());
-            pstmt.setString(2, reserva.getNombrePersona());
-            pstmt.setString(3, reserva.getDni());
-            pstmt.setDate(4, Date.valueOf(reserva.getFecha())); // Convertir LocalDate a Date
-            pstmt.setTime(5, Time.valueOf(reserva.getHora())); // Convertir LocalTime a Time
-            pstmt.setBoolean(6, reserva.isEstado());
-            pstmt.setInt(7, reserva.getIdReserva());
+        LocalDate fechaActual = LocalDate.now();
+        if (!reserva.getFecha().isBefore(fechaActual)) {
+            String sql = "UPDATE Reserva SET id_mesa = ?, nombre_cliente = ?, dni_cliente = ?, fecha = ?, hora = ?, estado = ? WHERE id_reserva = ?";
+            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+                pstmt.setInt(1, reserva.getId_mesa());
+                pstmt.setString(2, reserva.getNombrePersona());
+                pstmt.setString(3, reserva.getDni());
+                pstmt.setDate(4, Date.valueOf(reserva.getFecha())); // Convertir LocalDate a Date
+                pstmt.setTime(5, Time.valueOf(reserva.getHora())); // Convertir LocalTime a Time
+                pstmt.setBoolean(6, reserva.isEstado());
+                pstmt.setInt(7, reserva.getIdReserva());
 
-            pstmt.executeUpdate();
-            System.out.println("Reserva actualizada con éxito");
-        } catch (SQLException e) {
-            System.out.println("Error al actualizar la reserva: " + e.getMessage());
+                pstmt.executeUpdate();
+                System.out.println("Reserva actualizada con éxito");
+            } catch (SQLException e) {
+                System.out.println("Error al actualizar la reserva: " + e.getMessage());
+            }
         }
     }
 }
