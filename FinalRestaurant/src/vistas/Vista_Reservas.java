@@ -1,4 +1,3 @@
-
 package vistas;
 
 import entidades.Reserva;
@@ -16,13 +15,13 @@ import javax.swing.table.DefaultTableModel;
 import persistencia.ReservaData;
 
 public class Vista_Reservas extends javax.swing.JInternalFrame {
-    
-        private Connection connection;
-        private ReservaData reservaData;
-        private DefaultTableModel modelo;
-        private ButtonGroup grupoEstado;
-        
-        private Map<String, Integer> mesaMap; // Para almacenar la relación número -> id_mesa
+
+    private Connection connection;
+    private ReservaData reservaData;
+    private DefaultTableModel modelo;
+    private ButtonGroup grupoEstado;
+
+    private Map<String, Integer> mesaMap; // Para almacenar la relación número -> id_mesa
 
     public Vista_Reservas() {
         initComponents();
@@ -34,10 +33,9 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
         grupoEstado.add(jRadioButton1);
         grupoEstado.add(jRadioButton2);
         consultarReservasPorMesa();
-        
-    
+
     }
-    
+
     private void conectarBaseDeDatos() {
         String url = "jdbc:mariadb://127.0.0.1:3306/restaurant";
         String user = "root";
@@ -62,59 +60,57 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
         modelo.addColumn("Estado");
         JTableReservas.setModel(modelo);
     }
-    
-private void llenarComboBoxMesas() {
-    mesaMap = new HashMap<>(); // Inicializa el HashMap
-    String sql = "SELECT id_mesa, numero FROM mesa WHERE estado >= 1";
-    try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
-        jCMesas.removeAllItems();
-        while (rs.next()) {
-            int idMesa = rs.getInt("id_mesa");
-            String numeroMesa = rs.getString("numero");
-            jCMesas.addItem(numeroMesa);
-            mesaMap.put(numeroMesa, idMesa);
+
+    private void llenarComboBoxMesas() {
+        mesaMap = new HashMap<>(); // Inicializa el HashMap
+        String sql = "SELECT id_mesa, numero FROM mesa WHERE estado >= 1";
+        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+            jCMesas.removeAllItems();
+            while (rs.next()) {
+                int idMesa = rs.getInt("id_mesa");
+                String numeroMesa = rs.getString("numero");
+                jCMesas.addItem(numeroMesa);
+                mesaMap.put(numeroMesa, idMesa);
+            }
+            if (jCMesas.getItemCount() > 0) {
+                jCMesas.setSelectedIndex(0); // Seleccionar el primer elemento por defecto
+                consultarReservasPorMesa();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar las mesas: " + e.getMessage());
         }
-        if (jCMesas.getItemCount() > 0) {
-            jCMesas.setSelectedIndex(0); // Seleccionar el primer elemento por defecto
+
+        // Añade un listener al JComboBox para actualizar la tabla cuando se seleccione una mesa
+        jCMesas.addActionListener((java.awt.event.ActionEvent evt) -> {
             consultarReservasPorMesa();
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al cargar las mesas: " + e.getMessage());
+        });
     }
-
-    // Añade un listener al JComboBox para actualizar la tabla cuando se seleccione una mesa
-    jCMesas.addActionListener((java.awt.event.ActionEvent evt) -> {
-        consultarReservasPorMesa();
-    });
-}
-
-
 
     private void consultarReservasPorMesa() {
         String mesaSeleccionada = (String) jCMesas.getSelectedItem();
-    if (mesaSeleccionada != null) {
-        int idMesa = mesaMap.get(mesaSeleccionada);
-        List<Reserva> reservas = reservaData.obtenerReservasPorMesa(idMesa);
-        modelo.setRowCount(0); // Limpiar el modelo de la tabla
+        if (mesaSeleccionada != null) {
+            int idMesa = mesaMap.get(mesaSeleccionada);
+            List<Reserva> reservas = reservaData.obtenerReservasPorMesa(idMesa);
+            modelo.setRowCount(0); // Limpiar el modelo de la tabla
 
-        for (Reserva reserva : reservas) {
-            Object[] fila = {
-                reserva.getIdReserva(),
-                reserva.getId_mesa(),
-                reserva.getNombrePersona(),
-                reserva.getDni(),
-                reserva.getFecha(),
-                reserva.getHora(),
-                reserva.isEstado() ? "Vigente" : "No vigente"
-            };
-            modelo.addRow(fila);
+            for (Reserva reserva : reservas) {
+                Object[] fila = {
+                    reserva.getIdReserva(),
+                    reserva.getId_mesa(),
+                    reserva.getNombrePersona(),
+                    reserva.getDni(),
+                    reserva.getFecha(),
+                    reserva.getHora(),
+                    reserva.isEstado() ? "Vigente" : "No vigente"
+                };
+                modelo.addRow(fila);
+            }
+
+            JTableReservas.setModel(modelo);
+            JTableReservas.revalidate(); // Validar la tabla después de actualizar el modelo
+            JTableReservas.repaint(); // Repintar la tabla
         }
-
-        JTableReservas.setModel(modelo);
-        JTableReservas.revalidate(); // Validar la tabla después de actualizar el modelo
-        JTableReservas.repaint(); // Repintar la tabla
-    }
     }
 
     private void actualizarTablaReservas() {
@@ -290,80 +286,94 @@ private void llenarComboBoxMesas() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
-        try {
-        String mesaSeleccionada = (String) jCMesas.getSelectedItem();
-        int idMesa = mesaMap.get(mesaSeleccionada); // Obtener id_mesa del HashMap
-        String nombre = jTNombre.getText();
-        String dni = jTDni.getText();
-        String fecha = jTFecha.getText(); // Asegúrate de que esté en formato YYYY-MM-DD
-        String hora = jTHora.getText();   // Asegúrate de que esté en formato HH:MM:SS
-        boolean estado = jRadioButton1.isSelected();
-        Reserva nuevaReserva = new Reserva(idMesa, nombre, dni, fecha, hora, estado );
-        reservaData.crearReserva(nuevaReserva);
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Por favor, ingresa datos válidos.");
-    }
+        if (jCMesas.getSelectedItem() != null
+                && !jTNombre.getText().isEmpty()
+                && !jTDni.getText().isEmpty()
+                && !jTFecha.getText().isEmpty()
+                && !jTHora.getText().isEmpty()) {
+
+            try {
+                String mesaSeleccionada = (String) jCMesas.getSelectedItem();
+                int idMesa = mesaMap.get(mesaSeleccionada);
+                String nombre = jTNombre.getText();
+                String dni = jTDni.getText();
+                String fecha = jTFecha.getText();
+                String hora = jTHora.getText();
+                boolean estado = jRadioButton1.isSelected();
+
+                Reserva nuevaReserva = new Reserva(idMesa, nombre, dni, fecha, hora, estado);
+                reservaData.crearReserva(nuevaReserva);
+
+                JOptionPane.showMessageDialog(this, "Se creó una reserva para el día " + nuevaReserva.getFecha() + " a la hora " + nuevaReserva.getHora());
+
+                consultarReservasPorMesa();
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Por favor, ingresa datos válidos.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa todos los datos.");
+        }
     }//GEN-LAST:event_jBAgregarActionPerformed
 
     private void jBActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBActualizarActionPerformed
         int fila = JTableReservas.getSelectedRow();
-    if (fila == -1) {
-        JOptionPane.showMessageDialog(this, "Seleccione una reserva de la tabla para actualizar.");
-    } else {
-        try {
-            int idReserva = (int) JTableReservas.getValueAt(fila, 0);
-            int idMesa = mesaMap.get((String) jCMesas.getSelectedItem());
-            String nombre = jTNombre.getText();
-            String dni = jTDni.getText();
-            String fecha = jTFecha.getText(); // Asegúrate de que esté en formato YYYY-MM-DD
-            String hora = jTHora.getText();   // Asegúrate de que esté en formato HH:MM:SS
-            boolean estado = jRadioButton1.isSelected();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una reserva de la tabla para actualizar.");
+        } else {
+            try {
+                int idReserva = (int) JTableReservas.getValueAt(fila, 0);
+                int idMesa = mesaMap.get((String) jCMesas.getSelectedItem());
+                String nombre = jTNombre.getText();
+                String dni = jTDni.getText();
+                String fecha = jTFecha.getText(); // Asegúrate de que esté en formato YYYY-MM-DD
+                String hora = jTHora.getText();   // Asegúrate de que esté en formato HH:MM:SS
+                boolean estado = jRadioButton1.isSelected();
 
-            Reserva reservaActualizada = new Reserva(idReserva, idMesa, nombre, dni, fecha, hora, estado);
-            reservaData.actualizarReserva(reservaActualizada);
+                Reserva reservaActualizada = new Reserva(idReserva, idMesa, nombre, dni, fecha, hora, estado);
+                reservaData.actualizarReserva(reservaActualizada);
 
-            actualizarTablaReservas(); // Actualiza la tabla después de actualizar
+                actualizarTablaReservas(); // Actualiza la tabla después de actualizar
 
-            JOptionPane.showMessageDialog(this, "Reserva actualizada exitosamente.");
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingresa datos válidos.");
+                JOptionPane.showMessageDialog(this, "Reserva actualizada exitosamente.");
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Por favor, ingresa datos válidos.");
+            }
         }
-    }
     }//GEN-LAST:event_jBActualizarActionPerformed
 
     private void JTableReservasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTableReservasMouseClicked
         if (evt.getClickCount() == 1) { // Asegúrate de que el evento se maneje solo en un clic
-        int fila = JTableReservas.getSelectedRow();
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "No se seleccionó una fila");
-        } else {
-            int idReserva = Integer.parseInt(JTableReservas.getValueAt(fila, 0).toString());
-            int idMesa = Integer.parseInt(JTableReservas.getValueAt(fila, 1).toString());
-            String nombreCliente = JTableReservas.getValueAt(fila, 2).toString();
-            String dniCliente = JTableReservas.getValueAt(fila, 3).toString();
-            String fecha = JTableReservas.getValueAt(fila, 4).toString();
-            String hora = JTableReservas.getValueAt(fila, 5).toString();
-            String estadoStr = JTableReservas.getValueAt(fila, 6).toString();
-
-            jTNombre.setText(nombreCliente);
-            jTDni.setText(dniCliente);
-            jTFecha.setText(fecha);
-            jTHora.setText(hora);
-
-            if (estadoStr.equals("Vigente")) {
-                jRadioButton1.setSelected(true); // Vigente
+            int fila = JTableReservas.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this, "No se seleccionó una fila");
             } else {
-                jRadioButton2.setSelected(true); // No vigente
-            }
- 
-         /*   for (int i = 0; i < jCMesas.getItemCount(); i++) {
+                int idReserva = Integer.parseInt(JTableReservas.getValueAt(fila, 0).toString());
+                int idMesa = Integer.parseInt(JTableReservas.getValueAt(fila, 1).toString());
+                String nombreCliente = JTableReservas.getValueAt(fila, 2).toString();
+                String dniCliente = JTableReservas.getValueAt(fila, 3).toString();
+                String fecha = JTableReservas.getValueAt(fila, 4).toString();
+                String hora = JTableReservas.getValueAt(fila, 5).toString();
+                String estadoStr = JTableReservas.getValueAt(fila, 6).toString();
+
+                jTNombre.setText(nombreCliente);
+                jTDni.setText(dniCliente);
+                jTFecha.setText(fecha);
+                jTHora.setText(hora);
+
+                if (estadoStr.equals("Vigente")) {
+                    jRadioButton1.setSelected(true); // Vigente
+                } else {
+                    jRadioButton2.setSelected(true); // No vigente
+                }
+
+                /*   for (int i = 0; i < jCMesas.getItemCount(); i++) {
                 if (mesaMap.get(jCMesas.getItemAt(i)) == idMesa) {
                     jCMesas.setSelectedIndex(i);
                     break;
                 }
             } */
+            }
         }
-    }
     }//GEN-LAST:event_JTableReservasMouseClicked
 
 
