@@ -185,8 +185,8 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -341,6 +341,7 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
     
     private void inicializarModelo() {
         modelo = new DefaultTableModel();
+         modelo.addColumn("N° De Pedido");
         modelo.addColumn("N° Mesa");
         modelo.addColumn("Mesero");
         modelo.addColumn("Fecha");
@@ -383,7 +384,9 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
                     }
                 }
 
+                // Ahora agregamos el id_pedido al arreglo de fila
                 Object[] fila = {
+                    pedido.getIdPedido(), // Agregar el id_pedido
                     numeroMesa,
                     apellidoMesero,
                     pedido.getFecha(),
