@@ -138,6 +138,7 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
         jBEntregado = new javax.swing.JButton();
         jBCobrar = new javax.swing.JButton();
         jTFPrecioTotal = new javax.swing.JTextField();
+        jBEliminar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTPedidoProducto = new javax.swing.JTable();
 
@@ -207,10 +208,26 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
         jTFPrecioTotal.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jTFPrecioTotal.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
+        jBEliminar.setText("Eliminar Producto");
+        jBEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBEliminarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jBEntregado, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(91, 91, 91))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jSProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(118, 118, 118))))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,18 +246,11 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
                                 .addComponent(jBCobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(32, 32, 32)
                                 .addComponent(jTFPrecioTotal)))
-                        .addContainerGap())))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jBEntregado, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBCargarProducto))
-                        .addGap(91, 91, 91))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jSProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(118, 118, 118))))
+                        .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jBCargarProducto)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jBEliminar))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -259,9 +269,11 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jBCargarProducto)
-                .addGap(38, 38, 38)
+                .addGap(13, 13, 13)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBCargarProducto)
+                    .addComponent(jBEliminar))
+                .addGap(43, 43, 43)
                 .addComponent(jBEntregado)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -311,9 +323,14 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jCBPedidosDisponiblesActionPerformed
 
     private void jBCargarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCargarProductoActionPerformed
-         int pedidoSeleccionado = Integer.parseInt((String) jCBPedidosDisponibles.getSelectedItem());
+        int cantidad = (Integer) jSProducto.getValue();
+        int pedidoSeleccionado = Integer.parseInt((String) jCBPedidosDisponibles.getSelectedItem());
          String productoSeleccionado = (String) jCBProductos.getSelectedItem();
-         int cantidad = (Integer) jSProducto.getValue();
+         
+         if (cantidad == 0) {
+            JOptionPane.showMessageDialog(this, "Por favor seleccione una cantidad para agregar.");
+            return;
+        }
          int idProducto = -1;
          for (Producto producto : productos){
           if (producto.getNombre().equals(productoSeleccionado))
@@ -340,6 +357,7 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
         int cantidad = (Integer) jTPedidoProducto.getValueAt(filaSeleccionada, 2);
 
         entregarProductoPedido(idPedido, idProducto, cantidad);
+        productoData.actualizarCantidadProducto(idProducto, cantidad);
         consultarProductosPorPedido();
     } else {
         JOptionPane.showMessageDialog(this, "Por favor, seleccione un producto para entregar.");
@@ -355,26 +373,53 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jCBPedidosDisponiblesItemStateChanged
 
     private void jBCobrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCobrarActionPerformed
-    String pedidoSeleccionadoStr = (String) jCBPedidosDisponibles.getSelectedItem();
-    if (pedidoSeleccionadoStr != null && !pedidoSeleccionadoStr.isEmpty()) {
-        int pedidoSeleccionado = Integer.parseInt(pedidoSeleccionadoStr);
+    if (todosLosProductosEntregados()) {
+        String pedidoSeleccionadoStr = (String) jCBPedidosDisponibles.getSelectedItem();
+        if (pedidoSeleccionadoStr != null && !pedidoSeleccionadoStr.isEmpty()) {
+            int pedidoSeleccionado = Integer.parseInt(pedidoSeleccionadoStr);
 
-        pedidoProductoData.eliminarProductosPorPedido(pedidoSeleccionado);
+            pedidoProductoData.eliminarProductosPorPedido(pedidoSeleccionado);
 
-        pedidoData.eliminarPedido(pedidoSeleccionado);
-        
-        String total = jTFPrecioTotal.getText();
-        // Mostrar mensaje de éxito
-        JOptionPane.showMessageDialog(this, "El cliente ha realizado el pago de "+ total +"$. Pedido eliminado.");
+            pedidoData.eliminarPedido(pedidoSeleccionado);
 
-        // Actualizar el JComboBox y la tabla
-        cargarPedidosEnCombo();
-        consultarProductosPorPedido(); // Esto limpiará la tabla ya que no habrá un pedido seleccionado
+            String total = jTFPrecioTotal.getText();
+            // Mostrar mensaje de éxito
+            JOptionPane.showMessageDialog(this, "El cliente ha realizado el pago de " + total + "$. Pedido eliminado.");
+
+            // Actualizar el JComboBox y la tabla
+            cargarPedidosEnCombo();
+            consultarProductosPorPedido(); // Esto limpiará la tabla ya que no habrá un pedido seleccionado
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona un pedido para cobrar.");
+        }
     } else {
-        JOptionPane.showMessageDialog(this, "Por favor, selecciona un pedido para cobrar.");
+        JOptionPane.showMessageDialog(this, "No se puede cobrar hasta que todos los productos sean entregados.");
     }
     
     }//GEN-LAST:event_jBCobrarActionPerformed
+
+    private void jBEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEliminarActionPerformed
+        int filaSeleccionada = jTPedidoProducto.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            //tomar los datos de la fila seleccionada
+        String pedidoSeleccionadoStr = (String) jCBPedidosDisponibles.getSelectedItem();
+        int idPedido = Integer.parseInt(pedidoSeleccionadoStr);
+        String nombreProducto = (String) modelo.getValueAt(filaSeleccionada, 1);
+        
+        //buscar el id del producto por su nombre
+        Producto producto = buscarProductoPorNombre(nombreProducto);
+        int idProducto = producto.getIdProducto();
+        
+        //metodo para eliminar el producto
+        pedidoProductoData.eliminarProductoDePedido(idPedido, idProducto);
+        
+        //mostramos el mensaje de exito y actualizamos
+        JOptionPane.showMessageDialog(this, "Producto eliminado del pedido.");
+        consultarProductosPorPedido();
+        } else{
+        JOptionPane.showMessageDialog(this, "Por favor, selecciona un producto para eliminar.");
+        }
+    }//GEN-LAST:event_jBEliminarActionPerformed
     
     public void entregarProductoPedido(int idPedido, int idProducto, int cantidad) {
     String sql = "UPDATE pedido_producto SET estado = 1 WHERE id_pedido = ? AND id_producto = ? AND cantidad = ?";
@@ -419,9 +464,20 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
     }
     return producto;
 }
+        private boolean todosLosProductosEntregados() {
+    for (int i = 0; i < modelo.getRowCount(); i++) {
+        boolean estado = (boolean) modelo.getValueAt(i, 3); // Asegúrate de que 3 es el índice de la columna "Estado"
+        if (!estado) {
+            return false;
+        }
+    }
+    return true;
+}
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBCargarProducto;
     private javax.swing.JButton jBCobrar;
+    private javax.swing.JButton jBEliminar;
     private javax.swing.JButton jBEntregado;
     private javax.swing.JComboBox<String> jCBPedidosDisponibles;
     private javax.swing.JComboBox<String> jCBProductos;

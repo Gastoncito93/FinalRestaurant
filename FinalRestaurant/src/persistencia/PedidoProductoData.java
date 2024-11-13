@@ -89,6 +89,16 @@ public void eliminarProductosPorPedido(int idPedido) {
         System.err.println("Error al eliminar los productos del pedido: " + e.getMessage());
     }
 }
+public void eliminarProductoDePedido(int idPedido, int idProducto) {
+    String sql = "DELETE FROM pedido_producto WHERE id_pedido = ? AND id_producto = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, idPedido);
+        ps.setInt(2, idProducto);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        System.err.println("Error al eliminar el producto del pedido: " + e.getMessage());
+    }
+}
 
 
     

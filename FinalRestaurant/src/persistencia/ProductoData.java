@@ -139,7 +139,16 @@ public class ProductoData {
     }
     return productos;
 }
-
+public void actualizarCantidadProducto(int idProducto, int cantidadReducida) {
+    String sql = "UPDATE producto SET cantidad = cantidad - ? WHERE id_producto = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, cantidadReducida);
+        ps.setInt(2, idProducto);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        System.err.println("Error al actualizar la cantidad del producto: " + e.getMessage());
+    }
+}
 
 
 }
