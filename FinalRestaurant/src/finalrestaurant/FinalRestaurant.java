@@ -16,6 +16,8 @@ import persistencia.PedidoProductoData;
 import persistencia.ReservaData;
 import entidades.Reserva;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class FinalRestaurant {
 
@@ -128,10 +130,10 @@ public class FinalRestaurant {
         //creando una reserva
         ReservaData reservaData = new ReservaData(conexion);
 
-        Reserva reserva1 = new Reserva(20, "Nico Nico", "33333333", "2024-02-21", "21:05:01", true);
+        Reserva reserva1 = new Reserva(20, "Nico Nico", "33333333", LocalDate.of(2024, 2, 21), LocalTime.of(21, 5), true);
         reservaData.crearReserva(reserva1);
 
-        Reserva reserva2 = new Reserva(20, "Maca Rena", "11111111", "2024-02-19", "19:00:00", true);
+        Reserva reserva2 = new Reserva(20, "Maca Rena", "11111111", LocalDate.of(2024, 2, 19), LocalTime.of(19, 0), true);
         reservaData.crearReserva(reserva2);
 
         //Mostrar todas las reservas

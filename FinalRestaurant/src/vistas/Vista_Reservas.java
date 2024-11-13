@@ -2,10 +2,16 @@ package vistas;
 
 import entidades.Reserva;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +35,7 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
         reservaData = new ReservaData(connection);
         inicializarModelo();
         llenarComboBoxMesas();
+        llenarComboBoxHora();
         grupoEstado = new ButtonGroup();
         grupoEstado.add(jRadioButton1);
         grupoEstado.add(jRadioButton2);
@@ -62,29 +69,40 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
     }
 
     private void llenarComboBoxMesas() {
-        mesaMap = new HashMap<>(); // Inicializa el HashMap
+       mesaMap = new HashMap<>(); // Inicializa el HashMap
         String sql = "SELECT id_mesa, numero FROM mesa WHERE estado >= 1";
         try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
-            jCMesas.removeAllItems();
+            jCMesas.removeAllItems(); // Limpiar el JComboBox antes de añadir los items
             while (rs.next()) {
                 int idMesa = rs.getInt("id_mesa");
                 String numeroMesa = rs.getString("numero");
                 jCMesas.addItem(numeroMesa);
-                mesaMap.put(numeroMesa, idMesa);
+                mesaMap.put(numeroMesa, idMesa); // Relaciona número de mesa con ID
             }
             if (jCMesas.getItemCount() > 0) {
                 jCMesas.setSelectedIndex(0); // Seleccionar el primer elemento por defecto
-                consultarReservasPorMesa();
+                consultarReservasPorMesa();  // Llamar a la función para consultar las reservas
             }
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al cargar las mesas: " + e.getMessage());
         }
 
-        // Añade un listener al JComboBox para actualizar la tabla cuando se seleccione una mesa
+        // Añadir listener al JComboBox para actualizar la tabla cuando se seleccione una mesa
         jCMesas.addActionListener((java.awt.event.ActionEvent evt) -> {
+            System.out.println("Mesa seleccionada: " + jCMesas.getSelectedItem());
             consultarReservasPorMesa();
         });
+    }
+    
+    private void llenarComboBoxHora() {
+        jCBHora.removeAllItems();
+        jCBHora.addItem("19:00");
+        jCBHora.addItem("20:00");
+        jCBHora.addItem("21:00");
+        jCBHora.addItem("22:00");
+        jCBHora.addItem("23:00");
+        jCBHora.addItem("00:00");
     }
 
     private void consultarReservasPorMesa() {
@@ -95,13 +113,17 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
             modelo.setRowCount(0); // Limpiar el modelo de la tabla
 
             for (Reserva reserva : reservas) {
+                // Verificar si la fecha y la hora son null
+                String fechaStr = (reserva.getFecha() != null) ? reserva.getFecha().toString() : "N/A";
+                String horaStr = (reserva.getHora() != null) ? reserva.getHora().toString() : "N/A";
+
                 Object[] fila = {
                     reserva.getIdReserva(),
                     reserva.getId_mesa(),
                     reserva.getNombrePersona(),
                     reserva.getDni(),
-                    reserva.getFecha(),
-                    reserva.getHora(),
+                    fechaStr,  // Mostrar la fecha como String
+                    horaStr,   // Mostrar la hora como String
                     reserva.isEstado() ? "Vigente" : "No vigente"
                 };
                 modelo.addRow(fila);
@@ -129,9 +151,7 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
         jTDni = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jCMesas = new javax.swing.JComboBox<>();
-        jTFecha = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTHora = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
@@ -139,6 +159,8 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
         JTableReservas = new javax.swing.JTable();
         jBAgregar = new javax.swing.JButton();
         jBActualizar = new javax.swing.JButton();
+        jDCFecha = new com.toedter.calendar.JDateChooser();
+        jCBHora = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -205,12 +227,17 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
             }
         });
 
+        jCBHora.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -228,14 +255,11 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
                             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jTNombre)
                             .addComponent(jTDni)
-                            .addComponent(jTFecha)
-                            .addComponent(jTHora)
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jDCFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jCBHora, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 577, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -261,12 +285,12 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jDCFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCBHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -286,94 +310,157 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
+    
         if (jCMesas.getSelectedItem() != null
-                && !jTNombre.getText().isEmpty()
-                && !jTDni.getText().isEmpty()
-                && !jTFecha.getText().isEmpty()
-                && !jTHora.getText().isEmpty()) {
+    && !jTNombre.getText().isEmpty()
+    && !jTDni.getText().isEmpty()
+    && jDCFecha.getDate() != null
+    && jCBHora.getSelectedItem() != null) {
 
-            try {
-                String mesaSeleccionada = (String) jCMesas.getSelectedItem();
-                int idMesa = mesaMap.get(mesaSeleccionada);
-                String nombre = jTNombre.getText();
-                String dni = jTDni.getText();
-                String fecha = jTFecha.getText();
-                String hora = jTHora.getText();
-                boolean estado = jRadioButton1.isSelected();
+    try {
+        // Obtener los datos del formulario
+        String mesaSeleccionada = (String) jCMesas.getSelectedItem();
+        int idMesa = mesaMap.get(mesaSeleccionada); // Mapa que relaciona nombres de mesas con IDs
+        String nombre = jTNombre.getText();
+        String dni = jTDni.getText();
 
-                Reserva nuevaReserva = new Reserva(idMesa, nombre, dni, fecha, hora, estado);
-                reservaData.crearReserva(nuevaReserva);
+        // Obtener la fecha seleccionada de jDCFecha
+        java.util.Date fechaSeleccionada = jDCFecha.getDate(); // Obtiene java.util.Date
+        
+        if (fechaSeleccionada != null) {
+            // Convertir java.util.Date a java.sql.Date
+            java.sql.Date sqlFecha = new java.sql.Date(fechaSeleccionada.getTime()); // Conversión correcta
 
-                JOptionPane.showMessageDialog(this, "Se creó una reserva para el día " + nuevaReserva.getFecha() + " a la hora " + nuevaReserva.getHora());
+            // Convertir la hora seleccionada en String a LocalTime
+            String horaSeleccionada = (String) jCBHora.getSelectedItem();
+            LocalTime hora = LocalTime.parse(horaSeleccionada);
 
-                consultarReservasPorMesa();
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Por favor, ingresa datos válidos.");
-            }
+            boolean estado = jRadioButton1.isSelected(); // Estado de la reserva
+
+            // Crear la reserva con LocalDate y LocalTime
+            Reserva nuevaReserva = new Reserva(idMesa, nombre, dni, sqlFecha.toLocalDate(), hora, estado);
+            reservaData.crearReserva(nuevaReserva); // Guardar la reserva en la base de datos
+
+            // Mostrar mensaje de confirmación
+            JOptionPane.showMessageDialog(this, "Se creó una reserva para el día " 
+                    + nuevaReserva.getFecha() + " a la hora " + nuevaReserva.getHora());
+
+            // Actualizar la vista con las reservas
+            consultarReservasPorMesa();
         } else {
-            JOptionPane.showMessageDialog(this, "Por favor, ingresa todos los datos.");
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona una fecha.");
         }
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Por favor, ingresa datos válidos.");
+    }
+} else {
+    JOptionPane.showMessageDialog(this, "Por favor, ingresa todos los datos.");
+}
+
+        
     }//GEN-LAST:event_jBAgregarActionPerformed
 
     private void jBActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBActualizarActionPerformed
-        int fila = JTableReservas.getSelectedRow();
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione una reserva de la tabla para actualizar.");
-        } else {
-            try {
-                int idReserva = (int) JTableReservas.getValueAt(fila, 0);
-                int idMesa = mesaMap.get((String) jCMesas.getSelectedItem());
-                String nombre = jTNombre.getText();
-                String dni = jTDni.getText();
-                String fecha = jTFecha.getText(); // Asegúrate de que esté en formato YYYY-MM-DD
-                String hora = jTHora.getText();   // Asegúrate de que esté en formato HH:MM:SS
-                boolean estado = jRadioButton1.isSelected();
+            int fila = JTableReservas.getSelectedRow();
+    if (fila == -1) {
+        JOptionPane.showMessageDialog(this, "Seleccione una reserva de la tabla para actualizar.");
+    } else {
+        try {
+        // Obtener el ID de la reserva seleccionada
+        int idReserva = (int) JTableReservas.getValueAt(fila, 0);
 
-                Reserva reservaActualizada = new Reserva(idReserva, idMesa, nombre, dni, fecha, hora, estado);
-                reservaData.actualizarReserva(reservaActualizada);
+        // Obtener el ID de la mesa seleccionada desde el ComboBox
+        int idMesa = mesaMap.get((String) jCMesas.getSelectedItem());
 
-                actualizarTablaReservas(); // Actualiza la tabla después de actualizar
+        // Obtener el nombre y el DNI desde los campos de texto
+        String nombre = jTNombre.getText();
+        String dni = jTDni.getText();
 
-                JOptionPane.showMessageDialog(this, "Reserva actualizada exitosamente.");
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Por favor, ingresa datos válidos.");
-            }
+        // Obtener la fecha seleccionada desde el JDateChooser
+        java.util.Date fechaSeleccionada = jDCFecha.getDate(); // Obtiene java.util.Date
+        if (fechaSeleccionada == null) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona una fecha.");
+            return;
         }
+        
+        // Convertir la java.util.Date a java.sql.Date
+        java.sql.Date sqlFecha = new java.sql.Date(fechaSeleccionada.getTime()); // Conversión correcta
+
+        // Convertir la hora seleccionada a LocalTime
+        String horaSeleccionada = (String) jCBHora.getSelectedItem();
+        LocalTime hora = LocalTime.parse(horaSeleccionada);
+
+        // Obtener el estado de la reserva (por ejemplo, si está activa o no)
+        boolean estado = jRadioButton1.isSelected();
+
+        // Crear el objeto Reserva actualizado con LocalDate y LocalTime
+        Reserva reservaActualizada = new Reserva(idReserva, idMesa, nombre, dni, sqlFecha.toLocalDate(), hora, estado);
+
+        // Llamar al método para actualizar la reserva en la base de datos
+        reservaData.actualizarReserva(reservaActualizada);
+
+        // Actualizar la tabla con las nuevas reservas
+        actualizarTablaReservas();
+
+        // Mostrar un mensaje de confirmación
+        JOptionPane.showMessageDialog(this, "Reserva actualizada exitosamente.");
+    } catch (Exception e) {
+        // Manejo de errores en caso de que algo no esté correcto
+        JOptionPane.showMessageDialog(this, "Por favor, ingresa datos válidos.");
+        e.printStackTrace();
+    }
+}
+
     }//GEN-LAST:event_jBActualizarActionPerformed
 
     private void JTableReservasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTableReservasMouseClicked
         if (evt.getClickCount() == 1) { // Asegúrate de que el evento se maneje solo en un clic
-            int fila = JTableReservas.getSelectedRow();
-            if (fila == -1) {
-                JOptionPane.showMessageDialog(this, "No se seleccionó una fila");
-            } else {
-                int idReserva = Integer.parseInt(JTableReservas.getValueAt(fila, 0).toString());
-                int idMesa = Integer.parseInt(JTableReservas.getValueAt(fila, 1).toString());
-                String nombreCliente = JTableReservas.getValueAt(fila, 2).toString();
-                String dniCliente = JTableReservas.getValueAt(fila, 3).toString();
-                String fecha = JTableReservas.getValueAt(fila, 4).toString();
-                String hora = JTableReservas.getValueAt(fila, 5).toString();
-                String estadoStr = JTableReservas.getValueAt(fila, 6).toString();
+    int fila = JTableReservas.getSelectedRow();
+    if (fila == -1) {
+        JOptionPane.showMessageDialog(this, "No se seleccionó una fila");
+    } else {
+        // Obtén los valores de la fila seleccionada
+        int idReserva = Integer.parseInt(JTableReservas.getValueAt(fila, 0).toString());
+        int idMesa = Integer.parseInt(JTableReservas.getValueAt(fila, 1).toString());
+        String nombreCliente = JTableReservas.getValueAt(fila, 2).toString();
+        String dniCliente = JTableReservas.getValueAt(fila, 3).toString();
+        String fechaStr = JTableReservas.getValueAt(fila, 4).toString();
+        String horaStr = JTableReservas.getValueAt(fila, 5).toString();
+        String estadoStr = JTableReservas.getValueAt(fila, 6).toString();
 
-                jTNombre.setText(nombreCliente);
-                jTDni.setText(dniCliente);
-                jTFecha.setText(fecha);
-                jTHora.setText(hora);
-
-                if (estadoStr.equals("Vigente")) {
-                    jRadioButton1.setSelected(true); // Vigente
-                } else {
-                    jRadioButton2.setSelected(true); // No vigente
-                }
-
-                /*   for (int i = 0; i < jCMesas.getItemCount(); i++) {
-                if (mesaMap.get(jCMesas.getItemAt(i)) == idMesa) {
-                    jCMesas.setSelectedIndex(i);
-                    break;
-                }
-            } */
-            }
+        // Setea los valores de los campos de texto
+        jTNombre.setText(nombreCliente);
+        jTDni.setText(dniCliente);
+        
+        // Convierte la fecha String a LocalDate y asigna a JDateChooser
+        try {
+            LocalDate fecha = LocalDate.parse(fechaStr);
+            jDCFecha.setDate(Date.valueOf(fecha)); // Asignamos la fecha al JDateChooser
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Formato de fecha incorrecto");
         }
+
+        // Asigna la hora al JComboBox de horas
+        jCBHora.setSelectedItem(horaStr);
+
+        // Establecer el estado en el radioButton
+        if (estadoStr.equals("Vigente")) {
+            jRadioButton1.setSelected(true); // Vigente
+        } else {
+            jRadioButton2.setSelected(true); // No vigente
+        }
+
+        // Puedes descomentar el siguiente código si deseas asignar la mesa al JComboBox
+        /*for (int i = 0; i < jCMesas.getItemCount(); i++) {
+            if (mesaMap.get(jCMesas.getItemAt(i)) == idMesa) {
+                jCMesas.setSelectedIndex(i);
+                break;
+            }
+        }*/
+    }
+}
+
     }//GEN-LAST:event_JTableReservasMouseClicked
 
 
@@ -381,7 +468,9 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
     private javax.swing.JTable JTableReservas;
     private javax.swing.JButton jBActualizar;
     private javax.swing.JButton jBAgregar;
+    private javax.swing.JComboBox<String> jCBHora;
     private javax.swing.JComboBox<String> jCMesas;
+    private com.toedter.calendar.JDateChooser jDCFecha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -393,8 +482,6 @@ public class Vista_Reservas extends javax.swing.JInternalFrame {
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTDni;
-    private javax.swing.JTextField jTFecha;
-    private javax.swing.JTextField jTHora;
     private javax.swing.JTextField jTNombre;
     // End of variables declaration//GEN-END:variables
 }

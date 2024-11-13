@@ -1,17 +1,20 @@
 package entidades;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class Reserva {
     private int idReserva;
     private int id_mesa;
     private String nombrePersona;
     private String dni;
-    private String fecha;
-    private String hora;
+    private LocalDate fecha;
+    private LocalTime hora;
     private boolean estado;
 
-    public Reserva(int id, int id_mesa, String nombrePersona, String dni, String fecha, String hora, boolean estado) {
+    public Reserva(int id, int id_mesa, String nombrePersona, String dni, LocalDate fecha, LocalTime hora, boolean estado) {
         this.idReserva = id;
-        this.id_mesa= id_mesa;
+        this.id_mesa = id_mesa;
         this.nombrePersona = nombrePersona;
         this.dni = dni;
         this.fecha = fecha;
@@ -19,8 +22,8 @@ public class Reserva {
         this.estado = estado;
     }
 
-    public Reserva( int id_mesa, String nombrePersona, String dni, String fecha, String hora, boolean estado) {
-        this.id_mesa= id_mesa;
+    public Reserva(int id_mesa, String nombrePersona, String dni, LocalDate fecha, LocalTime hora, boolean estado) {
+        this.id_mesa = id_mesa;
         this.nombrePersona = nombrePersona;
         this.dni = dni;
         this.fecha = fecha;
@@ -63,19 +66,19 @@ public class Reserva {
         this.dni = dni;
     }
 
-    public String getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
-    public String getHora() {
+    public LocalTime getHora() {
         return hora;
     }
 
-    public void setHora(String hora) {
+    public void setHora(LocalTime hora) {
         this.hora = hora;
     }
 
@@ -87,20 +90,16 @@ public class Reserva {
         this.estado = estado;
     }
 
-   
-    
     @Override
     public String toString() {
         return "Reserva {" +
                 "id=" + idReserva +
-                ", id_mesa" + id_mesa + '\'' +
+                ", id_mesa=" + id_mesa +
                 ", nombrePersona='" + nombrePersona + '\'' +
                 ", dni='" + dni + '\'' +
-                ", fecha='" + fecha + '\'' +
-                ", hora='" + hora + '\'' +
+                ", fecha=" + fecha +
+                ", hora=" + hora +
                 ", estado=" + (estado ? "Vigente" : "No vigente") +
                 '}';
     }
-
 }
-
