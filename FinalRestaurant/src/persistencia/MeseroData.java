@@ -118,20 +118,24 @@ public class MeseroData {
     }
     
     public boolean esDuplicado(String dni, String usuario, int idMesero) {
-    String sql = "SELECT COUNT(*) FROM mesero WHERE (dni = ? OR usuario = ?) AND id_mesero != ?";
-    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-        pstmt.setString(1, dni);
-        pstmt.setString(2, usuario);
-        pstmt.setInt(3, idMesero);
-        ResultSet rs = pstmt.executeQuery();
-        if (rs.next()) {
-            return rs.getInt(1) > 0;
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
+            // Para un nuevo mesero o actualizar uno existente
+            String sql = "SELECT COUNT(*) FROM mesero WHERE (dni = ? OR usuario = ?) AND id_mesero != ?";
+
+            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+                pstmt.setString(1, dni);
+                pstmt.setString(2, usuario);
+                pstmt.setInt(3, idMesero);  // Se excluye el mesero actual en caso de actualización
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;  // Si el resultado es mayor que 0, significa que ya existe el DNI o usuario
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return false;  // No hay duplicados
     }
-    return false;
-}
 
     // Método para listar todos los meseros
     public List<Mesero> listarMeseros() {

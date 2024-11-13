@@ -212,6 +212,15 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jTableMesero);
 
+        jTNombre.setNextFocusableComponent(jTApellido);
+        jTNombre.requestFocusInWindow();
+
+        jTApellido.setNextFocusableComponent(jTDNI);
+
+        jTDNI.setNextFocusableComponent(jTUsuario);
+
+        jTUsuario.setNextFocusableComponent(jTContraseña);
+
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Ingresar Nombre");
 
@@ -223,6 +232,8 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Ingresar Usuario ");
+
+        jTContraseña.setNextFocusableComponent(jTNombre);
 
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Ingresar Contraseña");
@@ -272,8 +283,8 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
                             .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -333,7 +344,8 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTableMeseroMouseClicked
 
     private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
-        try {
+                try {
+            // Obtener los valores de los campos de texto
             String nombre = jTNombre.getText().trim();
             String apellido = jTApellido.getText().trim();
             String dni = jTDNI.getText().trim();
@@ -341,24 +353,30 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
             String contraseña = jTContraseña.getText().trim();
             boolean estado = jRActivo.isSelected();
 
-                // Verificar si todos los campos obligatorios están llenos
-                if (nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty() || usuario.isEmpty() || contraseña.isEmpty()) {
+            // Verificar si todos los campos obligatorios están llenos
+            String[] campos = {nombre, apellido, dni, usuario, contraseña};
+            for (String campo : campos) {
+                if (campo.isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios. Por favor, complétalos.");
                     return;
                 }
+            }
 
-                // Verificar si el nombre de usuario ya existe
-                if (usuarioExiste(usuario)) {
-                    JOptionPane.showMessageDialog(this, "El nombre de usuario ya está en uso. Elige otro.");
-                    return;
-                }
-
-            // Crear y agregar el mesero
+            // Crear el objeto Mesero
             Mesero nuevoMesero = new Mesero(nombre, apellido, dni, estado, usuario, contraseña);
-            meseroData.agregarMesero(nuevoMesero);
-            actualizarTabla(); // Actualiza la tabla después de agregar
 
-            JOptionPane.showMessageDialog(this, "Mesero agregado exitosamente.");
+            // Verificar si el DNI o el usuario ya existen
+            if (!meseroData.esDuplicado(dni, usuario, 0)) {
+                // Si no es duplicado, proceder con la inserción
+                meseroData.agregarMesero(nuevoMesero);
+                JOptionPane.showMessageDialog(this, "Mesero agregado exitosamente.");
+            } else {
+                // Si es duplicado, mostrar el error
+                JOptionPane.showMessageDialog(this, "El DNI o usuario ya están registrados.");
+            }
+
+            // Actualizar la tabla y limpiar los campos
+            actualizarTabla(); // Actualiza la tabla después de agregar
 
             // Limpiar los campos de texto después de agregar
             jTNombre.setText("");
@@ -368,9 +386,13 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
             jTContraseña.setText("");
             jRActivo.setSelected(false);
 
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingresa un número válido en los campos numéricos.");
+        }catch (Exception e) {
+            // Manejo de otras excepciones generales
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado.");
+            e.printStackTrace();
         }
+        // Manejo de errores de base de datos (por ejemplo, si falla la inserción en la base de datos)
+        
     }//GEN-LAST:event_jBAgregarActionPerformed
 
     private void jBActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBActualizarActionPerformed

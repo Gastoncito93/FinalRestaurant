@@ -192,7 +192,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
         });
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel5.setText("Cantidad");
+        jLabel5.setText("Stock");
 
         jLabel6.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel6.setText("Nombre del producto");
