@@ -27,8 +27,7 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
     private DefaultTableModel modelo;
     private List<Pedido> pedidos;
     private List<Producto> productos;
-    
-    
+
     public Vista_CargarOrden() {
         initComponents();
         conectarBaseDeDatos();
@@ -39,11 +38,9 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
         cargarPedidosEnCombo();
         cargarProductosEnCombo();
         consultarProductosPorPedido();
-        
-        
+
     }
-    
-    
+
     private void conectarBaseDeDatos() {
         String url = "jdbc:mariadb://127.0.0.1:3306/restaurant";
         String user = "root";
@@ -56,7 +53,7 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Error al conectar con la base de datos: " + e.getMessage());
         }
     }
-    
+
     private void inicializarModelo() {
         modelo = new DefaultTableModel();
         modelo.addColumn("Pedido N°");
@@ -66,62 +63,64 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
         modelo.addColumn("Subtotal");
         jTPedidoProducto.setModel(modelo);
     }
-    
+
     private void cargarPedidosEnCombo() {
         pedidos = pedidoData.obtenerPedidos();
         jCBPedidosDisponibles.removeAllItems();
         for (Pedido pedido : pedidos) {
             jCBPedidosDisponibles.addItem(String.valueOf(pedido.getIdPedido()));
-            
+
         }
     }
+
     private void cargarProductosEnCombo() {
         productos = productoData.obtenerTodosLosProductos();
         jCBProductos.removeAllItems();
         for (Producto producto : productos) {
             jCBProductos.addItem(producto.getNombre());
-            
+
         }
     }
+
     private void consultarProductosPorPedido() {
         String pedidoSeleccionadoStr = (String) jCBPedidosDisponibles.getSelectedItem();
-    if (pedidoSeleccionadoStr != null && !pedidoSeleccionadoStr.isEmpty()) {
-        int pedidoSeleccionado = Integer.parseInt(pedidoSeleccionadoStr);
-        List<Producto> productosPedido = pedidoProductoData.obtenerProductosPorPedido(pedidoSeleccionado);
-        modelo.setRowCount(0); // Limpiar la tabla antes de volver a cargar los datos
+        if (pedidoSeleccionadoStr != null && !pedidoSeleccionadoStr.isEmpty()) {
+            int pedidoSeleccionado = Integer.parseInt(pedidoSeleccionadoStr);
+            List<Producto> productosPedido = pedidoProductoData.obtenerProductosPorPedido(pedidoSeleccionado);
+            modelo.setRowCount(0); // Limpiar la tabla antes de volver a cargar los datos
 
-        int numeroPedido = 1;
-        double totalPrecio = 0.0;  // Variable para calcular el precio total
+            int numeroPedido = 1;
+            double totalPrecio = 0.0;  // Variable para calcular el precio total
 
-        for (Producto producto : productosPedido) {
-            double subtotal = producto.getPrecio() * producto.getCantidad();
-            totalPrecio += subtotal;
+            for (Producto producto : productosPedido) {
+                double subtotal = producto.getPrecio() * producto.getCantidad();
+                totalPrecio += subtotal;
 
-            Object[] fila = {
-                producto.getIdPedido(),
-                producto.getNombre(),
-                producto.getCantidad(),
-                producto.isEstado(),
-                subtotal
-            };
-            modelo.addRow(fila);
-            numeroPedido++;
+                Object[] fila = {
+                    producto.getIdPedido(),
+                    producto.getNombre(),
+                    producto.getCantidad(),
+                    producto.isEstado(),
+                    subtotal
+                };
+                modelo.addRow(fila);
+                numeroPedido++;
+            }
+
+            // Actualizar la tabla
+            jTPedidoProducto.setModel(modelo);
+            jTPedidoProducto.revalidate();
+            jTPedidoProducto.repaint();
+
+            // Actualizar el campo de texto con el precio total
+            jTFPrecioTotal.setText(String.valueOf(totalPrecio));
+        } else {
+            // Manejar el caso en el que no hay un pedido seleccionado o la cadena está vacía
+            System.out.println("No se ha seleccionado un pedido válido.");
+            jTFPrecioTotal.setText("0.0"); // Restablecer el campo de texto a 0.0
         }
-
-        // Actualizar la tabla
-        jTPedidoProducto.setModel(modelo);
-        jTPedidoProducto.revalidate();
-        jTPedidoProducto.repaint();
-
-        // Actualizar el campo de texto con el precio total
-        jTFPrecioTotal.setText(String.valueOf(totalPrecio));
-    } else {
-        // Manejar el caso en el que no hay un pedido seleccionado o la cadena está vacía
-        System.out.println("No se ha seleccionado un pedido válido.");
-        jTFPrecioTotal.setText("0.0"); // Restablecer el campo de texto a 0.0
     }
-}
-   
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -319,49 +318,61 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCBPedidosDisponiblesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBPedidosDisponiblesActionPerformed
-        consultarProductosPorPedido(); 
+        consultarProductosPorPedido();
     }//GEN-LAST:event_jCBPedidosDisponiblesActionPerformed
 
     private void jBCargarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCargarProductoActionPerformed
         int cantidad = (Integer) jSProducto.getValue();
-        int pedidoSeleccionado = Integer.parseInt((String) jCBPedidosDisponibles.getSelectedItem());
-         String productoSeleccionado = (String) jCBProductos.getSelectedItem();
-         
-         if (cantidad == 0) {
-            JOptionPane.showMessageDialog(this, "Por favor seleccione una cantidad para agregar.");
-            return;
+    int pedidoSeleccionado = Integer.parseInt((String) jCBPedidosDisponibles.getSelectedItem());
+    String productoSeleccionado = (String) jCBProductos.getSelectedItem();
+
+    if (cantidad == 0) {
+        JOptionPane.showMessageDialog(this, "Por favor seleccione una cantidad para agregar.");
+        return;
+    }
+
+    int idProducto = -1;
+    for (Producto producto : productos) {
+        if (producto.getNombre().equals(productoSeleccionado)) {
+            idProducto = producto.getIdProducto();
+
+            // Verificamos si la cantidad solicitada excede el stock
+            if (cantidad > producto.getCantidad()) {
+                // Si la cantidad solicitada es mayor que la cantidad en stock, muestra el mensaje
+                JOptionPane.showMessageDialog(this, "La cantidad solicitada supera nuestro stock. Solo tenemos " 
+                    + producto.getCantidad() + " unidades de " + producto.getNombre() + " disponibles.");
+                return;  // Salir del método sin agregar el producto
+            }
+            break;
         }
-         int idProducto = -1;
-         for (Producto producto : productos){
-          if (producto.getNombre().equals(productoSeleccionado))
-         { idProducto = producto.getIdProducto();
-         break;
-            } 
-         } 
-         if (idProducto != -1) {
-             pedidoProductoData.agregarProductoAPedido(pedidoSeleccionado, idProducto, cantidad);
-             consultarProductosPorPedido();
-             JOptionPane.showMessageDialog(this, "Producto agregado al pedido exitosamente.");
-         } else { 
-             JOptionPane.showMessageDialog(this, "Error al encontrar el producto.");
-         }
+    }
+
+    if (idProducto != -1) {
+        // Agregar el producto al pedido si la cantidad es válida
+        pedidoProductoData.agregarProductoAPedido(pedidoSeleccionado, idProducto, cantidad);
+        productoData.actualizarCantidadProducto(idProducto, cantidad);
+        consultarProductosPorPedido();
+        JOptionPane.showMessageDialog(this, "Producto agregado al pedido exitosamente.");
+    } else {
+        JOptionPane.showMessageDialog(this, "Error al encontrar el producto.");
+    }
     }//GEN-LAST:event_jBCargarProductoActionPerformed
 
     private void jBEntregadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEntregadoActionPerformed
-      int filaSeleccionada = jTPedidoProducto.getSelectedRow();
-    
-    if (filaSeleccionada != -1) {
-        int idPedido = (Integer) jTPedidoProducto.getValueAt(filaSeleccionada, 0);
-        String nombreProducto = (String) jTPedidoProducto.getValueAt(filaSeleccionada, 1);
-        int idProducto = buscarProductoPorNombre(nombreProducto).getIdProducto();
-        int cantidad = (Integer) jTPedidoProducto.getValueAt(filaSeleccionada, 2);
+        int filaSeleccionada = jTPedidoProducto.getSelectedRow();
 
-        entregarProductoPedido(idPedido, idProducto, cantidad);
-        productoData.actualizarCantidadProducto(idProducto, cantidad);
-        consultarProductosPorPedido();
-    } else {
-        JOptionPane.showMessageDialog(this, "Por favor, seleccione un producto para entregar.");
-    }
+        if (filaSeleccionada != -1) {
+            int idPedido = (Integer) jTPedidoProducto.getValueAt(filaSeleccionada, 0);
+            String nombreProducto = (String) jTPedidoProducto.getValueAt(filaSeleccionada, 1);
+            int idProducto = buscarProductoPorNombre(nombreProducto).getIdProducto();
+            int cantidad = (Integer) jTPedidoProducto.getValueAt(filaSeleccionada, 2);
+
+            entregarProductoPedido(idPedido, idProducto, cantidad);
+            
+            consultarProductosPorPedido();
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un producto para entregar.");
+        }
     }//GEN-LAST:event_jBEntregadoActionPerformed
 
     private void jCBProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBProductosActionPerformed
@@ -369,110 +380,112 @@ public class Vista_CargarOrden extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jCBProductosActionPerformed
 
     private void jCBPedidosDisponiblesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBPedidosDisponiblesItemStateChanged
-       
+
     }//GEN-LAST:event_jCBPedidosDisponiblesItemStateChanged
 
     private void jBCobrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCobrarActionPerformed
-    if (todosLosProductosEntregados()) {
-        String pedidoSeleccionadoStr = (String) jCBPedidosDisponibles.getSelectedItem();
-        if (pedidoSeleccionadoStr != null && !pedidoSeleccionadoStr.isEmpty()) {
-            int pedidoSeleccionado = Integer.parseInt(pedidoSeleccionadoStr);
+        if (todosLosProductosEntregados()) {
+            String pedidoSeleccionadoStr = (String) jCBPedidosDisponibles.getSelectedItem();
+            if (pedidoSeleccionadoStr != null && !pedidoSeleccionadoStr.isEmpty()) {
+                int pedidoSeleccionado = Integer.parseInt(pedidoSeleccionadoStr);
 
-            pedidoProductoData.eliminarProductosPorPedido(pedidoSeleccionado);
+                pedidoProductoData.eliminarProductosPorPedido(pedidoSeleccionado);
 
-            pedidoData.eliminarPedido(pedidoSeleccionado);
+                pedidoData.eliminarPedido(pedidoSeleccionado);
 
-            String total = jTFPrecioTotal.getText();
-            // Mostrar mensaje de éxito
-            JOptionPane.showMessageDialog(this, "El cliente ha realizado el pago de " + total + "$. Pedido eliminado.");
+                String total = jTFPrecioTotal.getText();
+                // Mostrar mensaje de éxito
+                JOptionPane.showMessageDialog(this, "El cliente ha realizado el pago de " + total + "$. Pedido eliminado.");
 
-            // Actualizar el JComboBox y la tabla
-            cargarPedidosEnCombo();
-            consultarProductosPorPedido(); // Esto limpiará la tabla ya que no habrá un pedido seleccionado
+                // Actualizar el JComboBox y la tabla
+                cargarPedidosEnCombo();
+                consultarProductosPorPedido(); // Esto limpiará la tabla ya que no habrá un pedido seleccionado
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor, selecciona un pedido para cobrar.");
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Por favor, selecciona un pedido para cobrar.");
+            JOptionPane.showMessageDialog(this, "No se puede cobrar hasta que todos los productos sean entregados.");
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "No se puede cobrar hasta que todos los productos sean entregados.");
-    }
-    
+
     }//GEN-LAST:event_jBCobrarActionPerformed
 
     private void jBEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEliminarActionPerformed
         int filaSeleccionada = jTPedidoProducto.getSelectedRow();
         if (filaSeleccionada != -1) {
             //tomar los datos de la fila seleccionada
-        String pedidoSeleccionadoStr = (String) jCBPedidosDisponibles.getSelectedItem();
-        int idPedido = Integer.parseInt(pedidoSeleccionadoStr);
-        String nombreProducto = (String) modelo.getValueAt(filaSeleccionada, 1);
-        
-        //buscar el id del producto por su nombre
-        Producto producto = buscarProductoPorNombre(nombreProducto);
-        int idProducto = producto.getIdProducto();
-        
-        //metodo para eliminar el producto
-        pedidoProductoData.eliminarProductoDePedido(idPedido, idProducto);
-        
-        //mostramos el mensaje de exito y actualizamos
-        JOptionPane.showMessageDialog(this, "Producto eliminado del pedido.");
-        consultarProductosPorPedido();
-        } else{
-        JOptionPane.showMessageDialog(this, "Por favor, selecciona un producto para eliminar.");
+            String pedidoSeleccionadoStr = (String) jCBPedidosDisponibles.getSelectedItem();
+            int idPedido = Integer.parseInt(pedidoSeleccionadoStr);
+            String nombreProducto = (String) modelo.getValueAt(filaSeleccionada, 1);
+
+            //buscar el id del producto por su nombre
+            Producto producto = buscarProductoPorNombre(nombreProducto);
+            int idProducto = producto.getIdProducto();
+
+            //metodo para eliminar el producto
+            pedidoProductoData.eliminarProductoDePedido(idPedido, idProducto);
+
+            //mostramos el mensaje de exito y actualizamos
+            JOptionPane.showMessageDialog(this, "Producto eliminado del pedido.");
+            consultarProductosPorPedido();
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona un producto para eliminar.");
         }
     }//GEN-LAST:event_jBEliminarActionPerformed
-    
+
     public void entregarProductoPedido(int idPedido, int idProducto, int cantidad) {
-    String sql = "UPDATE pedido_producto SET estado = 1 WHERE id_pedido = ? AND id_producto = ? AND cantidad = ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setInt(1, idPedido);
-        ps.setInt(2, idProducto);
-        ps.setInt(3, cantidad);
+        String sql = "UPDATE pedido_producto SET estado = 1 WHERE id_pedido = ? AND id_producto = ? AND cantidad = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idPedido);
+            ps.setInt(2, idProducto);
+            ps.setInt(3, cantidad);
 
-        int filasActualizadas = ps.executeUpdate();
-   
-        if (filasActualizadas > 0) {
-            JOptionPane.showMessageDialog(this, "Producto entregado exitosamente.");
-        } else {
-            JOptionPane.showMessageDialog(this, "No se encontró el producto con los datos especificados.");
-        }
-    } catch (SQLException e) {
-        System.err.println("Error al entregar el producto del pedido: " + e.getMessage());
-        JOptionPane.showMessageDialog(this, "Ocurrió un error al intentar entregar el producto.");
-    }
-}
-        public Producto buscarProductoPorNombre(String nombreProducto) {
-    Producto producto = null;
-    String sql = "SELECT * FROM producto WHERE nombre like ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, nombreProducto);
-        ResultSet rs = ps.executeQuery();
+            int filasActualizadas = ps.executeUpdate();
 
-        if (rs.next()) {
-            // Recuperar los datos del producto
-            int idProducto = rs.getInt("id_producto");
-            String nombre = rs.getString("nombre");
-            int cantidad = rs.getInt("cantidad");
-            double precio = rs.getDouble("precio");
-            String tipo = rs.getString("tipo");
-            boolean estado = rs.getBoolean("estado");
-
-            // Crear el objeto Producto
-            producto = new Producto(idProducto, nombre, cantidad, precio, tipo, estado);
-        }
-    } catch (SQLException e) {
-        System.err.println("Error al buscar el producto: " + e.getMessage());
-    }
-    return producto;
-}
-        private boolean todosLosProductosEntregados() {
-    for (int i = 0; i < modelo.getRowCount(); i++) {
-        boolean estado = (boolean) modelo.getValueAt(i, 3); // Asegúrate de que 3 es el índice de la columna "Estado"
-        if (!estado) {
-            return false;
+            if (filasActualizadas > 0) {
+                JOptionPane.showMessageDialog(this, "Producto entregado exitosamente.");
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró el producto con los datos especificados.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al entregar el producto del pedido: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Ocurrió un error al intentar entregar el producto.");
         }
     }
-    return true;
-}
+
+    public Producto buscarProductoPorNombre(String nombreProducto) {
+        Producto producto = null;
+        String sql = "SELECT * FROM producto WHERE nombre like ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, nombreProducto);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                // Recuperar los datos del producto
+                int idProducto = rs.getInt("id_producto");
+                String nombre = rs.getString("nombre");
+                int cantidad = rs.getInt("cantidad");
+                double precio = rs.getDouble("precio");
+                String tipo = rs.getString("tipo");
+                boolean estado = rs.getBoolean("estado");
+
+                // Crear el objeto Producto
+                producto = new Producto(idProducto, nombre, cantidad, precio, tipo, estado);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar el producto: " + e.getMessage());
+        }
+        return producto;
+    }
+
+    private boolean todosLosProductosEntregados() {
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            boolean estado = (boolean) modelo.getValueAt(i, 3); // Asegúrate de que 3 es el índice de la columna "Estado"
+            if (!estado) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBCargarProducto;
