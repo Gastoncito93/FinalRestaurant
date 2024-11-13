@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-11-2024 a las 03:04:59
+-- Tiempo de generación: 13-11-2024 a las 23:53:52
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -99,7 +99,6 @@ CREATE TABLE `pedido` (
 
 INSERT INTO `pedido` (`id_pedido`, `id_mesa`, `id_mesero`, `fecha`, `estado`) VALUES
 (37, 20, 22, '2024-11-11 18:55:20', 1),
-(38, 23, 31, '2024-11-11 19:42:16', 1),
 (39, 26, 22, '2024-11-12 01:26:48', 1);
 
 -- --------------------------------------------------------
@@ -122,11 +121,10 @@ CREATE TABLE `pedido_producto` (
 --
 
 INSERT INTO `pedido_producto` (`id_pedido`, `id_producto`, `cantidad`, `precio`, `estado`) VALUES
-(37, 45, 1, 160.00, 0),
 (37, 55, 2, 1000.00, 1),
 (37, 61, 2, 200.00, 1),
-(38, 47, 0, 0.00, 0),
-(39, 49, 2, 160.00, 1);
+(39, 49, 2, 160.00, 1),
+(37, 47, 3, 300.00, 1);
 
 -- --------------------------------------------------------
 
@@ -149,13 +147,13 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`id_producto`, `nombre`, `cantidad`, `precio`, `tipo`, `estado`) VALUES
-(45, 'Paco', 4, 160.00, 'Perfumería', 1),
+(45, 'Paco', 50, 160.00, 'Perfumería', 1),
 (46, 'Shampoo', 5, 250.75, 'Higiene', 1),
-(47, 'Jabón', 3, 100.00, 'Higiene', 1),
+(47, 'Jabón', 50, 100.00, 'Higiene', 1),
 (48, 'Perfume', 6, 500.00, 'Perfumería', 1),
 (49, 'Desodorante', 2, 80.00, 'Higiene', 1),
 (55, 'Pizza', 20, 500.00, 'Comida', 1),
-(61, 'Gaseosa', 50, 100.00, 'Bebida', 1);
+(61, 'Gaseosa', 44, 100.00, 'Bebida', 1);
 
 -- --------------------------------------------------------
 
@@ -179,7 +177,12 @@ CREATE TABLE `reserva` (
 --
 
 INSERT INTO `reserva` (`id_reserva`, `id_mesa`, `nombre_cliente`, `dni_cliente`, `fecha`, `hora`, `estado`) VALUES
-(16, 20, 'alguien', '12121212', '2024-11-11', '22:00:00', 1);
+(16, 20, 'alguien', '12121212', '2024-11-11', '22:00:00', 1),
+(17, 23, 'alguien nuevo', '55511133', '2024-11-13', '20:00:00', 1),
+(18, 21, 'Chino Mandarin', '12332134', '2024-11-13', '11:00:00', 1),
+(19, 20, 'Un Tipo Comun', '44444445', '2024-12-12', '00:00:00', 1),
+(20, 20, 'Un Tipo Comun', '', '2024-12-15', '00:00:00', 1),
+(21, 23, 'arjona ricardo', '12345678', '2024-12-01', '22:00:00', 1);
 
 --
 -- Índices para tablas volcadas
@@ -212,8 +215,8 @@ ALTER TABLE `pedido`
 -- Indices de la tabla `pedido_producto`
 --
 ALTER TABLE `pedido_producto`
-  ADD PRIMARY KEY (`id_pedido`,`id_producto`),
-  ADD KEY `id_producto` (`id_producto`);
+  ADD KEY `id_producto` (`id_producto`),
+  ADD KEY `id_pedido` (`id_pedido`);
 
 --
 -- Indices de la tabla `producto`
@@ -260,7 +263,7 @@ ALTER TABLE `producto`
 -- AUTO_INCREMENT de la tabla `reserva`
 --
 ALTER TABLE `reserva`
-  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Restricciones para tablas volcadas
