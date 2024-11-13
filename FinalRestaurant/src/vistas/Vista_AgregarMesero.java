@@ -218,6 +218,11 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
         jTApellido.setNextFocusableComponent(jTDNI);
 
         jTDNI.setNextFocusableComponent(jTUsuario);
+        jTDNI.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTDNIKeyTyped(evt);
+            }
+        });
 
         jTUsuario.setNextFocusableComponent(jTContraseña);
 
@@ -433,6 +438,14 @@ public class Vista_AgregarMesero extends javax.swing.JInternalFrame {
         JOptionPane.showMessageDialog(this, "Por favor, selecciona un Mesero para actualizar.");
     }
     }//GEN-LAST:event_jBActualizarActionPerformed
+
+    private void jTDNIKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTDNIKeyTyped
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c)) {
+            evt.consume(); // No permitir la entrada
+            JOptionPane.showMessageDialog(null, "Por favor, ingrese solo números en el DNI.");
+        }
+    }//GEN-LAST:event_jTDNIKeyTyped
     
     
     private boolean usuarioExiste(String usuario) {
