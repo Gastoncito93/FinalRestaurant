@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PedidoData {
+
     private Connection connection;
 
     public PedidoData(Connection connection) {
@@ -33,8 +34,7 @@ public class PedidoData {
     public List<Pedido> obtenerPedidos() {
         List<Pedido> pedidos = new ArrayList<>();
         String sql = "SELECT * FROM pedido";
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Pedido pedido = new Pedido();
@@ -62,7 +62,6 @@ public class PedidoData {
     }
 
     // Puedes agregar más métodos para actualizar o buscar pedidos
-
     // Método para actualizar un pedido
     public void actualizarPedido(Pedido pedido) {
         String sql = "UPDATE pedido SET id_mesa = ?, id_mesero = ?, fecha = ?, estado = ? WHERE id_pedido = ?";
@@ -99,4 +98,21 @@ public class PedidoData {
         }
         return pedido;
     }
+    // Método para verificar si existe un pedido activo en una mesa
+
+    public boolean existePedidoActivoEnMesa(int idMesa) {
+        String sql = "SELECT COUNT(*) FROM pedido WHERE id_mesa = ? AND estado = true";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idMesa);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next() && rs.getInt(1) > 0) {
+                return true; // Existe al menos un pedido activo en la mesa
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al verificar el pedido activo en la mesa: " + e.getMessage());
+        }
+        return false; // No hay pedidos activos para la mesa
+    }
+    
 }
