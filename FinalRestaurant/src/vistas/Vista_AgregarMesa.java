@@ -280,28 +280,64 @@ public class Vista_AgregarMesa extends javax.swing.JInternalFrame {
 
     private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
         try {
-        int numero = Integer.parseInt(jTextFieldNumero.getText());
-        int capacidad = Integer.parseInt(jTextFieldCapacidad.getText());
-        boolean estado = jRHabilitada.isSelected();
+    // Verificar que los campos de texto no estén vacíos antes de parsearlos
+    if (jTextFieldNumero.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, ingresa un número de mesa.");
+        return;
+    }
+    if (jTextFieldCapacidad.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, ingresa una capacidad.");
+        return;
+    }
 
-        // Verificar si la mesa ya existe antes de agregarla
-        if (mesaData.mesaExiste(numero)) {
-            JOptionPane.showMessageDialog(this, "El número de mesa ya está en uso. Elige otro número.");
+    // Parseo de campos y validación de números no negativos
+    int numero;
+    int capacidad;
+    boolean estado = jRHabilitada.isSelected();
+
+    // Intenta convertir a int para numero y valida que no sea negativo
+    try {
+        numero = Integer.parseInt(jTextFieldNumero.getText());
+        if (numero < 0) {
+            JOptionPane.showMessageDialog(this, "El número de mesa no puede ser negativo.");
             return;
         }
-
-        Mesa nuevaMesa = new Mesa(numero, capacidad, estado, null);
-        mesaData.agregarMesa(nuevaMesa); // Agrega la mesa a la base de datos
-        consultar(); // Actualiza la tabla después de agregar
-        setearTodoEnVacio(); // Limpiar campos de entrada
-
-        JOptionPane.showMessageDialog(this, "Mesa agregada exitosamente.");
     } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Por favor, ingresa un número válido para número y capacidad.");
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al agregar la mesa: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, "Por favor, ingresa un número válido para el número de mesa.");
+        return;
     }
+
+    // Intenta convertir a int para capacidad y valida que no sea negativo
+    try {
+        capacidad = Integer.parseInt(jTextFieldCapacidad.getText());
+        if (capacidad < 0) {
+            JOptionPane.showMessageDialog(this, "La capacidad no puede ser negativa.");
+            return;
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Por favor, ingresa un número válido para la capacidad.");
+        return;
+    }
+
+    // Verificar si la mesa ya existe antes de agregarla
+    if (mesaData.mesaExiste(numero)) {
+        JOptionPane.showMessageDialog(this, "El número de mesa ya está en uso. Elige otro número.");
+        return;
+    }
+
+    // Crear la nueva mesa y agregarla a la base de datos
+    Mesa nuevaMesa = new Mesa(numero, capacidad, estado, null);
+    mesaData.agregarMesa(nuevaMesa); // Agrega la mesa a la base de datos
+    consultar(); // Actualiza la tabla después de agregar
+    setearTodoEnVacio(); // Limpiar campos de entrada
+
+    JOptionPane.showMessageDialog(this, "Mesa agregada exitosamente.");
+
+} catch (SQLException e) {
+    e.printStackTrace();
+    JOptionPane.showMessageDialog(this, "Error al agregar la mesa: " + e.getMessage());
+}
+
     }//GEN-LAST:event_jBAgregarActionPerformed
 
     private void jBBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBorrarActionPerformed
@@ -330,36 +366,71 @@ public class Vista_AgregarMesa extends javax.swing.JInternalFrame {
 
     private void jBActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBActualizarActionPerformed
         int filaSeleccionada = jTMesa.getSelectedRow();
-    if (filaSeleccionada != -1) {
-        int numero = Integer.parseInt(jTextFieldNumero.getText());
-        int capacidad = Integer.parseInt(jTextFieldCapacidad.getText());
-        boolean estado = jRHabilitada.isSelected(); 
-        int idMesa = (int) modelo.getValueAt(filaSeleccionada, 0); 
+if (filaSeleccionada != -1) {
+    try {
+        // Verificar que los campos de texto no estén vacíos antes de parsearlos
+        if (jTextFieldNumero.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa un número de mesa.");
+            return;
+        }
+        if (jTextFieldCapacidad.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa una capacidad.");
+            return;
+        }
 
+        // Parseo de campos y validación de números no negativos
+        int numero;
+        int capacidad;
+        boolean estado = jRHabilitada.isSelected();
+        int idMesa = (int) modelo.getValueAt(filaSeleccionada, 0);
+
+        // Intenta convertir a int para numero y valida que no sea negativo
         try {
-            // Verificar si el número de mesa ya está en uso por otra mesa
-            if (mesaData.mesaExiste(numero, idMesa)) {
-                JOptionPane.showMessageDialog(this, "El número de mesa ya está en uso. Elige otro número.");
+            numero = Integer.parseInt(jTextFieldNumero.getText());
+            if (numero < 0) {
+                JOptionPane.showMessageDialog(this, "El número de mesa no puede ser negativo.");
                 return;
             }
-
-            // Procede con la actualización si el número no está duplicado
-            Mesa mesaActualizada = new Mesa(idMesa, numero, capacidad, estado, null); 
-            mesaData.actualizarMesa(mesaActualizada);
-
-            consultar(); // Actualiza la tabla después de actualizar
-            setearTodoEnVacio(); // Limpiar campos de entrada
-
-            JOptionPane.showMessageDialog(this, "Mesa actualizada exitosamente.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al actualizar la mesa: " + e.getMessage());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingresa un número válido para número y capacidad.");
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa un número válido para el número de mesa.");
+            return;
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Por favor, selecciona una mesa para actualizar.");
+
+        // Intenta convertir a int para capacidad y valida que no sea negativo
+        try {
+            capacidad = Integer.parseInt(jTextFieldCapacidad.getText());
+            if (capacidad < 0) {
+                JOptionPane.showMessageDialog(this, "La capacidad no puede ser negativa.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa un número válido para la capacidad.");
+            return;
+        }
+
+        // Verificar si el número de mesa ya está en uso por otra mesa
+        if (mesaData.mesaExiste(numero, idMesa)) {
+            JOptionPane.showMessageDialog(this, "El número de mesa ya está en uso. Elige otro número.");
+            return;
+        }
+
+        // Procede con la actualización si el número no está duplicado
+        Mesa mesaActualizada = new Mesa(idMesa, numero, capacidad, estado, null);
+        mesaData.actualizarMesa(mesaActualizada);
+
+        consultar(); // Actualiza la tabla después de actualizar
+        setearTodoEnVacio(); // Limpiar campos de entrada
+
+        JOptionPane.showMessageDialog(this, "Mesa actualizada exitosamente.");
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al actualizar la mesa: " + e.getMessage());
     }
+} else {
+    JOptionPane.showMessageDialog(this, "Por favor, selecciona una mesa para actualizar.");
+}
+
     }//GEN-LAST:event_jBActualizarActionPerformed
 
     private void cargarDatosMesaSeleccionada(int rowIndex) {
