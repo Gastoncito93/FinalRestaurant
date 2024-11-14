@@ -439,26 +439,79 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
 
     private void jBActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBActualizarActionPerformed
         int filaSeleccionada = jTProducto.getSelectedRow();
-    if (filaSeleccionada != -1) {
-        int idProducto = (int) modelo.getValueAt(filaSeleccionada, 0);
+if (filaSeleccionada != -1) {
+    try {
+        // Verifica que los campos de texto no estén vacíos antes de parsearlos
+        if (jTFNombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa un nombre.");
+            return;
+        }
+        if (jTFCantidad.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa una cantidad.");
+            return;
+        }
+        if (jTFPrecio.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa un precio.");
+            return;
+        }
+        if (jTFTipo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa un tipo.");
+            return;
+        }
+
+        // Parseo de campos
         String nombre = jTFNombre.getText();
-        int cantidad = Integer.parseInt(jTFCantidad.getText());
-        double precio = Double.parseDouble(jTFPrecio.getText());
+        int cantidad;
+        double precio;
         String tipo = jTFTipo.getText();
         boolean estado = jRBAlta.isSelected();
 
+        // Intenta convertir a int para cantidad
+        try {
+            cantidad = Integer.parseInt(jTFCantidad.getText());
+            if (cantidad < 0) {
+                JOptionPane.showMessageDialog(this, "La cantidad no puede ser negativa.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "La cantidad debe ser un número entero.");
+            return;
+        }
+
+        // Intenta convertir a double para precio
+        try {
+            precio = Double.parseDouble(jTFPrecio.getText());
+            if (precio < 0) {
+                JOptionPane.showMessageDialog(this, "El precio no puede ser negativo.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El precio debe ser un número válido.");
+            return;
+        }
+
+        // Obtén el ID del producto de la fila seleccionada
+        int idProducto = (int) modelo.getValueAt(filaSeleccionada, 0);
+
+        // Crea el objeto Producto actualizado
         Producto nuevoProducto = new Producto(idProducto, nombre, cantidad, precio, tipo, estado);
 
+        // Actualiza el producto en la base de datos
         productoData.actualizarProducto(nuevoProducto);
-        
-        consultar(); 
-        
+
+        // Actualiza la tabla y limpia los campos
+        consultar();
         setearTodoEnVacio();
 
         JOptionPane.showMessageDialog(this, "Producto actualizado exitosamente.");
-    } else {
-        JOptionPane.showMessageDialog(this, "Por favor, selecciona un Producto para actualizar.");
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado. Por favor, inténtalo nuevamente.");
     }
+} else {
+    JOptionPane.showMessageDialog(this, "Por favor, selecciona un Producto para actualizar.");
+}
+
     }//GEN-LAST:event_jBActualizarActionPerformed
 
     private void jTFCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFCantidadActionPerformed
