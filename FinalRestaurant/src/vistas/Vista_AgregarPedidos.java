@@ -80,12 +80,12 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
         setMaximizable(true);
         setResizable(true);
 
-        jLabel5.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/pedidos.png"))); // NOI18N
         jLabel5.setText("Crear Pedido");
 
-        jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Mesas Disponibles");
 
@@ -101,16 +101,17 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Meseros Disponibles");
 
         jCBMeseros.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Estado");
 
+        jBGenerarPedido.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jBGenerarPedido.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/carroLista.png"))); // NOI18N
         jBGenerarPedido.setText("Generar Pedido");
         jBGenerarPedido.addActionListener(new java.awt.event.ActionListener() {
@@ -166,6 +167,7 @@ public class Vista_AgregarPedidos extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
+        jTPedido.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTPedido.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},

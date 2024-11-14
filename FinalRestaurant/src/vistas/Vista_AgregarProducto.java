@@ -150,6 +150,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
         setMaximizable(true);
         setResizable(true);
 
+        jTProducto.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTProducto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -168,11 +169,11 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jTProducto);
 
-        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Tabla de productos en Stock");
 
-        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/producto1.png"))); // NOI18N
         jLabel2.setText("Agregar Producto");
@@ -180,7 +181,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
 
         jTFNombre.setNextFocusableComponent(jTFCantidad);
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Precio");
 
@@ -198,20 +199,21 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Stock");
         jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        jLabel6.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Nombre del producto");
 
-        jLabel7.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/estado.png"))); // NOI18N
         jLabel7.setText("Estado");
 
+        jBAgregar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jBAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/agregaboton2.png"))); // NOI18N
         jBAgregar.setText("Agregar");
         jBAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -220,6 +222,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
             }
         });
 
+        jBActualizar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jBActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/actualizar1.png"))); // NOI18N
         jBActualizar.setText("Actualizar");
         jBActualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -228,7 +231,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel8.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("Tipo");
 
@@ -239,6 +242,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
             }
         });
 
+        jRBAlta.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jRBAlta.setText("Alta");
         jRBAlta.setNextFocusableComponent(jRBBaja);
         jRBAlta.addActionListener(new java.awt.event.ActionListener() {
@@ -247,6 +251,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
             }
         });
 
+        jRBBaja.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jRBBaja.setText("Baja");
         jRBBaja.setNextFocusableComponent(jTFNombre);
 
@@ -274,7 +279,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jBAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jBActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)))
+                                        .addComponent(jBActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(77, 77, 77)
@@ -317,7 +322,7 @@ public class Vista_AgregarProducto extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jRBAlta)
                             .addComponent(jRBBaja))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jBAgregar)
                             .addComponent(jBActualizar)))
